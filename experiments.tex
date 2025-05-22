@@ -1,0 +1,88 @@
+\section{Experiments}
+
+\subsection{Dataset Description}
+In order to test our itinerary planning system, we used curated sets of Points of Interest (POIs) for seven large cities namely: Delhi, Budapest, Vienna, Osaka, Glasgow, Edinburgh, and Perth. The initial dataset utilized is derived from the \textbf{Yahoo Flickr Creative Commons 100 Million Dataset (YFCC100M)}, containing near about 100 million images, of which 69 million are annotated and 48 million are geotagged.
+
+We used the Flickr User-POI Visits dataset available at ~\cite{limkwanhuiDataCode}, which was generated in a below explained manner; In order to generate this dataset the authors of the paper ~\cite{taylor2018tour} took a set of popular POIs for every city mentioned earlier using resources such as \textit{Wikipedia}. Then, geotagged photos in \textit{Flickr} were matched with these POIs using spatial proximity. By estimating relative \textbf{popularity} of a POI through the counts of photos for every POI, the relative popularity which is referred to as utility was estimated.
+
+This approach generates an empirical proxy for real tourist behavior, measuring interest in a specific attraction as measured by publicly accessible, crowd-sourced images.
+
+The existing dataset contained the following key fields for each POI:
+
+\begin{table}[H]
+\begin{tabularx}{0.5\textwidth}{p{3cm} X}
+\hline
+\textbf{Field Name} & \textbf{Description} \\
+\hline
+\texttt{poiID} & A unique identifier assigned to each POI. \\
+\hline
+\texttt{poiName} & The name of the POI, e.g., ``Red Fort'', ``Osaka Castle''. \\
+\hline
+\texttt{lat} & Latitude coordinate of the POI. \\
+\hline
+\texttt{long} & Longitude coordinate of the POI. \\
+\hline
+\texttt{theme or category} & Thematic classification of the POI, such as \textit{amusement}, \textit{historical}, \textit{museum}, \textit{shopping}, \textit{park}, etc. \\
+\hline
+\texttt{Utility Score or Profit} & A numerical value representing the estimated utility or attractiveness of the POI, derived based on its popularity (photo frequency). \\
+\hline
+\texttt{Cost} & Geospatial travel distance (in meters) between pairs of POIs. This is used in the travel time estimation between locations considering the walking speed to be 4 kmph and taxi speed as 30kmph which can be modified as per requirement. \\
+\hline
+\end{tabularx}
+\caption{Original dataset fields}
+\end{table}
+
+With an aim to make our system more authentic and feasible to use, we supplemented the dataset manually with real-life operating limitations and data that we gathered from \textbf{official tourist websites} and verified online portals. The added fields are:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{0.5\textwidth}{p{3cm} X}
+\toprule
+\textbf{Field Name} & \textbf{Description} \\
+\midrule
+\texttt{fees} & Entrance fee or ticket price associated with the POI, in INR. \\
+\midrule
+\texttt{opening time} & The time at which the POI opens for visitors, stored in \texttt{HH:MM:SS} format. \\
+\midrule
+\texttt{closing time} & The time at which the POI closes for visitors, stored similarly. \\
+\midrule
+\texttt{Days of Week} & Seven binary columns (\texttt{Monday}, \texttt{Tuesday}, ..., \texttt{Sunday}). A value of 1 indicates the POI is open on that day; 0 indicates it is closed. \\
+\midrule
+\texttt{Avg Visiting Time} & The average duration (in minutes) tourists typically spend at the POI. \\
+\bottomrule
+\end{tabularx}
+\caption{Additional features added to the dataset}
+\end{table}
+
+These manually extracted features add a \textbf{temporal and availability aspect} to the optimisation problem, allowing more realistic and accurate itinerary generation. For example, POIs closed on the chosen day are excluded from the planning automatically.
+
+All the other information was collected by scraping or quoting \textbf{official tourist boards}, \textbf{city tourism websites}, and trustworthy travel websites.
+
+The experiments were conducted on a MacBook Air equipped with an Apple M1 processor and 8GB of RAM, providing a lightweight yet efficient environment for developing and testing the itinerary planning system. The implementation was carried out in Python, leveraging its rich ecosystem for data handling, user interaction, and visualization. The core optimization process was performed using the Gurobi Optimizer, a state-of-the-art solver for mathematical programming. Gurobi was employed to solve the underlying Integer Linear Programming (ILP) formulations that generate optimized multi-day travel itineraries under various user-defined constraints and real-world conditions.
+
+\subsection{Baseline Itinerary Planner}
+
+To establish a baseline for evaluation, we implemented the itinerary planning model described in the widely cited WWW paper, which we refer to as the \textbf{baseline model}. This model adopts a binary decision framework where each Point of Interest (POI) is either fully included in the itinerary or completely excluded. The utility function in this setting is defined as:
+
+\[
+\max \left\{ \sum_{i=2}^{N} \sum_{j=2}^{N} S_i \cdot x_{i,j} \right\}
+\]
+
+where \( x_{i,j} = 1 \) if POI \( i \) is visited immediately before POI \( j \), and 0 otherwise. This is equivalent to the binary utility formulation:
+
+\[
+\sum_{i=1}^{N} U(v_i) \cdot y_i
+\]
+
+where \( U(v_i) \) denotes the utility of POI \( v_i \), and \( y_i \in \{0,1\} \) is a binary variable indicating whether \( v_i \) is selected in the itinerary.
+
+The baseline model incorporates only fundamental constraints, including the time budget constraint, connectivity requirements, a restriction preventing a direct path between the start and end POIs, and a sub-tour elimination constraint. In our implementation, the sub-tour elimination is effectively enforced using arrival-time-based constraints. We were able to seamlessly adapt our ILP-based framework to replicate this baseline behavior, effectively converting our advanced planner into a simplified version matching the baseline model's structure.
+
+However, direct performance comparison between our model and the baseline was not feasible due to a key limitation in the common dataset used by both our system and the WWW paper---namely, the absence of standardized POI visiting durations. Second, the baseline paper distributed POI visit durations by an unspecified method, making it impossible to reproduce exactly the same execution cases. Despite this, we were able to re-implement the baseline model in its entirety in terms of constraints as well as utility structure, which provided a good basis for qualitative analysis.
+
+\subsection{Input and Performance Metrics}
+
+Directly from thesis
+
+\subsection{Demonstrations}
+

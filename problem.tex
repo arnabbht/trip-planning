@@ -1,0 +1,230 @@
+\section{Problem Formulation}
+
+In this work, we introduce the Trip Itinerary Planning (TIP) Problem, which is formulated as follows. The city is represented as a multimodal graph, with every pair of POIs connected by two edges corresponding to walking and taxi travel. The taxi speed is $s_t$ and walking speed is $s_w$. Every POI is also given a utility score, which is its relative attractiveness or significance to the tourist. The core of the system is formulated as a Mixed-Integer Linear Programming (MILP) problem, solved using the Gurobi Optimizer, a powerful tool for mathematical optimization. The goal of the MILP model is to maximize the total utility obtained from the chosen POIs in the resulting itinerary, subject to a rich set of real-world constraints.
+
+The itinerary is a linear, day-wise sequence of POIs that the tourist traverses in the city over multiple days, while adhering to daily time constraints and overall cost constraint. Let $V$ denote the set of POIs in the city. Each POI has its associated opening and closing time, i.e., the time window in which it can be explored by the tourists. Also, each POI has a weekly schedule and specific operating days on which it can be visited.
+
+Each POI \( v_i \in V \) has the following features:
+
+\begin{itemize}
+    \item \( U(v_i) \): Utility Score associated with each POI
+    \item \( ot(v_i) \): Opening time of POI
+    \item \( ct(v_i) \): Closing time of POI
+    \item \( t(v_i) \): Average visit time spent by tourists on the POI
+    \item \( c(v_i) \): Entrance fee for the POI.
+\end{itemize}
+
+\noindent \textbf{Multimodal Graph Representation:}
+This problem is modeled using a multimodal graph \( G = (V, E) \) where:
+
+\begin{itemize}
+    \item \( V = \{v_1, ..., v_N\} \) denotes the set of all Points of interest of the city
+    \item \( E \) contains two distinct edges between every pair of POIs \( (v_i, v_j) \), corresponding the two modes of travel:
+    \begin{itemize}
+        \item \textbf{Walking Edge} \( e^{w}_{i,j} \) is characterized by:
+        \begin{itemize}
+            \item \( t^{w}_{i,j} \): Time required to walk from \( v_i \) to \( v_j \).
+            \item \( c^{w}_{i,j} \): Cost associated with walking (usually zero).
+        \end{itemize}
+        \item \textbf{Taxi Edge} \( e^{t}_{i,j} \) is characterized by:
+        \begin{itemize}
+            \item \( t^{t}_{i,j} \): Time required to travel by taxi.
+            \item \( c^{t}_{i,j} \): Cost of travel by taxi.
+        \end{itemize}
+    \end{itemize}
+    \item Days is the set of all days.
+\end{itemize}
+
+\noindent \textbf{Objective Function}\\
+To create multi-day itinerary, the optimization ensures a balanced distribution across all days. The objective is to \textbf{maximize the total utility score across all days}.
+
+The decision variable \( y_{i,d} \in \{0,1\} \) indicates whether POI \( v_i \) is selected on day \( d \). The objective function is:
+\begin{align}
+U(I) &= \sum_{d \in \text{Days}} \sum_{i = 1}^{N} U(v_i) \cdot y_{i,d} \label{eq:multi_day_binary}
+\end{align}
+
+This equation computes the total utility $U(I)$ of the multi-day itinerary by summing the utilities of all selected POIs across all days.
+
+The basic constraints of the system are described below:
+
+\begin{itemize}
+
+\item \textbf{Time Budget Constraint}\\
+This constraint ensures that the total time taken i.e. the sum of visit and travel times is under the user specified time budget for each day.
+
+\begin{align}
+\label{mul_day_9}
+    & \sum_{i \ne j} t^{w}_{i,j} \cdot w_{i,j,d}
+    + \sum_{i \ne j} t^{t}_{i,j} \cdot x_{i,j,d}
+    + \sum_{i \in V} t(v_i) \cdot y_{i,d} \leq H
+\end{align}
+
+where H is the time budget specified by user. The user can specify different time budgets for the first day, last day, and intermediate days to account for flight or train arrival and departure timings.
+\\[1ex]
+\item \textbf{Cost Budget Constraint} \\
+ This constraint ensures that the total cost of the trip, including both taxi travel and POI entry fees, remains within the cost budget specified by the user.
+
+\begin{align}
+\label{mul_day_25}
+\sum_{d \in \text{Days}} \sum_{(i,j) \in I} \left(c^{w}_{i,j} \cdot w_{i,j} + c^{t}_{i,j} \cdot x_{i,j} \right) + \sum_{d \in \text{Days}} \sum_{i \in I} c(v_i) \leq B 
+\end{align}
+where B is the cost budget for whole trip.
+\\[1ex]
+\item \textbf{Opening and Closing Time}\\
+    This constraint makes sure that each POI is visited correctly in its operating hours:
+    \begin{equation}
+    \label{mul_day_29}
+    s_{i,d} \geq \text{ot}_i \quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{days} \\
+    \end{equation}
+    \begin{equation}
+    \label{mul_day_30}
+        s_{i,d} \leq \text{ct}_i - t(v_i) \quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{days}
+    \end{equation}
+    \noindent
+    where \( s_{i,d} \) is the arrival time at POI \( i \) on day \( d \)
+\\[1ex]
+\item \textbf{Opening and Closing Day}\\
+    This constraint checks the availability of each POI on the day selected by the user. If the POI is not open for public during that day, then this constraint effectively uses $y[i, d] = 0$, to deliberately not include that POI in that day's itinerary.
+    \begin{align}
+\label{mul_day_31}
+& y_{i,d} = 0, \\
+&\text{if } \texttt{day\_availability}[\texttt{trip\_weekdays}[d]][i] = 0 \nonumber
+\end{align}
+    \[\quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{Days},\]
+  
+    \noindent
+    where:
+    \begin{itemize}
+        \item \( \texttt{trip\_weekdays}[d] \) denotes the weekday corresponding to day \( d \).
+        \item \( \texttt{day\_availability}[weekday][i] \) is 1 if POI \( i \) is open on that weekday, and 0 if it is closed.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Example}
+
+\begin{table}[H]
+\centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{tabular}{ccrrr}
+\toprule
+\textbf{poiID} & \textbf{Theme} & \textbf{Avg Time} & \textbf{Utility} & \textbf{Fees} \\
+\midrule
+S & Source      & 0  & 0   & 0    \\
+1 & Park        & 90 & 886 & 1320 \\
+2 & Park        & 30 & 253 & 440  \\
+3 & Park        & 45 & 599 & 275  \\
+4 & Museum      & 60 & 512 & 4730 \\
+5 & Museum      & 30 & 315 & 330  \\
+6 & Museum      & 60 & 660 & 825  \\
+D & Destination & 0  & 0   & 0    \\
+\bottomrule
+\end{tabular}
+}
+\caption{Details of Points of Interests}
+\label{tab:poi_data}
+\end{table}
+
+\begin{table}[H]
+\centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{tabular}{c|cccccccc}
+\toprule
+\textbf{From$\backslash$To} & \textbf{S} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{D} \\
+\midrule
+\textbf{S} & --    & 28.7  & 49.9  & 55.5  & 68.9  & 126.6 & 117.2 & 102.9 \\
+\textbf{1} & 28.7  & --    & 3.3   & 3.2   & 4.3   & 10.1  & 9.3   & 78.2  \\
+\textbf{2} & 49.9  & 3.3   & --    & 5.7   & 2.7   & 8.0   & 6.9   & 94.3  \\
+\textbf{3} & 55.5  & 3.2   & 5.7   & --    & 5.0   & 9.9   & 9.6   & 47.4  \\
+\textbf{4} & 68.9  & 4.3   & 2.7   & 5.0   & --    & 5.8   & 5.0   & 74.7  \\
+\textbf{5} & 126.6 & 10.1  & 8.0   & 9.9   & 5.8   & --    & 1.5   & 98.5  \\
+\textbf{6} & 117.2 & 9.3   & 6.9   & 9.6   & 5.0   & 1.5   & --    & 102.4 \\
+\textbf{D} & 102.9 & 78.2  & 94.3  & 47.4  & 74.7  & 98.5  & 102.4 & --    \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Walking Travel Time Matrix (in minutes)}
+\label{tab:travel_time_walking}
+\end{table}
+
+\begin{table}[H]
+\centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{tabular}{c|cccccccc}
+\toprule
+\textbf{From$\backslash$To} & \textbf{S} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{D} \\
+\midrule
+\textbf{S} & --    & 3.8  & 6.7  & 7.4  & 9.2  & 16.9 & 15.6 & 13.7 \\
+\textbf{1} & 3.8   & --   & 0.4  & 0.4  & 0.6  & 1.3  & 1.2  & 10.4 \\
+\textbf{2} & 6.7   & 0.4  & --   & 0.8  & 0.4  & 1.1  & 0.9  & 12.6 \\
+\textbf{3} & 7.4   & 0.4  & 0.8  & --   & 0.7  & 1.3  & 1.3  & 6.3  \\
+\textbf{4} & 9.2   & 0.6  & 0.4  & 0.7  & --   & 0.8  & 0.7  & 10.0 \\
+\textbf{5} & 16.9  & 1.3  & 1.1  & 1.3  & 0.8  & --   & 0.2  & 13.1 \\
+\textbf{6} & 15.6  & 1.2  & 0.9  & 1.3  & 0.7  & 0.2  & --   & 13.7 \\
+\textbf{D} & 13.7  & 10.4 & 12.6 & 6.3  & 10.0 & 13.1 & 13.7 & --   \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Taxi Travel Time Matrix (in minutes)}
+\label{tab:taxi_time_matrix}
+\end{table}
+
+
+\textbf{Constraints applied:}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Time budget:} 300 minutes (5 hours)
+    \item \textbf{Cost budget:} 3500 rupees
+    \item \textbf{Must-see POIs:} POIs 1 and 2 must be included in the itinerary
+    \item \textbf{Ordering constraints:} (Applied if both POIs are included in the itinerary)
+    \begin{itemize}
+        \item POI 3 must be visited before POI 2
+        \item POI 2 must be visited before POI 1
+        \item POI 3 must be visited before POI 5
+    \end{itemize}
+    \item \textbf{Category constraints:}
+    \begin{itemize}
+        \item At least 2 POIs from the \textit{Park} category
+        \item At most 2 POIs from the \textit{Museum} category
+    \end{itemize}
+    \item \textbf{Modes of travel allowed:} Taxi and walking
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{toy.png}
+\caption{Toy Example}
+\label{fig:sample_image}
+\end{figure}
+
+\noindent \textbf{Itinerary suggested in Binary Version:}
+Start from S, spend exact amount of visiting time on POIs 1,2 and 3 and gain complete utility from them, reach D.
+\begin{itemize}
+    \item \textbf{Utility Score:} 1738
+    \item \textbf{Total trip cost:} 3211 Rupees
+    \item \textbf{Total time taken:} 256.75 minutes
+\end{itemize}
+
+\noindent \textbf{Itinerary suggested in Fractional Version}\\
+\textbf{Variant of utility calculation: Continuous Linear Function}
+Start from S, arrive on 3, visit it completely and gain full utility, arrive on 5, visit it completely and gain full utility, arrive on 2, spend 28.14 minutes here instead of 30 minutes, gain proportional utility, then arrive on 1, spend complete visiting time and gain full utility, then reach destination.
+\begin{itemize}
+    \item \textbf{Utility Score:} 2037.31
+    \item \textbf{Total trip cost:} 3475.25 Rupees
+    \item \textbf{Total time taken:} 300 minutes
+\end{itemize}
+
+\noindent \textbf{Variant of utility calculation: Slabs}
+Same itinerary as CLF variant except on POI 2, the utility granted to tourist was $28.14/30$
+which is $0.938$ times the complete utility i.e. $237.314$, Here in slabs variant, spending $93.8\%$ utility grants $90\%$ of complete utility according to Slab 5, and tourist will gain the same utility on POI 2 if he spends $27$ minutes here, hence utility granted is $227.7$ and time spent is $27$ minutes instead of $28.14$ minutes.
+\begin{itemize}
+    \item \textbf{Utility Score:} 2027.7
+    \item \textbf{Total trip cost:} 3475.25 Rupees
+    \item \textbf{Total time taken:} 298.86 minutes
+\end{itemize}
+
+\noindent \textbf{Insights}
+\begin{itemize}
+    \item Fractional Version gains ~$17\%$ more utility than Binary Version.
+    \item More effecient Time and Cost budget utilization can be observed in the Fractional version.
+    \item The Slabs variant gives approximately similar utility as CLF variant with slight changes due to the modelling of slabs.
+\end{itemize}
+
