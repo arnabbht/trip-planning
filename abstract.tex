@@ -1,0 +1,38 @@
+\begin{abstract}
+	%
+	Given a tourist who intends to visit a set of points of interest (POIs)
+	spread across a geographical region, the \emph{Trip Itinerary Planning
+	(TIP)} problem aims to identify an optimal itinerary that maximizes the
+	tourist's utility under a specified cost and time budget. An itinerary is
+	defined as an ordered sequence of POIs that adheres to the time and budget
+	constraints. This problem is not only important for tourists, but also for
+	tour planners that offer personalized trips as business. Although there are
+	few prior works that have attempted to address the above problem, they allow
+	limited flexibility in terms of accommodating multiple transportation modes,
+	re-planning the itinerary based on tourist's actual visit duration of the
+	POIs and the live traffic situation, customizing the itinerary based on the
+	personalized constraints and the utility function chosen by the user. This
+	work revisits the TIP problem with the goal of overcoming the above
+	limitations and considering more realistic factors.
+	%
+	In particular, the proposed solution allows the tourist to (1) choose from a
+	set of utility function variants that best captures his/her travel
+	experience; (2) factor in multiple transportation modes based on available
+	cost and time budget; (3) dynamically adjust the remaining itinerary based
+	on the actual time spent till the current POI; (4) plan a multi-day
+	itinerary that considers the opening and the closing times of the POIs (in
+	addition to open and closed days) and user's choice of the start and the end
+	time of the trip and the originating POI and the ending POI for each day;
+	(5) customize the itinerary by allowing the tourist to choose from a rich
+	set of personalized constraints that include must-visit constraints,
+	must-avoid constraints, category constraints and ordering constraints. The
+	problem is modeled using a directed graph, where the nodes represent the
+	POIs and the edges represent the available transportation modes between each
+	pair of POIs. Subsequently, this problem is solved using a mixed integer
+	linear program (MILP) that returns the optimal itinerary. A comprehensive
+	empirical evaluation over a real data set comprising of several popular
+	tourist destinations demonstrate the efficacy and efficiency of the proposed
+	solution.
+	%
+\end{abstract}
+
