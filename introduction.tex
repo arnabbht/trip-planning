@@ -1,8 +1,57 @@
 \section{Introduction}
 
-Tourism is one of the most dynamic and rapidly growing sectors of the modern economy. However, planning trips that offer a rich travel experience remains a nontrivial problem facing most tourists. A tourist planning to visit a new city faces the problem of planning a suitable \emph{itinerary} that maximizes her utility under a given cost budget and time budget. Here, an itinerary refers to a sequence of points of interest (POIs), along with the respective time of arrival and departure for each POI such that each POI is visited at most once. With the increasing number of tourists and the increased availability of spatio-temporal data, there is growing research interest in planning the trip itinerary~\cite{li2016travel, gavalas2014survey, sylejmani2011survey}. This problem is important not only for tourists, but also for tour planners that offer personalized trips as business.
+Tourism is one of the most dynamic and rapidly growing sectors of the modern
+economy. However, planning trips that offer a rich travel experience remains a
+non-trivial problem. A tourist planning to visit a new city faces the problem of
+planning a suitable \emph{itinerary} that maximizes her utility under a given
+cost budget and time budget. Here, an itinerary refers to a sequence of
+\emph{points of interest (POIs)}, along with the respective time of arrival and
+departure for each POI such that each POI is visited at most once. With the
+increasing number of tourists and the increased availability of spatio-temporal
+data, there is growing research interest in planning the trip itinerary
+\cite{li2016travel, gavalas2014survey, sylejmani2011survey}. This problem is
+important not only for tourists, but also for tour planners that offer
+personalized trips as business.
 
-Traditionally, most tourist destinations offer a set of pre-defined itineraries that do not necessarily match with the tourists' schedule, cost budget, and preferences. As digital tourism resources and urban mobility platforms grow, tourists expect personalized, optimal, and efficient travel itineraries that meet their needs, constraints, and resources. Such itineraries are challenging to construct manually due to the underlying complexity arising due to the number of POIs, varying travel costs and durations, entrance fees, opening hours, and different user interests. This creates an imperative need for intelligent itinerary planning systems that can generate effective and personalized trip itineraries that offer high utility, while being cognizant of the requirements of tourists. Although there exist several prior works \cite{chen2014automatic, vanzelst2016itinerary, taylor2018tour, vu2022branch, panagiotakis2024expectation, liu2024personalized, rambha2024optimized, lim2018personalized, bolzoni2014efficient}, they have several limitations. Some key limitations include: (1) None of the existing works allow the tourist to choose from available transportation modes such as only walking, only taxi, or a hybrid mode allowing usage of multiple transportation modes in the itinerary ~\cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}. (2) Many tourists spend more than a day at a given tourist destination. This scenario ideally calls for a multi-day trip itinerary planning that is aware of opening and closing days of each POI along with opening and closing time for each open day. However, majority of the earlier studies focus only on single-day itinerary planning \cite{taylor2018tour, vu2022branch, panagiotakis2024expectation}.  While it may be possible to combine multiple single day itineraries to generate a multi-day itinerary, it is not guaranteed to be cost-effective (as demonstrated in Sec.~6). Further, earlier studies paid little attention to the operational schedule (i.e., operational timings of each open day) of the POIs \cite{chen2014automatic, vanzelst2016itinerary, taylor2018tour} (3) Often there are tourists with specific requirements and preferences based on their priorities and interests. These requirements and preferences must be respected, along with the tourist's cost budget and time availability constraints. However, many existing itinerary planning solutions ignore this need to \emph{personalize} trip itineraries \cite{rambha2024optimized, yu2017mining, rani2018development, yu2014optimal}. (4) While travelling based on a planned itinerary, often it is required to update the remaining itinerary based on unexpected delays or early exits from the previously visited POIs. This demands dynamically adjusting the remaining itinerary as deemed necessary. However, to the best of our knowledge, none of the existing works address this requirement ~\cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}.
+Traditionally, most tourist destinations offer a set of pre-defined itineraries
+that do not necessarily fit directly within the tourists' schedule, cost budget,
+and preferences. As digital tourism resources and urban mobility platforms grow,
+tourists expect personalized, optimal, and efficient travel itineraries that
+meet their needs, constraints, and resources. Such itineraries are challenging
+to construct manually due to the underlying complexity arising due to the number
+of POIs, varying travel costs and durations, entrance fees, opening hours, and
+different user interests. This creates a need for intelligent
+itinerary planning systems that can generate effective and personalized trip
+itineraries that offer high utility, while being cognizant of the requirements
+of tourists. Although there exist several prior works \cite{chen2014automatic,
+vanzelst2016itinerary, taylor2018tour, vu2022branch,
+panagiotakis2024expectation, liu2024personalized, rambha2024optimized,
+lim2018personalized, bolzoni2014efficient}, they have several limitations. Some
+key limitations include: (1) None of the existing works allow the tourist to
+choose from multiple available transportation modes such as walking, taxi, or a
+hybrid mode allowing usage of multiple transportation modes
+\cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}. (2) Many
+tourists spend more than a day at a given tourist destination. This scenario
+ideally calls for a multi-day trip itinerary planning that is aware of opening
+and closing days of each POI along with opening and closing time for each open
+day. However, majority of the earlier studies focus only on single-day itinerary
+planning \cite{taylor2018tour, vu2022branch, panagiotakis2024expectation}.
+While it may be possible to combine multiple single day itineraries to generate
+a multi-day itinerary, it is not guaranteed to be as cost-effective (as
+demonstrated in Sec.~6). Further, earlier studies paid little attention to the
+operational schedule (i.e., operational timings of each open day) of the POIs
+\cite{chen2014automatic, vanzelst2016itinerary, taylor2018tour} (3) Often there
+are tourists with specific requirements and preferences based on their
+priorities and interests. These requirements and preferences must be respected,
+along with the tourist's cost budget and time availability constraints. However,
+many existing itinerary planning solutions ignore this need to
+\emph{personalize} trip itineraries \cite{rambha2024optimized, yu2017mining,
+rani2018development, yu2014optimal}. (4) While traveling based on a planned
+itinerary, often it is required to update the remaining itinerary based on
+unexpected delays or early exits from the previously visited POIs. This demands
+dynamically adjusting the remaining itinerary as deemed necessary. However, to
+the best of our knowledge, none of the existing works address this requirement
+\cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}.
 
 Motivated by the above limitations, this work addresses the following itinerary planning problem: \emph{Given a tourist who intends to visit a set of POIs spread across a geographical region, how to  identify an optimal itinerary that maximizes the tourist's utility under a specified cost budget that respects her availability schedule that may span multiple time intervals spread over one or more days?} The itinerary must adhere to the tourist's specified starting location and time, and ending location and time for each day of the trip. Additionally, it must consider the operational schedule (day and timings) of each POI.  The itinerary should factor in the tourist's preferred mode of transportation such as only walking, only taxi, or a hybrid mode that uses both walking and taxi, as necessary. The cost of the itinerary comprises of two components: (a) transportation cost, i.e., the cost incurred in traveling, (b) visiting cost, i.e., the cost incurred due to entry fees at each POI. The tourist may also specify one or more personalized constraints that include the following: (a) \textbf{Must-see constraints:} These constraints specify a set of POIs that should necessarily be part of the itinerary. (b) \textbf{Ordering constraints:} These indicate relative ordering between two or more POIs in the itinerary. (c) \textbf{Category constraints:} Based on the similarity of the POIs, they may be classified into one or more categories. For example, museums, lakes and churches could be a set of categories.  The category constraints allow a tourist to specify a lower bound and an upper bound on the number of POIs she wants to visit from each category. For instance, a tourist may decide to visit at most one museum and $k$ churches in her itinerary where $1 \le k \le 2$. 
 
