@@ -1,4 +1,4 @@
-\section{Problem Formulation}
+\section{Trip Itinerary Planning Problem}
 
 In this work, we introduce the Trip Itinerary Planning (TIP) Problem, which is formulated as follows. The city is represented as a multimodal graph, with every pair of POIs connected by two edges corresponding to walking and taxi travel. The taxi speed is $s_t$ and walking speed is $s_w$. Every POI is also given a utility score, which is its relative attractiveness or significance to the tourist. The core of the system is formulated as a Mixed-Integer Linear Programming (MILP) problem, solved using the Gurobi Optimizer, a powerful tool for mathematical optimization. The goal of the MILP model is to maximize the total utility obtained from the chosen POIs in the resulting itinerary, subject to a rich set of real-world constraints.
 
@@ -32,7 +32,7 @@ This problem is modeled using a multimodal graph \( G = (V, E) \) where:
             \item \( c^{t}_{i,j} \): Cost of travel by taxi.
         \end{itemize}
     \end{itemize}
-    \item Days is the set of all days.
+    \item \textit{days} is the set of all days.
 \end{itemize}
 
 \noindent \textbf{Objective Function}\\
@@ -40,7 +40,7 @@ To create multi-day itinerary, the optimization ensures a balanced distribution 
 
 The decision variable \( y_{i,d} \in \{0,1\} \) indicates whether POI \( v_i \) is selected on day \( d \). The objective function is:
 \begin{align}
-U(I) &= \sum_{d \in \text{Days}} \sum_{i = 1}^{N} U(v_i) \cdot y_{i,d} \label{eq:multi_day_binary}
+U(I) &= \sum_{d \in \text{days}} \sum_{i = 1}^{N} U(v_i) \cdot y_{i,d} \label{eq:multi_day_binary}
 \end{align}
 
 This equation computes the total utility $U(I)$ of the multi-day itinerary by summing the utilities of all selected POIs across all days.
@@ -66,7 +66,7 @@ where H is the time budget specified by user. The user can specify different tim
 
 \begin{align}
 \label{mul_day_25}
-\sum_{d \in \text{Days}} \sum_{(i,j) \in I} \left(c^{w}_{i,j} \cdot w_{i,j} + c^{t}_{i,j} \cdot x_{i,j} \right) + \sum_{d \in \text{Days}} \sum_{i \in I} c(v_i) \leq B 
+\sum_{d \in \text{days}} \sum_{(i,j) \in I} \left(c^{w}_{i,j} \cdot w_{i,j} + c^{t}_{i,j} \cdot x_{i,j} \right) + \sum_{d \in \text{days}} \sum_{i \in I} c(v_i) \leq B 
 \end{align}
 where B is the cost budget for whole trip.
 \\[1ex]
@@ -86,15 +86,16 @@ where B is the cost budget for whole trip.
 \item \textbf{Opening and Closing Day}\\
     This constraint checks the availability of each POI on the day selected by the user. If the POI is not open for public during that day, then this constraint effectively uses $y[i, d] = 0$, to deliberately not include that POI in that day's itinerary.
     \begin{align}
-\label{mul_day_31}
-& y_{i,d} = 0, \\
-&\text{if } \texttt{day\_availability}[\texttt{trip\_weekdays}[d]][i] = 0 \nonumber
+    \label{mul_day_31}
+ \quad y_{i,d} = 0 \quad  &\forall i \in \text{POI\_IDs}, \nonumber \\
+        &\forall d \in \text{days, } \texttt{day\_availability}[\texttt{trip\_weekdays}[d]][i] = 0 \nonumber
 \end{align}
-    \[\quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{Days},\]
+    % \[\quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{Days},\]
   
     \noindent
     where:
     \begin{itemize}
+        \item \textit{days} represent the set of weekdays.
         \item \( \texttt{trip\_weekdays}[d] \) denotes the weekday corresponding to day \( d \).
         \item \( \texttt{day\_availability}[weekday][i] \) is 1 if POI \( i \) is open on that weekday, and 0 if it is closed.
     \end{itemize}
@@ -172,7 +173,7 @@ D & Destination & 0  & 0   & 0    \\
 \textbf{Constraints applied:}
 \begin{enumerate}[label=\textbf{\arabic*.}]
     \item \textbf{Time budget:} 300 minutes (5 hours)
-    \item \textbf{Cost budget:} 3500 rupees
+    \item \textbf{Cost budget:} 3500 units
     \item \textbf{Must-see POIs:} POIs 1 and 2 must be included in the itinerary
     \item \textbf{Ordering constraints:} (Applied if both POIs are included in the itinerary)
     \begin{itemize}
@@ -199,7 +200,7 @@ D & Destination & 0  & 0   & 0    \\
 Start from S, spend exact amount of visiting time on POIs 1,2 and 3 and gain complete utility from them, reach D.
 \begin{itemize}
     \item \textbf{Utility Score:} 1738
-    \item \textbf{Total trip cost:} 3211 Rupees
+    \item \textbf{Total trip cost:} 3211 units
     \item \textbf{Total time taken:} 256.75 minutes
 \end{itemize}
 
@@ -208,7 +209,7 @@ Start from S, spend exact amount of visiting time on POIs 1,2 and 3 and gain com
 Start from S, arrive on 3, visit it completely and gain full utility, arrive on 5, visit it completely and gain full utility, arrive on 2, spend 28.14 minutes here instead of 30 minutes, gain proportional utility, then arrive on 1, spend complete visiting time and gain full utility, then reach destination.
 \begin{itemize}
     \item \textbf{Utility Score:} 2037.31
-    \item \textbf{Total trip cost:} 3475.25 Rupees
+    \item \textbf{Total trip cost:} 3475.25 units
     \item \textbf{Total time taken:} 300 minutes
 \end{itemize}
 
@@ -217,7 +218,7 @@ Same itinerary as CLF variant except on POI 2, the utility granted to tourist wa
 which is $0.938$ times the complete utility i.e. $237.314$, Here in slabs variant, spending $93.8\%$ utility grants $90\%$ of complete utility according to Slab 5, and tourist will gain the same utility on POI 2 if he spends $27$ minutes here, hence utility granted is $227.7$ and time spent is $27$ minutes instead of $28.14$ minutes.
 \begin{itemize}
     \item \textbf{Utility Score:} 2027.7
-    \item \textbf{Total trip cost:} 3475.25 Rupees
+    \item \textbf{Total trip cost:} 3475.25 units
     \item \textbf{Total time taken:} 298.86 minutes
 \end{itemize}
 

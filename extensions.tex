@@ -1,23 +1,84 @@
-\section{Extensions}
+\section{Extensions of \trip}
 
-\textbf{Dynamic Re-routing}\\
-The real tourist behavior and weather conditions, are dynamic and unpredictable in nature. They can be influenced by unforeseen delays, detours, longer-than-anticipated visits, or spontaneous user preferences, which can significantly impact the feasibility and correctness of an advanced preplanned itinerary. To close the gap between theory and practice, a dynamic approach is required.
+\subsection{Personalized Constraints}
+\begin{itemize}
+\item \textbf{Must-see POIs}\\
+This constraint enforces that each POI marked as a must-see is visited exactly once over the duration of the trip:
 
-In contrast with the static approach used in \cite{taylor2018tour}, where rigid, precomputed travel times and POI visit times, we have taken real-time travel times using Google-Maps API (Routes API). 
+\begin{equation}
+\label{mul_day_7}
+    \sum_{d \in \text{days}} y_{i,d} = 1 \quad \quad \forall i \in \text{must\_see\_pois}
+\end{equation}
 
-On the top of suggested times of visit and travel, user can enter the actual time they have taken to visit a POI and the travel time they took to reach the current POI.
+where:
+\begin{itemize}
+  \item \texttt{must\_see\_pois} is the set of user-specified must-visit POIs
+\end{itemize}
+\item \textbf{Must-avoid POIs}\\
+This constraint enforces that each POI marked as excluded is never visited in the entire trip:
 
-With every visit to a POI, the system replans the schedule based on the remaining time and cost budgets. The POIs already visited are not considered for further itineraries. This optimizes the rest of the day based on current progress and not stale assumptions.
+\begin{equation}
+\label{mul_day_8}
+    \sum_{d \in \text{days}} y_{i,d} = 0 \quad \quad \forall i \in \text{excluded\_pois}
+\end{equation}
 
-For the dynamic feature, a record of visited POIs was maintained. On visiting a POI, it was eliminated from the list to be taken into account in future itinerary calculations with the new remaining time and cost budgets.
+where:
+\begin{itemize}
+  \item \texttt{excluded\_pois} is the set of user-specified excluded POIs
+\end{itemize}
+\item \textbf{Category Constraints}\\
+The user can specify the lower bound and upper bound for the categories of POIs to be visited across the trip. This constraint ensures that user's preferences over these themes are respected:
 
-\begin{figure}[H]
-\textbf{Implementation of Dynamic Approach}
-\centering
-\includegraphics[width=0.5\textwidth]{binary dynamic flowchart.png}
-\caption{Implementation of Dynamic Approach}
-\label{fig:flowchart_dynamic}
-\end{figure}
+\begin{align}
+\label{mul_day_11}
+lb_m \leq \sum_{i \in V_m} \sum_{d \in \text{days}} y_{i,d} \leq ub_m, \quad \forall m \in C 
+\end{align}
+
+where:
+\begin{itemize}
+  \item \( C \) represents all the categories (e.g., historical, cultural, adventure, etc.)
+  \item \( lb_m \) and \( ub_m \) are the lower and upper bounds for theme \( m \)
+\end{itemize}
+\item \textbf{Ordering Constraints}\\
+If (a,b) is an ordering constraint, then POI a and POI b can be visited on different days, so this constraint makes sure that day of visit of POI a is before, or same as day of visit of POI b.
+\begin{align}
+\label{mul_day_12}
+\texttt{day\_visit}_a \leq \texttt{day\_visit}_b, \quad \forall (v_a, v_b) \in P
+\end{align}
+\noindent
+where:
+\begin{itemize}
+    \item \( \texttt{day\_visit}_a \): the day on which POI \( a \) is visited.
+    \item \( P \): the set of all ordered POI pairs with ordering constraints entered by the tourist.
+\end{itemize}
+
+\textbf{2. Intra-day Temporal Ordering Constraint}\\
+If (a,b) is an ordering constraint and both POI a and POI b are to be visited on same day, then this constraint ensures that arrival time of POI b is greater than or equal to sum of arrival time of POI a, visit duration of POI a and travel time from POI a to POI b.
+
+\begin{align}
+\label{mul_day_13}
+s_{i,d} + \left( t(v_i) + \left( t^{w}_{i,j} \cdot w_{i,j,d} + t^{t}_{i,j} \cdot x_{i,j,d} \right) \right) y_{i,d}
+&\leq s_{j,d} + T_{ij} (1 - y_{j,d})\\ \forall (v_i, v_j) \in P,\; \forall d \in \text{days} \nonumber \\
+\label{mul_day_14}
+T_{ij} = ct(v_i) + t(v_i) + t^{w}_{i,j} 
+\end{align}
+
+
+
+\noindent
+where:
+\begin{itemize}
+    \item \( s_{i,d} \): start time of visiting POI \( i \) on day \( d \).
+    \item \( t(v_i) \):visit time spent at POI \( i \).
+    \item \( ct(v_i) \): closing time of POI \(v_i\) \( i \).
+\end{itemize}
+
+\noindent
+The Big-M term \( T_{ij} (1 - y_{j,d}) \) ensures the constraint becomes non-restrictive when POI \( j \) is not selected on day \( d \).
+\end{itemize}
+
+
+\subsection{Utility Variants}
 
 \noindent \textbf{Fractional Visits to POIs}\\
 This feature enables partial visiting of Points of Interest (POIs), thus enhancing the flexibility and potential utility of the proposed itineraries. In comparison to the Binary approach used before which required the POI to be completely visited in order to collect its utility, the Fractional version built here grants proportional utility based on the proportion visited of the POI—improving time and cost budget efficiency.
@@ -79,3 +140,24 @@ To ensure only one slab level is chosen per POI, the following constraint is imp
 \sum_{k=1}^{6} s_k[i] \leq 1, \quad \forall i \in \{1, \dots, N\}
 \end{align}
 
+
+
+
+\subsection{Dynamic Itinerary Re-planning}
+The real tourist behavior and weather conditions, are dynamic and unpredictable in nature. They can be influenced by unforeseen delays, detours, longer-than-anticipated visits, or spontaneous user preferences, which can significantly impact the feasibility and correctness of an advanced preplanned itinerary. To close the gap between theory and practice, a dynamic approach is required.
+
+In contrast with the static approach used in \cite{taylor2018tour}, where rigid, precomputed travel times and POI visit times, we have taken real-time travel times using Google-Maps API (Routes API). 
+
+On the top of suggested times of visit and travel, user can enter the actual time they have taken to visit a POI and the travel time they took to reach the current POI.
+
+With every visit to a POI, the system replans the schedule based on the remaining time and cost budgets. The POIs already visited are not considered for further itineraries. This optimizes the rest of the day based on current progress and not stale assumptions.
+
+For the dynamic feature, a record of visited POIs was maintained. On visiting a POI, it was eliminated from the list to be taken into account in future itinerary calculations with the new remaining time and cost budgets.
+
+\begin{figure}[H]
+\textbf{Implementation of Dynamic Approach}
+\centering
+\includegraphics[width=0.5\textwidth]{binary dynamic flowchart.png}
+\caption{Implementation of Dynamic Approach}
+\label{fig:flowchart_dynamic}
+\end{figure}

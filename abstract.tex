@@ -1,32 +1,29 @@
 \begin{abstract}
 	%
 	Given a tourist who intends to visit a set of points of interest (POIs)
-	spread across a geographical region, the \emph{Trip Itinerary Planning
-	(TIP)} problem aims to identify an optimal itinerary that maximizes the
-	tourist's utility under a specified cost and time budget. An itinerary is
+	spread across a geographical region, the trip itinerary planning
+	 problem aims to identify an \textit{optimal itinerary} that \textit{maximizes} the
+	tourist's utility under a specified  cost and time budget. An itinerary is
 	defined as an ordered sequence of POIs that adheres to the time and budget
 	constraints. This problem is not only important for tourists, but also for
 	tour planners that offer personalized trips as business. Although there are
 	few prior works that have attempted to address the above problem, they allow
-	limited flexibility in terms of accommodating multiple transportation modes,
+	limited flexibility in terms of accommodating multiple transportation modes, planning a multi-day itinerary that adheres to the operational schedule of the POIs, 
 	re-planning the itinerary based on tourist's actual visit duration of the
 	POIs and the live traffic situation, customizing the itinerary based on the
 	personalized constraints and the utility function chosen by the user. This
-	work revisits the TIP problem with the goal of overcoming the above
+	work revisits this problem with the goal of overcoming the above
 	limitations and considering more realistic factors.
 	%
-	In particular, the proposed solution allows the tourist to (1) choose from a
-	set of utility function variants that best captures his/her travel
-	experience; (2) factor in multiple transportation modes based on available
-	cost and time budget; (3) dynamically adjust the remaining itinerary based
-	on the actual time spent till the current POI; (4) plan a multi-day
-	itinerary that considers the opening and the closing times of the POIs (in
-	addition to open and closed days) and user's choice of the start and the end
-	time of the trip and the originating POI and the ending POI for each day;
-	(5) customize the itinerary by allowing the tourist to choose from a rich
-	set of personalized constraints that include must-visit constraints,
-	must-avoid constraints, category constraints and ordering constraints. The
-	problem is modeled using a directed graph, where the nodes represent the
+	In particular, the proposed solution, named \emph{TRIP (TRip Itinerary Planner)} allows the tourist to (1) plan a \textit{multi-day
+	itinerary} that considers the operational schedule of the POIs and user's choice of the start and the end time of the trip and the originating POI and the ending POI for each day;
+ (2) factor in \textit{multiple transportation modes} based on available
+	cost and time budget; (3) customize the itinerary by allowing the tourist to specify one or more  \textbf{personalized constraints} that include must-see constraints, ordering constraints and category constraints.
+(4) choose from a
+	\textit{set of utility function variants} that best captures his/her travel
+	experience;
+(5) \textbf{dynamically} adjust the remaining itinerary based on the delays or early exits made during the previously visited POIs.
+  The problem is modeled using a directed graph, where the nodes represent the
 	POIs and the edges represent the available transportation modes between each
 	pair of POIs. Subsequently, this problem is solved using a mixed integer
 	linear program (MILP) that returns the optimal itinerary. A comprehensive
