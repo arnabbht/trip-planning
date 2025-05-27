@@ -1,9 +1,9 @@
 \section{Experiments}
 
 \subsection{Dataset Description}
-In order to test our itinerary planning system, we used curated sets of Points of Interest (POIs) for seven large cities namely: Delhi, Budapest, Vienna, Osaka, Glasgow, Edinburgh, and Perth. The initial dataset utilized is derived from the \textbf{Yahoo Flickr Creative Commons 100 Million Dataset (YFCC100M)}, containing near about 100 million images, of which 69 million are annotated and 48 million are geotagged.
+In order to test our itinerary planning system, we used curated sets of Points of Interest (POIs) for seven large cities namely: Delhi, Budapest, Vienna, Osaka, Glasgow, Edinburgh, and Perth. The initial dataset utilized is derived from the \textbf{Yahoo Flickr Creative Commons 100 Million Dataset (YFCC100M)} \cite{}, containing over 100 million images, of which 69 million are annotated and 48 million are geotagged. \ab{69+48>100}
 
-We used the Flickr User-POI Visits dataset available at ~\cite{limkwanhuiDataCode}, which was generated in a below explained manner; In order to generate this dataset the authors of the paper ~\cite{taylor2018tour} took a set of popular POIs for every city mentioned earlier using resources such as \textit{Wikipedia}. Then, geotagged photos in \textit{Flickr} were matched with these POIs using spatial proximity. By estimating relative \textbf{popularity} of a POI through the counts of photos for every POI, the relative popularity which is referred to as utility was estimated.
+We used the Flickr User-POI Visits dataset available at ~\cite{limkwanhuiDataCode}, \ab{are we using 2 separate datasets?} which was generated in the following manner. In order to generate this dataset, the authors of the paper ~\cite{taylor2018tour} took a set of popular POIs for every city mentioned earlier using resources such as \textit{Wikipedia}. Then, geotagged photos in \textit{Flickr} were matched with these POIs using spatial proximity. By estimating relative \textbf{popularity} of a POI through the counts of photos for every POI, the relative popularity which is referred to as utility was estimated.
 
 This approach generates an empirical proxy for real tourist behavior, measuring interest in a specific attraction as measured by publicly accessible, crowd-sourced images.
 
@@ -26,7 +26,7 @@ The existing dataset contained the following key fields for each POI:
 \hline
 \texttt{Utility Score or Profit} & A numerical value representing the estimated utility or attractiveness of the POI, derived based on its popularity (photo frequency). \\
 \hline
-\texttt{Cost} & Geospatial travel distance (in meters) between pairs of POIs. This is used in the travel time estimation between locations considering the walking speed to be $v_w$ (assumed 4 kmph) and taxi speed $v_w$ (assumed 30kmph) which can be modified as per requirement. \\
+\texttt{Cost} & Geospatial travel distance (in meters) between pairs of POIs. This is used in the travel time estimation between locations, with the walking speed $v_w$ and taxi speed $v_t$. \\
 \hline
 \end{tabularx}
 \caption{Original dataset fields}
@@ -34,7 +34,7 @@ The existing dataset contained the following key fields for each POI:
 
 \subsection{Experimental Setup}
 
-With an aim to make our system more authentic and feasible to use, we supplemented the dataset manually with real-life operating limitations and data that we gathered from \textbf{official tourist websites} and verified online portals. The added fields are:
+With an aim to make our system more realistic and practical to use, we supplemented the dataset manually with real-life operating limitations and data that we gathered from \textbf{official tourist websites} and verified online portals. The added fields are:
 
 \begin{table}[H]
 \centering
@@ -66,13 +66,13 @@ The experiments were conducted on a MacBook Air equipped with an Apple M1 proces
 
 \subsection{Baseline Itinerary Planner}
 
-To establish a baseline for evaluation, we implemented the itinerary planning model described in the widely cited WWW paper, which we refer to as the \textbf{baseline model}. This model adopts a binary decision framework where each Point of Interest (POI) is either fully included in the itinerary or completely excluded. The utility function in this setting is defined as:
+To establish a baseline for evaluation, we implemented the itinerary planning model described in Taylor and Lim \cite{taylor2018tour}, which we refer to as the \textbf{baseline model}. This model adopts a binary decision framework, where each Point of Interest (POI) is either fully included in the itinerary or completely excluded. The utility function in this setting is defined as:
 
 \[
 \max \left\{ \sum_{i=2}^{N} \sum_{j=2}^{N} S_i \cdot x_{i,j} \right\}
 \]
 
-where \( x_{i,j} = 1 \) if POI \( i \) is visited immediately before POI \( j \), and 0 otherwise. This is equivalent to the binary utility formulation:
+, where \( x_{i,j} = 1 \) if POI \( i \) is visited immediately before POI \( j \), and 0 otherwise. \ab{what is $s_i$?} This is equivalent to the binary utility formulation:
 
 \[
 \sum_{i=1}^{N} U(v_i) \cdot y_i
@@ -80,12 +80,13 @@ where \( x_{i,j} = 1 \) if POI \( i \) is visited immediately before POI \( j \)
 
 where \( U(v_i) \) denotes the utility of POI \( v_i \), and \( y_i \in \{0,1\} \) is a binary variable indicating whether \( v_i \) is selected in the itinerary.
 
-The baseline model incorporates only fundamental constraints, including the time budget constraint, connectivity requirements, a restriction preventing a direct path between the start and end POIs, and a sub-tour elimination constraint. In our implementation, the sub-tour elimination is effectively enforced using arrival-time-based constraints. We were able to seamlessly adapt our ILP-based framework to replicate this baseline behavior, effectively converting our advanced planner into a simplified version matching the baseline model's structure.
+The baseline model incorporates only fundamental constraints, including the time budget constraint, connectivity requirements, a restriction preventing a direct path between the start and the end POIs, and  sub-tour elimination constraints. In our implementation, the sub-tour elimination is effectively enforced using arrival-time-based constraints. We were able to seamlessly adapt our ILP-based framework to replicate this baseline behavior, effectively converting our advanced planner into a simplified version matching the baseline model's structure.
 
-However, direct performance comparison between our model and the baseline was not feasible due to a key limitation in the common dataset used by both our system and the WWW paper---namely, the absence of standardized POI visiting durations. Second, the baseline paper distributed POI visit durations by an unspecified method, making it impossible to reproduce exactly the same execution cases. Despite this, we were able to re-implement the baseline model in its entirety in terms of constraints as well as utility structure, which provided a good basis for qualitative analysis.
+However, direct performance comparison between our model and the baseline was not feasible due to a key limitation in the common dataset used by both our system and Taylor and Lim \cite{taylor2018tour} --namely, the absence of standardized POI visiting durations. Second, the baseline paper distributed POI visit durations by an unspecified method, making it impossible to reproduce exactly the same execution cases. Despite this, we were able to re-implement the baseline model in its entirety in terms of constraints as well as utility structure, which provided a good basis for qualitative analysis. \ab{No mention of absence of cost budget}
 
-\subsection{9 Variants of the Problem}
+\subsection{9 Variants of the \trip}
 
+We evaluate the performance of the \trip solution by considering its variants as listed in Table~\ref{tab:trip_variants}, that are based on the transportation mode and the chosen utility variant. 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|}
@@ -94,21 +95,21 @@ However, direct performance comparison between our model and the baseline was no
 \hline
 TRIP\_W\_B & Walk & Binary \\
 TRIP\_T\_B & Taxi & Binary \\
-TRIP\_H\_B & Hybrid- Walk + Taxi & Binary \\
-TRIP\_W\_C & Walk & Fractional- CLF \\
-TRIP\_T\_C & Taxi & Fractional- CLF \\
-TRIP\_H\_C & Hybrid- Walk + Taxi & Fractional- CLF \\
-TRIP\_W\_M & Walk & Fractional- Slabs \\
-TRIP\_T\_M & Taxi & Fractional- Slabs \\
-TRIP\_H\_M & Hybrid- Walk + Taxi & Fractional- Slabs \\
+TRIP\_H\_B & Hybrid -- Walk + Taxi & Binary \\
+TRIP\_W\_C & Walk & Fractional -- CLF \\
+TRIP\_T\_C & Taxi & Fractional -- CLF \\
+TRIP\_H\_C & Hybrid -- Walk + Taxi & Fractional -- CLF \\
+TRIP\_W\_M & Walk & Fractional -- Slabs \\
+TRIP\_T\_M & Taxi & Fractional -- Slabs \\
+TRIP\_H\_M & Hybrid -- Walk + Taxi & Fractional -- Slabs \\
 \hline
 \end{tabular}
-\caption{Trip Variants by Transportation Mode and Utility Variant}
+\caption{\trip Variants by Transportation Mode and Utility Variant}
 \label{tab:trip_variants}
 \end{table}
 
 
-\subsection{Input and Performance Metrics}
+\subsection{Input Parameters and Performance Metrics}
 
 \textbf{User Inputs}\\
 Our trip planning system is capable of accepting a wide range of user inputs to support personalized and realistic trip planning. They are:
@@ -116,7 +117,7 @@ Our trip planning system is capable of accepting a wide range of user inputs to 
 \begin{itemize}
     \item \textbf{City Choice:} The city would be selected by the user from options.
     
-    \item \textbf{Trip Day:} The actual day o which the trip is to take place.
+    \item \textbf{Trip Day:} The actual day on which the trip is to take place.
 
     \item \textbf{Start and End Points:} Latitude and longitude coordinates identifying the point where the day's journey begins and ends.
     
@@ -127,8 +128,9 @@ Our trip planning system is capable of accepting a wide range of user inputs to 
         \item \textbf{Ordering Constraints:} Ordering constraints with respect to POIs, indicating visit priority.
     \end{itemize}
     
+	\item Utility Variant: \ab{Add the utility variants}
     \item \textbf{Time Budget:} The time (minutes or hours) the user is willing to spend on the trip.
-    \item \textbf{Cost Budget:} The highest value which the user will incur on travel expenditure (e.g., taxi fares).
+    \item \textbf{Cost Budget:} The maximum cost which the user will incur on travel expenditure (e.g., taxi fares) and entry fees of POIs.
     
     \item \textbf{Dynamic Variant Specific Inputs:}
     \begin{itemize}
@@ -153,7 +155,7 @@ We evaluate the quality and efficiency of the generated itineraries using the fo
     
     \item \textbf{Running Time:} The time (in seconds) required by the system to compute the itinerary. It is an indicator of the system's computational efficiency.
     
-    \item \textbf{Time Utilisation Percentage:} The percentage of the user-provided time budget that is actually used in the itinerary:
+    \item \textbf{Time Utilisation:} The percentage of the user-provided time budget that is actually used in the itinerary:
     \[
     \text{Time Utilisation \%} = \frac{\text{Total time used}}{\text{Time budget}} \times 100
     \]
@@ -164,6 +166,8 @@ We evaluate the quality and efficiency of the generated itineraries using the fo
         \item \textbf{Visit Time Fraction:} Ratio of time spent visiting POIs to the total available time.
     \end{itemize}
 \end{itemize}
+
+\ab{Add Cost Utilization}
 
 These metrics serve as the basis for the comparative analysis and graphical illustrations presented in the subsequent section.
 
@@ -194,7 +198,7 @@ The plot~\ref{fig:comparisonWithBaselinePlot} compares the performance of our pr
 
 Figure ~\ref{fig:mm2} illustrate the impact of varying time and cost budgets on the utility achieved by different transportation modes in our itinerary planning framework. The top graph explores how increasing the time budget (with a fixed cost budget of 6000 units) affects utility. Here, we observe that the utility continues to increase for walking and hybrid modes, while it saturates for the taxi-only variant. This is because the taxi mode relies heavily on cost availability—once the fixed cost budget is consumed, additional time offers very little, to no further improvement. In contrast, the hybrid mode, which leverages both walking and taxi flexibly, consistently outperforms the single-mode options across all three TRIP variants, highlighting the effectiveness of our multi-modality feature.
 
-The lower graph, which holds the time budget constant at 480 minutes while increasing the cost budget, further supports this observation: hybrid models adapt more efficiently to increased resource availability, maximizing utility better than single-mode approaches. In this case, the utility for walking-only variants remains saturated across all TRIP variants, as the potential gains from walking are constrained by the fixed time rather than by cost. Furthermore, a consistent trend is observed wherein the CLF (Continuous Linear Function) scoring model outperforms the slab-based model. This is because CLF assigns utility proportionally to the time spent at a POI—for example, visiting a POI for 63\% of its average duration yields 63\% utility—while the slab model would round this down to 60\% based on predefined thresholds, resulting in a measurable loss. Together, both graphs validate our design choices, demonstrating the combined advantages of multimodal transportation and continuous utility modeling in enhancing itinerary quality.
+The lower graph, which holds the time budget constant at 480 minutes while increasing the cost budget, further supports this observation: hybrid models adapt more efficiently to increased resource availability, maximizing utility better than single-mode approaches. In this case, the utility for walking-only variants remains saturated across all TRIP variants, as the potential gains from walking are constrained by the fixed time rather than by cost. Furthermore, a consistent trend is observed wherein the CLF (Continuous Linear Function) scoring model outperforms the slab-based model. This is because CLF assigns utility proportionally to the time spent at a POI—for example, visiting a POI for 63\% of its average duration yields 63\% utility—while the slab model would round this down to 60\% based on predefined thresholds, resulting in a measurable loss. Together, both graphs validate our design choices, demonstrating the combined advantages of multi-modal transportation and continuous utility modeling in enhancing itinerary quality.
 
 \noindent\textbf{Time Utilization}
 
@@ -207,7 +211,7 @@ The lower graph, which holds the time budget constant at 480 minutes while incre
 \label{fig:TimeUtilization}
 \end{figure}
 
-Figure~\ref{fig:TimeUtilization} presents a comparison of travel time versus visit time across the three TRIP variants---walking-only (TRIP\_W), taxi-only (TRIP\_T), and hybrid (TRIP\_H)---at a fixed time budget of 480 minutes and varying cost budgets (5000, 6000, 7000, and 8000 units). Across all three utility scoring versions (B, C, and M), a clear trend emerges: TRIP\_W exhibits a high travel-to-visit time ratio, reflecting the slower nature of walking as a mode of transport. In contrast, TRIP\_T minimizes travel time due to exclusive reliance on taxis, thereby maximizing time spent at points of interest (POIs). The hybrid model, TRIP\_H, maintains a balanced ratio between travel and visit time, offering a compromise between the two extremes. While the taxi-only model may seem efficient in terms of maximizing visit time, earlier experiments have demonstrated that it is the hybrid TRIP\_H that achieves the highest overall utility. This highlights that optimizing for utility involves not just maximizing visit duration but also strategically balancing travel efficiency with multimodal flexibility.\\
+Figure~\ref{fig:TimeUtilization} presents a comparison of travel time versus visit time across the three TRIP variants---walking-only (TRIP\_W), taxi-only (TRIP\_T), and hybrid (TRIP\_H)---at a fixed time budget of 480 minutes and varying cost budgets (5000, 6000, 7000, and 8000 units). Across all three utility scoring versions (B, C, and M), a clear trend emerges: TRIP\_W exhibits a high travel-to-visit time ratio, reflecting the slower nature of walking as a mode of transport. In contrast, TRIP\_T minimizes travel time due to exclusive reliance on taxis, thereby maximizing time spent at points of interest (POIs). The hybrid model, TRIP\_H, maintains a balanced ratio between travel and visit time, offering a compromise between the two extremes. While the taxi-only model may seem efficient in terms of maximizing visit time, earlier experiments have demonstrated that it is the hybrid TRIP\_H that achieves the highest overall utility. This highlights that optimizing for utility involves not just maximizing visit duration but also strategically balancing travel efficiency with multi-modal flexibility.\\
 
 \noindent\textbf{Utility vs Time budget on different cost budgets}
 
@@ -236,7 +240,7 @@ Figure~\ref{fig:cities} illustrates how the achieved utility varies across diffe
 \label{fig:util_md}
 \end{figure}
 
-Figure ~\ref{fig:util_md} presents the utility trends for the multiday variant of our itinerary planner. Similar to the single-day analysis, a consistent increasing trend in utility results is observed with fixed cost budget and increasing time budget and vice-versa, across the various formulations. Specifically, the utility achieved using the fractional variant is consistently higher than that of the binary variant, reaffirming the advantages of allowing partial visitations in enhancing overall experience. Furthermore, within the fractional formulations, the CLF (Continuous Linear Fractional) approach typically yields higher utility than the slab-based version, demonstrating its stronger capability to balance constraints and exploit budget flexibility effectively across multiple days of planning.\\
+Figure ~\ref{fig:util_md} presents the utility trends for the multi-day variant of our itinerary planner. Similar to the single-day analysis, a consistent increasing trend in utility results is observed with fixed cost budget and increasing time budget and vice-versa, across the various formulations. Specifically, the utility achieved using the fractional variant is consistently higher than that of the binary variant, reaffirming the advantages of allowing partial visitations in enhancing overall experience. Furthermore, within the fractional formulations, the CLF (Continuous Linear Fractional) approach typically yields higher utility than the slab-based version, demonstrating its stronger capability to balance constraints and exploit budget flexibility effectively across multiple days of planning.\\
 
 \noindent\textbf{Multi-day Trips vs 2 single day trips}
 \begin{figure}[H]
@@ -245,7 +249,7 @@ Figure ~\ref{fig:util_md} presents the utility trends for the multiday variant o
 \caption{Comparison of agreggated Single day trips with 1 multi-day trip}
 \label{fig:singlevsmultiday}
 \end{figure}
-Figure ~\ref{fig:singlevsmultiday} clearly shows that a multi-day trip offers more than just the sum of individual single-day trips. In our experiment, we combined two separate single-day trips, where on the second day, the POIs of first day were exand compared their total utility with that of a single two-day trip using the multi-day variant. The results were consistent across all three utility measures—Binary, CLF, and Slabs—with the multi-day version yielding noticeably higher utility in each case. This suggests that the multi-day model captures cross-day interactions or efficiencies that are missed when treating each day independently, highlighting the added value of modeling trips across multiple days as a single unit.\\
+Figure ~\ref{fig:singlevsmultiday} clearly shows that a multi-day trip offers more than just the sum of individual single-day trips. In our experiment, we combined two separate single-day trips, where on the second day, the POIs of first day were extended and compared their total utility with that of a single two-day trip using the multi-day variant. The results were consistent across all three utility measures—Binary, CLF, and Slabs—with the multi-day version yielding noticeably higher utility in each case. This suggests that the multi-day model captures cross-day interactions or efficiencies that are missed when treating each day independently, highlighting the added value of modeling trips across multiple days as a single unit.\\
 
 \noindent\textbf{Effect of personalized constraints}
 \begin{figure}[H]
@@ -274,11 +278,11 @@ The impact of incorporating personalized constraints, that is, must-see, orderin
     \label{fig:scalability1}
 \end{figure*}
 
-Figure ~\ref{fig:dynamic} shows the effect of the dynamic nature of our itinerary planner,where we conducted an analysis based on three distinct user behavior scenarios. Our planner dynamically recalculates the itinerary by considering the actual time a user spends at each Point of Interest (POI) and the time taken to travel between them, in contrast to the initially suggested schedule. The three scenarios include: (1) \textit{30 Minutes Less Visiting Time}, where the user spends 30 minutes less at two POIs while keeping the travel time unchanged; (2) \textit{Ontime}, where the user follows the suggested visiting and travel times precisely; and (3) \textit{30 Minutes More Visiting Time}, where the user spends 30 minutes more at two POIs with the travel time remaining the same. As shown in figure, at a time budget of 480 minutes and cost budget of 8000 units in TRIP\_H\_B variant, the utility achieved in the first case is higher than the on-time scenario, while the utility in the third case is lower. This variation in utility values underscores the importance of adapting the itinerary based on real-time user behavior, demonstrating the effectiveness of our dynamically responsive planning approach.\\
+Figure ~\ref{fig:dynamic} shows the effect of the dynamic nature of our itinerary planner,where we conducted an analysis based on three distinct user behavior scenarios. Our planner dynamically recalculates the itinerary by considering the actual time a user spends at each Point of Interest (POI) and the time taken to travel between them, in contrast to the initially suggested schedule. The three scenarios include: (1) \textit{30 Minutes Less Visiting Time}, where the user spends 30 minutes less at two POIs while keeping the travel time unchanged; (2) \textit{On time}, where the user follows the suggested visiting and travel times precisely; and (3) \textit{30 Minutes More Visiting Time}, where the user spends 30 minutes more at two POIs with the travel time remaining the same. As shown in figure, at a time budget of 480 minutes and cost budget of 8000 units in TRIP\_H\_B variant, the utility achieved in the first case is higher than the on-time scenario, while the utility in the third case is lower. This variation in utility values underscores the importance of adapting the itinerary based on real-time user behavior, demonstrating the effectiveness of our dynamically responsive planning approach.\\
 
 
 \noindent\textbf{Scalability}\\
-To evaluate the scalability of our itinerary planning system, we examine how the computation time required to generate a complete itinerary varies with the number of Points of Interest (POIs) in a city, while keeping the time and cost budgets fixed at sufficiently accommodating values of 600 minutes and 10000 units respectively. As illustrated in Figure~\ref{fig:scalability1}, the observed increase in computation time with the number of POIs is expected, given that our approach is formulated as an Integer Linear Program (ILP). This growth aligns with the theoretical complexity of the underlying problem—a variant of the Team Orienteering Problem—which is known to be NP-Hard. Despite this, our formulation remains tractable for problem sizes typical of real-world tourist cities. Despite this theoretical complexity, our system demonstrates strong practical performance. For instance, with approximately 270 POIs, the itinerary is generated in under 25 seconds. Even with nearly 430 POIs, the computation time remains under 110 seconds. These results highlight that, for realistically sized cities, our system maintains high computational efficiency, making it a viable and scalable solution for real-world deployment.
+To evaluate the scalability of our itinerary planning system, we examine how the computation time required to generate a complete itinerary varies with the number of Points of Interest (POIs) in a city, while keeping the time and cost budgets fixed at sufficiently accommodating values of 600 minutes and 10000 units respectively. As illustrated in Figure~\ref{fig:scalability1}, the observed increase in computation time with the number of POIs is expected, given that our approach is formulated as an Integer Linear Program (ILP). This growth aligns with the theoretical complexity of the underlying problem — a variant of the Team Orienteering Problem — which is known to be NP-Hard. Despite this, our formulation remains tractable for problem sizes typical of real-world tourist cities. Despite this theoretical complexity, our system demonstrates strong practical performance. For instance, with approximately 270 POIs, the itinerary is generated in under 25 seconds. Even with nearly 430 POIs, the computation time remains under 110 seconds. These results highlight that, for realistically sized cities, our system maintains high computational efficiency, making it a viable and scalable solution for real-world deployment.
 
 \begin{figure}[H]
     \includegraphics[width=0.4\textwidth]{plots/multidayVStoc.png}
@@ -286,7 +290,3 @@ To evaluate the scalability of our itinerary planning system, we examine how the
     \label{fig:scalability2}
 \end{figure}
 We further analyze the scalability of our system by examining how the computation time varies with the number of days in the trip. As shown in Figure~\ref{fig:scalability2}, an increase in the number of days leads to a nonlinear growth in the time required to compute the optimal itinerary. This behavior is expected, as extending the trip duration increases the solution space exponentially due to the combinatorial nature of the underlying ILP formulation. Despite this, our system remains efficient for most practical use cases. For trips spanning up to 5 days, the computation time remains under 150 seconds, which is acceptable for interactive or semi-interactive planning scenarios. Even for longer trips (e.g., 7–8 days), where the computation time exceeds 1000 seconds, the planner still provides complete and optimized itineraries, reaffirming its robustness and practical viability for extended travel planning.
-
-
-
-
