@@ -99,9 +99,9 @@ TRIP\_H\_B & Hybrid -- Walk + Taxi & Binary \\
 TRIP\_W\_C & Walk & Fractional -- CLF \\
 TRIP\_T\_C & Taxi & Fractional -- CLF \\
 TRIP\_H\_C & Hybrid -- Walk + Taxi & Fractional -- CLF \\
-TRIP\_W\_M & Walk & Fractional -- Slabs \\
-TRIP\_T\_M & Taxi & Fractional -- Slabs \\
-TRIP\_H\_M & Hybrid -- Walk + Taxi & Fractional -- Slabs \\
+TRIP\_W\_S & Walk & Fractional -- Slabs \\
+TRIP\_T\_S & Taxi & Fractional -- Slabs \\
+TRIP\_H\_S & Hybrid -- Walk + Taxi & Fractional -- Slabs \\
 \hline
 \end{tabular}
 \caption{\trip Variants by Transportation Mode and Utility Variant}
@@ -179,7 +179,7 @@ To demonstrate the performance and insights of our itinerary planning system, we
 \noindent \textbf{Comparison of Multi-day trip in 9 variants with the Baseline Model}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.4\textwidth]{plots/baselineComparison.png}
+\includegraphics[width=0.42\textwidth]{plots/baselineComparison.png}
 \caption{Comparison with Baseline Model}
 \label{fig:comparisonWithBaselinePlot}
 \end{figure}
@@ -198,15 +198,15 @@ The plot~\ref{fig:comparisonWithBaselinePlot} compares the performance of our pr
 
 Figure ~\ref{fig:mm2} illustrate the impact of varying time and cost budgets on the utility achieved by different transportation modes in our itinerary planning framework. The top graph explores how increasing the time budget (with a fixed cost budget of 6000 units) affects utility. Here, we observe that the utility continues to increase for walking and hybrid modes, while it saturates for the taxi-only variant. This is because the taxi mode relies heavily on cost availability—once the fixed cost budget is consumed, additional time offers very little, to no further improvement. In contrast, the hybrid mode, which leverages both walking and taxi flexibly, consistently outperforms the single-mode options across all three TRIP variants, highlighting the effectiveness of our multi-modality feature.
 
-The lower graph, which holds the time budget constant at 480 minutes while increasing the cost budget, further supports this observation: hybrid models adapt more efficiently to increased resource availability, maximizing utility better than single-mode approaches. In this case, the utility for walking-only variants remains saturated across all TRIP variants, as the potential gains from walking are constrained by the fixed time rather than by cost. Furthermore, a consistent trend is observed wherein the CLF (Continuous Linear Function) scoring model outperforms the slab-based model. This is because CLF assigns utility proportionally to the time spent at a POI—for example, visiting a POI for 63\% of its average duration yields 63\% utility—while the slab model would round this down to 60\% based on predefined thresholds, resulting in a measurable loss. Together, both graphs validate our design choices, demonstrating the combined advantages of multi-modal transportation and continuous utility modeling in enhancing itinerary quality.
-
+The lower graph, which holds the time budget constant at 480 minutes while increasing the cost budget, further supports this observation: hybrid models adapt more efficiently to increased resource availability, maximizing utility better than single-mode approaches. In this case, the utility for walking-only variants remains saturated across all TRIP variants, as the potential gains from walking are constrained by the fixed time rather than by cost. Furthermore, a consistent trend is observed wherein the CLF (Continuous Linear Function) scoring model outperforms the slab-based model. This is because CLF assigns utility proportionally to the time spent at a POI—for example, visiting a POI for 63\% of its average duration yields 63\% utility—while the slab model would round this down to 60\% based on predefined thresholds, resulting in a measurable loss. Together, both graphs validate our design choices, demonstrating the combined advantages of multi-modal transportation and continuous utility modeling in enhancing itinerary quality.\\
 \noindent\textbf{Time Utilization}
-
 \begin{figure}[H]
+\textbf{Travel Times vs Visit Times in different Modes}\\
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_BINARY.png}
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_CLF.png}
-\centering
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_SLABS.png}
+\hspace{8pt}
+\raisebox{0.75\height}{\includegraphics[width=0.14\textwidth]{plots/TIME_UTILIZATION_LEGEND.png}}
 \caption{Time Utilization in 3 Modes- Osaka}
 \label{fig:TimeUtilization}
 \end{figure}
@@ -251,12 +251,12 @@ Figure ~\ref{fig:util_md} presents the utility trends for the multi-day variant 
 \end{figure}
 Figure ~\ref{fig:singlevsmultiday} clearly shows that a multi-day trip offers more than just the sum of individual single-day trips. In our experiment, we combined two separate single-day trips, where on the second day, the POIs of first day were extended and compared their total utility with that of a single two-day trip using the multi-day variant. The results were consistent across all three utility measures—Binary, CLF, and Slabs—with the multi-day version yielding noticeably higher utility in each case. This suggests that the multi-day model captures cross-day interactions or efficiencies that are missed when treating each day independently, highlighting the added value of modeling trips across multiple days as a single unit.\\
 
-\noindent\textbf{Effect of personalized constraints}
+\noindent\textbf{Effect of personalized constraints on Utility}
 \begin{figure}[H]
 \includegraphics[width=0.23\textwidth]{plots/mustsee.png}
 \includegraphics[width=0.23\textwidth]{plots/ordering.png}
-\centering
 \includegraphics[width=0.23\textwidth]{plots/category.png}
+\raisebox{0.5\height}{\includegraphics[width=0.15\textwidth]{plots/legend_personalized.png}}
 \caption{Effect of Must-see, ordering and category constraints}
 \label{fig:personalizedconstraints}
 \end{figure}

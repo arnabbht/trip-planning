@@ -17,46 +17,46 @@ Tarun Rambha et al. \ab{??} proposed a solution for optimizing costs of such iti
 Few other related work includes route recommendation based on crowd sensing in a multi-objective and multi-constraint setup~\cite{zheng2021novel}, coterie, revealing representative travel trajectory patterns hidden in Instagram data at shared locations and paths~\cite{yu2017mining}, Self-driving travel planning where a fuzzy analytic hierarchy process (FAHP) is utilized to solve the destination choice problem~\cite{jiaoman2018travel}, individual preferences about points of interests for multiple tourists and the mutual social relationship between them~\cite{sylejmani2017planning}, itinerary planning in multimodal transportation networks~\cite{zografos2008algorithms}, itinerary planning using Traveling Salesman Problem and K-means~\cite{rani2018development}, Mixed Integer Programming (MIP) for a spatially distributed POIs using non-decreasing reward function over the time spent at the POI~\cite{yu2014optimal} and IoT based trip planning ~\cite{arora2024itinerary}.   
 %------------------------------------------------------
 
-Current efforts have generally been limited to a subset of dimensions like time and cost limits, compulsory POIs, or ordering constraints. Our research (2025) offers an \underline{integrated optimization model} covering all the dimensions necessary: \emph{multi-modal transport modes, fractional visiting of POIs, real-time responsiveness, and advanced planning constraints like working days and category limits}. By bringing together these myriad constraints in one model, our system provides rich and versatile itineraries in proportion to the complexity of contemporary travel.
+Current efforts have generally been limited to a subset of dimensions like time and cost limits, compulsory POIs, or ordering constraints. Our research (2025) offers an \emph{integrated optimization model} covering all the dimensions necessary: \emph{multi-modal transport modes, fractional visiting of POIs, real-time responsiveness, and advanced planning constraints like working days and category limits}. By bringing together these myriad constraints in one model, our system provides rich and versatile itineraries in proportion to the complexity of contemporary travel.
 
 \begin{table*}[tbp]
 \centering
 \begin{adjustbox}{width=\textwidth,center}
 \begin{tabular}{lcccccccccccc}
 \toprule
-& \makecell{Time\\Budget} 
-& \makecell{Cost\\Budget} 
-& \makecell{Multi-modal\\Trips}
-& \makecell{Multi-day\\Trips} 
-& \makecell{Time\\Windows} 
-& \makecell{Working\\Days}  
-& \makecell{Category\\Constraint} 
-& \makecell{Must-see\\POIs}  
-& \makecell{Excluded\\POIs} 
-& \makecell{Ordering\\Constraint}
-& \makecell{Fractional\\Visit} 
-& \makecell{Dynamic\\Itineraries}\\
+& \bf \makecell{Time\\Budget} 
+& \bf \makecell{Cost\\Budget} 
+& \bf \makecell{Multi-modal\\Trips}
+& \bf \makecell{Multi-day\\Trips} 
+& \bf \makecell{Time\\Windows} 
+& \bf \makecell{Working\\Days}  
+& \bf \makecell{Category\\Constraint} 
+& \bf \makecell{Must-see\\POIs}  
+& \bf \makecell{Excluded\\POIs} 
+& \bf \makecell{Ordering\\Constraint}
+& \bf \makecell{Fractional\\Visit} 
+& \bf \makecell{Dynamic\\Itineraries}\\
 \midrule
-~\cite{chen2014automatic}      & \cmark &   &   & \cmark &   &   &   & \cmark &   &   &   &   \\
+\cite{chen2014automatic}      & \cmark &   &   & \cmark &   &   &   & \cmark &   &   &   &   \\
+%\midrule
+\cite{vanzelst2016itinerary}  &   & \cmark &   & \cmark & \cmark &   & \cmark &   &   &   &   &   \\
+%\midrule
+\cite{taylor2018tour}         & \cmark &   &   &   &   &   &   & \cmark &   &   &   &   \\
+%\midrule
+\cite{vu2022branch}           & \cmark & \cmark &   &   & \cmark &   & \cmark & \cmark & \cmark & \cmark &   &   \\
+%\midrule
+\cite{panagiotakis2024expectation}          & \cmark &   &   &   &   &   & \cmark & \cmark &   & \cmark &   &   \\
+%\midrule
+\cite{liu2024personalized}    & \cmark &   &   & \cmark & \cmark &   & \cmark & \cmark &   &   &   &   \\
+%\midrule
+\cite{rambha2024optimized}    &  & \cmark  &   &  \cmark  & \cmark  & \cmark   &  &  &   &   &   &   \\
+%\midrule
+\cite{lim2018personalized}    & \cmark & \cmark  &   &   & \cmark  &   & \cmark & \cmark &   &   &   &   \\
+%\midrule
+\cite{bolzoni2014efficient}    & \cmark &   &   &    &  &   & \cmark &  &   &   & \cmark  &   \\
+%\midrule
 \midrule
-~\cite{vanzelst2016itinerary}  &   & \cmark &   & \cmark & \cmark &   & \cmark &   &   &   &   &   \\
-\midrule
-~\cite{taylor2018tour}         & \cmark &   &   &   &   &   &   & \cmark &   &   &   &   \\
-\midrule
-~\cite{vu2022branch}           & \cmark & \cmark &   &   & \cmark &   & \cmark & \cmark & \cmark & \cmark &   &   \\
-\midrule
-~\cite{panagiotakis2024expectation}          & \cmark &   &   &   &   &   & \cmark & \cmark &   & \cmark &   &   \\
-\midrule
-~\cite{liu2024personalized}    & \cmark &   &   & \cmark & \cmark &   & \cmark & \cmark &   &   &   &   \\
-\midrule
-~\cite{rambha2024optimized}    &  & \cmark  &   &  \cmark  & \cmark  & \cmark   &  &  &   &   &   &   \\
-\midrule
-~\cite{lim2018personalized}    & \cmark & \cmark  &   &   & \cmark  &   & \cmark & \cmark &   &   &   &   \\
-\midrule
-~\cite{bolzoni2014efficient}    & \cmark &   &   &    &  &   & \cmark &  &   &   & \cmark  &   \\
-\midrule
-\midrule
-\textbf{Our Work}             & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark \\
+{Our Work}             & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}

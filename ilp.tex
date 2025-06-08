@@ -25,7 +25,7 @@
     & \sum_{\substack{i \in \text{POIs} \\ i \neq k}} z_{i,k,d} = y_{k,d}
     \quad \forall d \in \text{days},\forall k \in \text{POIs} \setminus \{\text{start}, \text{end}, \text{hotel}\}\\
     & \sum_{\substack{j \in \text{POIs} \\ j \neq k}} z_{k,j,d} = y_{k,d}, \quad \forall d \in \text{days}, \forall k \in \text{POIs} \setminus \{\text{start}, \text{end}, \text{hotel}\}
-     \end{align}
+\end{align}
 \begin{align}
     & \sum_{i \ne j} t^{w}_{i,j} \cdot w_{i,j,d} + \sum_{i \ne j} t^{t}_{i,j} \cdot x_{i,j,d} + \sum_{i \in V} \text{t}(v_i) \cdot y_{i,d} \nonumber \leq H \hspace{0.9cm} \ref{mul_day_9}\\
     & \sum_{d \in \text{days}} \sum_{(i,j) \in I} c^{w}_{i,j} \cdot w_{i,j} + c^{t}_{i,j} \cdot x_{i,j} + \sum_{d \in \text{days}} \sum_{i \in I} c(v_i) \leq B \hspace{0.3cm} \ref{mul_day_25} \notag\\
