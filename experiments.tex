@@ -179,7 +179,7 @@ To demonstrate the performance and insights of our itinerary planning system, we
 \noindent \textbf{Comparison of Multi-day trip in 9 variants with the Baseline Model}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.42\textwidth]{plots/baselineComparison.png}
+\includegraphics[width=0.42\textwidth]{plots/baselineComparison_pkj.png}
 \caption{Comparison with Baseline Model}
 \label{fig:comparisonWithBaselinePlot}
 \end{figure}
@@ -189,9 +189,9 @@ The plot~\ref{fig:comparisonWithBaselinePlot} compares the performance of our pr
 \noindent\textbf{Effect of Multi-modality}
 
 \begin{figure}[H]
-\includegraphics[width=0.4\textwidth]{plots/multimodality1.png}
+\includegraphics[width=0.4\textwidth]{plots/multimodality1_pkj.png}
 \label{fig:mm1}
-\includegraphics[width=0.4\textwidth]{plots/multimodality2.png}
+\includegraphics[width=0.4\textwidth]{plots/multimodality2_pkj.png}
 \caption{Variation of Utility in single-day trips in 9 variants}
 \label{fig:mm2}
 \end{figure}
@@ -215,18 +215,18 @@ Figure~\ref{fig:TimeUtilization} presents a comparison of travel time versus vis
 
 \noindent\textbf{Utility vs Time budget on different cost budgets}
 
-\begin{figure}[H]
-\includegraphics[width=0.22\textwidth]{plots/exp1-osaka.png}
-\includegraphics[width=0.22\textwidth]{plots/exp1-budapest.png}
-\includegraphics[width=0.22\textwidth]{plots/exp1-perth.png}
-\includegraphics[width=0.22\textwidth]{plots/exp1-delhi.png}
-\includegraphics[width=0.22\textwidth]{plots/exp1-glasgow.png}
-\includegraphics[width=0.22\textwidth]{plots/exp-1 vienna.png}
-\centering
-\includegraphics[width=0.22\textwidth]{plots/exp1-edinburgh.png}
-\caption{Utility variation with time and cost in 7 cities}
-\label{fig:cities}
-\end{figure}
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.33\textwidth]{plots/exp1-osaka_pkj.png}
+    \includegraphics[width=0.33\textwidth]{plots/exp1-budapest_pkj.png}
+    \includegraphics[width=0.33\textwidth]{plots/exp1-delhi_pkj.png}
+    \includegraphics[width=0.33\textwidth]{plots/exp1-glasgow_pkj.png}
+    \includegraphics[width=0.33\textwidth]{plots/exp-1 vienna_pkj.png}
+    \includegraphics[width=0.33\textwidth]{plots/exp1-edinburgh_pkj.png}
+    \caption{Utility variation with time and cost in 7 cities}
+    \label{fig:cities}
+\end{figure*}
+
 
 Figure~\ref{fig:cities} illustrates how the achieved utility varies across different combinations of time and cost budgets for the seven cities in our dataset. In each plot, line colors represent distinct cost budgets, the X-axis corresponds to increasing time budgets, and marker shapes denote different optimization variants (B, M, and C). A few consistent trends emerge across all cities. First, for a fixed cost budget, increasing the available time consistently leads to higher utility, highlighting the value of longer exploration durations. Second, for a given time budget, allocating a higher cost budget also results in improved utility, indicating the benefit of greater financial flexibility. Most notably, the C variant consistently outperforms both the M and B versions in terms of utility achieved, suggesting its superior effectiveness in balancing constraints across diverse urban scenarios.\\
 
@@ -273,7 +273,7 @@ The impact of incorporating personalized constraints, that is, must-see, orderin
 
 \begin{figure*}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{plots/scalability.png}
+    \includegraphics[width=\textwidth]{plots/scalability_pkj.png}
     \caption{Time of computation on increasing number of POIs in single-day trips.}
     \label{fig:scalability1}
 \end{figure*}
@@ -282,11 +282,11 @@ Figure ~\ref{fig:dynamic} shows the effect of the dynamic nature of our itinerar
 
 
 \noindent\textbf{Scalability}\\
-To evaluate the scalability of our itinerary planning system, we examine how the computation time required to generate a complete itinerary varies with the number of Points of Interest (POIs) in a city, while keeping the time and cost budgets fixed at sufficiently accommodating values of 600 minutes and 10000 units respectively. As illustrated in Figure~\ref{fig:scalability1}, the observed increase in computation time with the number of POIs is expected, given that our approach is formulated as an Integer Linear Program (ILP). This growth aligns with the theoretical complexity of the underlying problem — a variant of the Team Orienteering Problem — which is known to be NP-Hard. Despite this, our formulation remains tractable for problem sizes typical of real-world tourist cities. Despite this theoretical complexity, our system demonstrates strong practical performance. For instance, with approximately 270 POIs, the itinerary is generated in under 25 seconds. Even with nearly 430 POIs, the computation time remains under 110 seconds. These results highlight that, for realistically sized cities, our system maintains high computational efficiency, making it a viable and scalable solution for real-world deployment.
+To evaluate the scalability of our itinerary planning system, we examine how the computation time required to generate a complete itinerary varies with the number of Points of Interest (POIs) in a city, while keeping the time and cost budgets fixed at sufficiently accommodating values of 480 minutes and 6000 units respectively. As illustrated in Figure~\ref{fig:scalability1}, the observed increase in computation time with the number of POIs is expected, given that our approach is formulated as an Integer Linear Program (ILP). This growth aligns with the theoretical complexity of the underlying problem — a variant of the Team Orienteering Problem — which is known to be NP-Hard. Despite this, our formulation remains tractable for problem sizes typical of real-world tourist cities. Despite this theoretical complexity, our system demonstrates strong practical performance. For instance, with approximately 180 POIs, the itinerary is generated in under 1 minute. Even with nearly 260 POIs, the computation time remains approximately 5 minutes. These results highlight that, for realistically sized cities, our system maintains high computational efficiency, making it a viable and scalable solution for real-world deployment.
 
 \begin{figure}[H]
-    \includegraphics[width=0.4\textwidth]{plots/multidayVStoc.png}
+    \includegraphics[width=0.4\textwidth]{plots/multidayvstoc.png}
      \caption{Time of computation on increasing number of days in multi-day trips}
     \label{fig:scalability2}
 \end{figure}
-We further analyze the scalability of our system by examining how the computation time varies with the number of days in the trip. As shown in Figure~\ref{fig:scalability2}, an increase in the number of days leads to a nonlinear growth in the time required to compute the optimal itinerary. This behavior is expected, as extending the trip duration increases the solution space exponentially due to the combinatorial nature of the underlying ILP formulation. Despite this, our system remains efficient for most practical use cases. For trips spanning up to 5 days, the computation time remains under 150 seconds, which is acceptable for interactive or semi-interactive planning scenarios. Even for longer trips (e.g., 7–8 days), where the computation time exceeds 1000 seconds, the planner still provides complete and optimized itineraries, reaffirming its robustness and practical viability for extended travel planning.
+We further analyze the scalability of our system by examining how the computation time varies with the number of days in the trip. As shown in Figure~\ref{fig:scalability2}, an increase in the number of days leads to a non-linear growth in the time required to compute the optimal itinerary. This behavior is expected, as extending the trip duration increases the solution space exponentially due to the combinatorial nature of the underlying ILP formulation. Despite this, our system remains efficient for most practical use cases. For trips spanning up to 5 days, the computation time remains under 150 seconds, which is acceptable for interactive or semi-interactive planning scenarios. Even for longer trips (e.g., 7–8 days), where the computation time exceeds 1000 seconds, the planner still provides complete and optimized itineraries, reaffirming its robustness and practical viability for extended travel planning.
