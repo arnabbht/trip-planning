@@ -9,7 +9,7 @@ This approach generates an empirical proxy for real tourist behavior, measuring 
 
 The existing dataset contained the following key fields for each POI:
 
-\begin{table}[H]
+\begin{table}[th]
 \begin{tabularx}{0.5\textwidth}{p{3cm} X}
 \hline
 \textbf{Field Name} & \textbf{Description} \\
@@ -36,7 +36,7 @@ The existing dataset contained the following key fields for each POI:
 
 With an aim to make our system more realistic and practical to use, we supplemented the dataset manually with real-life operating limitations and data that we gathered from \textbf{official tourist websites} and verified online portals. The added fields are:
 
-\begin{table}[H]
+\begin{table}[th]
 \centering
 \begin{tabularx}{0.5\textwidth}{p{3cm} X}
 \toprule
@@ -87,7 +87,7 @@ However, direct performance comparison between our model and the baseline was no
 \subsection{9 Variants of the \trip}
 
 We evaluate the performance of the \trip solution by considering its variants as listed in Table~\ref{tab:trip_variants}, that are based on the transportation mode and the chosen utility variant. 
-\begin{table}[H]
+\begin{table}[th]
 \centering
 \begin{tabular}{|l|l|l|}
 \hline
@@ -177,7 +177,7 @@ To demonstrate the performance and insights of our itinerary planning system, we
 
 \newpage
 \noindent \textbf{Comparison 9 variants with the Baseline Model}
-\begin{figure}[H]
+\begin{figure}[th]
 \centering
 \includegraphics[width=0.5\textwidth]{plots/singledaycomparison.png}
 \caption{Comparison of Single-day trips with Baseline Model}
@@ -194,7 +194,7 @@ Overall, the plot effectively highlights how our approach—especially the allow
 
 
 
-\begin{figure}[H]
+\begin{figure}[th]
 \includegraphics[width=0.5\textwidth]{plots/baselineComparison_pkj.png}
 \caption{Comparison of Multi-day trips with Baseline Model}
 \label{fig:comparisonWithBaselinePlot}
@@ -204,7 +204,7 @@ The plot~\ref{fig:comparisonWithBaselinePlot} compares the performance of our pr
 
 \noindent\textbf{Effect of Multi-modality}
 
-\begin{figure}[H]
+\begin{figure}[th]
 \includegraphics[width=0.4\textwidth]{plots/multimodality1.png}
 \label{fig:mm1}
 \includegraphics[width=0.4\textwidth]{plots/multimodality2.png}
@@ -220,7 +220,7 @@ This experiment was done to illustrate the impact of varying time and cost budge
 The lower graph, which holds the time budget constant at 480 minutes while increasing the cost budget, further supports this observation: hybrid models adapt more efficiently to increased resource availability, maximizing utility better than single-mode approaches. In this case, the utility for walking-only variants remains saturated across all TRIP variants, as the potential gains from walking are constrained by the fixed time rather than by cost. Furthermore, a consistent trend is observed wherein the CLF (Continuous Linear Function) scoring model outperforms the slab-based model. This is because CLF assigns utility proportionally to the time spent at a POI—for example, visiting a POI for 63\% of its average duration yields 63\% utility—while the slab model would round this down to 60\% based on predefined thresholds, resulting in a measurable loss. Together, both graphs validate our design choices, demonstrating the combined advantages of multi-modal transportation and continuous utility modeling in enhancing itinerary quality.\\
 
 \noindent\textbf{Time Utilization}
-\begin{figure}[H]
+\begin{figure}[th]
 \textbf{Travel Times vs Visit Times in different Modes and Cost Budgets}\\
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_BINARY.png}
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_CLF.png}
@@ -231,7 +231,7 @@ The lower graph, which holds the time budget constant at 480 minutes while incre
 \label{fig:TimeUtilization}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[th]
 \textbf{Travel Times vs Visit Times in different Modes and Time Budgets}\\
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_BINARY1.png}
 \includegraphics[width=0.23\textwidth]{plots/TIME_UTILIZATION_CLF1.png}
@@ -246,7 +246,7 @@ Figures~\ref{fig:TimeUtilization} and ~\ref{fig:TimeUtilization1} present a comp
 
 \noindent\textbf{Cost Utilization}
 
-\begin{figure}[H]
+\begin{figure}[th]
 \textbf{Travel Cost vs Visit Cost in different Modes and Time Budgets}\\
 \includegraphics[width=0.5\textwidth]{plots/CU3_pkj.png}
 \includegraphics[width=0.5\textwidth]{plots/CU1_pkj.png}
@@ -257,7 +257,7 @@ Figures~\ref{fig:TimeUtilization} and ~\ref{fig:TimeUtilization1} present a comp
 \label{fig:CostUtilization1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[th]
 \textbf{Travel Cost vs Visit Cost in different Modes and Cost Budgets}\\
 \includegraphics[width=0.5\textwidth]{plots/CU4_pkj.png}
 \includegraphics[width=0.5\textwidth]{plots/CU5_pkj.png}
@@ -295,10 +295,10 @@ No definite trends in these plots what to explain in them????\\
 
 % \newpage
 \noindent\textbf{Variation of Utility in Multi-day Itineraries}
-\begin{figure}[H]
+\begin{figure}[th]
 \includegraphics[width=0.45\textwidth]{plots/multiday1_pkj.png}
 % \end{figure}
-% \begin{figure}[H]
+% \begin{figure}[th]
 \includegraphics[width=0.45\textwidth]{plots/multiday2_pkj.png}
 \caption{Trends in Multi-day itineraries (3-day Trip)}
 \label{fig:util_md}
@@ -307,7 +307,7 @@ No definite trends in these plots what to explain in them????\\
 Figure ~\ref{fig:util_md} presents the utility trends for the multi-day variant of our itinerary planner for a 3 day trip. Similar to the single-day analysis, a consistent increasing trend in utility results is observed with fixed cost budget and increasing time budget and vice-versa, across the various formulations. Specifically, the utility achieved using the fractional variant is consistently higher than that of the binary variant, reaffirming the advantages of allowing partial visitations in enhancing overall experience. Furthermore, within the fractional formulations, the CLF (Continuous Linear Fractional) approach typically yields higher utility than the slab-based version, demonstrating its stronger capability to balance constraints and exploit budget flexibility effectively across multiple days of planning. However slabbed version works better than the binary version and thus it can be used to mathematically model the non linear utility functions in our problem which otherwise cannot be handled directly by ILP solvers and thus resulting in a better performance than the binary version.\\
 
 \noindent\textbf{Multi-day Trips vs 3 single day trips}
-\begin{figure}[H]
+\begin{figure}[th]
 \centering
 \includegraphics[width=0.5\textwidth]{plots/multivssingle.png}
 \caption{Comparison of aggregated Single day trips with 2 day and 3 day multi-day trips}
@@ -317,7 +317,7 @@ Figure ~\ref{fig:singlevsmultiday}  illustrates a comparison of total utility ac
 
 The results clearly demonstrate that multi-day planning consistently outperforms naive aggregation over single days. In the Binary variant, the 2-day multi-day plan has a score of 4084, whereas two single-day plans aggregated give lower cumulative utility. Similarly, in the 3-day variant, the multi-day plan has a score of 5349, much higher than the three single-day utilities summed up. The same is the case with the CLF variant, where the multi-day plans (4218 for 2-day, 5382 for 3-day) consistently beat the aggregated single-day tallies. This improved performance is due to the flexibility and optimization advantages of multi-day planning, where activities and itineraries can be optimized globally over multiple days as opposed to being restricted within independent daily plans. Thus, multi-day trip planning is not a single-day plan aggregation but a richer solution space that optimally exploits inter-day complementarities.
 \noindent\textbf{Effect of personalized constraints on Utility}
-\begin{figure}[H]
+\begin{figure}[th]
 \includegraphics[width=0.24\textwidth]{plots/mustsee_pkj.png}
 \includegraphics[width=0.23\textwidth]{plots/ordering_pkj.png}
 \includegraphics[width=0.24\textwidth]{plots/category_pkj.png}
@@ -329,7 +329,7 @@ The results clearly demonstrate that multi-day planning consistently outperforms
 The impact of incorporating personalized constraints, that is, must-see, ordering, and category constraints, on overall utility is illustrated in the three graphs in figure ~\ref{fig:personalizedconstraints}. In this study a cost budget of 6000 units and a time budget of 480 minutes is utilized and across all cases, it is evident that increasing the number of constraints leads to a decline in the achievable utility, as the solution space becomes more restricted. However, the extent of this reduction varies across the different formulations. Specifically, the CLF and slab variants show a relatively gradual decline in utility compared to the binary variant. This is primarily because the binary model lacks the flexibility to accommodate partial visits to points of interest (POIs), thereby limiting its ability to adapt to tighter constraints. In contrast, the CLF and slab variants can better navigate these constraints by leveraging their ability to assign fractional visits, thus preserving higher utility under increasingly personalized user preferences.\\
 
 \noindent\textbf{Effect of Dynamic Re-routing}
-\begin{figure}[H]
+\begin{figure}[th]
     \centering
     \includegraphics[width=0.50\textwidth]{plots/dynamic_pkj.png}
     \caption{Comparison of utility when tourist gets delayed, reaches on time and arrives early}
@@ -378,7 +378,7 @@ To evaluate the scalability of our itinerary planning system, we examine how the
     \label{fig:timebudgetvstoc}
 \end{figure*}
 
-\begin{figure}[H]
+\begin{figure}[th]
     \includegraphics[width=0.4\textwidth]{plots/multidayvstoc.png}
      \caption{Time of computation on increasing number of days in multi-day trips}
     \label{fig:scalability2}
