@@ -1,60 +1,88 @@
 \section{Integer Linear Programming Solution}
 \label{sec:ilp}
 
-In this section, we first outline the basic solution, before expanding it for the different extensions.
+In this section, we first outline the basic solution, before expanding it for
+the different extensions.
 
 \subsection{Basic Solution}
 \label{sec:basic}
 
-We propose a \emph{mixed integer linear programming (ILP)} solution for the \trip problem.
-Each POI $v_{j}$ is associated with a binary variable $y_{j}$, which is $1$ if it is included in the optimal itinerary, and $0$ otherwise.
-%Suppose, the sequence of chosen POIs is $i_1, i_2, \dots, i_n$.
-Each edge (i.e., a connection between POIs and the source and destination) between two POIs $v_{j}$ and $v_{k}$ is also associated with an edge binary variable $z_{j,k}$; it is $1$ if the edge is chosen, and $0$ otherwise.
-To denote $d$ different transport modes, $z$ is superscripted with the mode.
-Thus, walking, taxi, etc. are denoted as $z^1$, $z^2$, etc.
-Assuming the city has $N$ POIs, without loss of generality, we
-treat the source $s$ and destination $d$ as POI $v_{0}$ and $v_{{N+1}}$ respectively for uniform treatment.
+We propose a \emph{mixed integer linear programming (ILP)} solution for the
+\trip problem.  Each POI $v_{j}$ is associated with a binary variable $y_{j}$,
+which is $1$ if it is included in the optimal itinerary, and $0$ otherwise.
+Each edge (i.e., a connection between POIs and the source and destination)
+between two POIs $v_{j}$ and $v_{k}$ is also associated with an edge binary
+variable $z_{j,k}$; it is $1$ if the edge is chosen, and $0$ otherwise.  To
+denote $m$ different transport modes, $z$ is superscripted with the mode.  Thus,
+walking, taxi, etc. are denoted as $z^1$, $z^2$, etc.  Assuming the city has $N$
+POIs, without loss of generality, we treat the source $S$ and destination $D$ as
+POI $v_{0}$ and $v_{{N+1}}$ respectively for uniform treatment.
 
 \begin{align}
-	\max & \sum_{\forall i} U_{v_{i}} . y_{i} \\
 		\label{eq:max}
+	\max & \sum_{\forall i} U_{v_{i}} . y_{i} \\
 	\text{subject to } & \nonumber \\
-	y_{i} & \in \{ 0, 1 \}, \forall i \\
 		\label{eq:y}
-	y_{0} = y_{{N+1}} & = 1 \\
+	y_{i} & \in \{ 0, 1 \}, \forall i \\
 		\label{eq:sd}
-	\sum_{\forall j, k} c_{v_{j},v_{k}} . y_{j} . y_{k} + \sum_{\forall j} c_{v_j} . y_{v_j} & \leq C \\
+	y_{0} = y_{{N+1}} & = 1 \\
 		\label{eq:cost}
-	\sum_{\forall j, k} t_{v_{j},v_{k}} . y_{j} . y_{k} + \sum_{\forall j} t_{v_j} . y_{v_j} & \leq T \\
+	\sum_{\forall j, k, \forall m} c_{v_{j},v_{k}} . z^m_{jk} + \sum_{\forall j} c_{v_j} . y_{v_j} & \leq C \\
 		\label{eq:time}
-	\sum_{\forall k} z^d_{v_{0},v_{k}} & = 1, \forall d \\
+	\sum_{\forall j, k, \forall m} t_{v_{j},v_{k}} . z^m_{jk} + \sum_{\forall j} t_{v_j} . y_{v_j} & \leq T \\
 		\label{eq:sout}
-	\sum_{\forall j} z^d_{v_{j},v_{0}} & = 0, \forall d \\
+	\sum_{\forall k} z^m_{v_{0},v_{k}} & = 1, \forall m \\
 		\label{eq:sin}
-	\sum_{\forall j} z^d_{v_{j},v_{N+1}} & = 1, \forall d \\
+	\sum_{\forall j} z^m_{v_{j},v_{0}} & = 0, \forall m \\
 		\label{eq:din}
-	\sum_{\forall k} z^d_{v_{N+1},v_{k}} & = 0, \forall d \\
+	\sum_{\forall j} z^m_{v_{j},v_{N+1}} & = 1, \forall m \\
 		\label{eq:dout}
-	\sum_{\forall j} z^d_{v_{j},v_{k}} & \leq 1, \forall k, \forall d \\
+	\sum_{\forall k} z^m_{v_{N+1},v_{k}} & = 0, \forall m \\
 		\label{eq:out}
-	\sum_{\forall k} z^d_{v_{j},v_{k}} & \leq 1, \forall j, \forall d \\
+	\sum_{\forall j} z^m_{v_{j},v_{k}} & \leq 1, \forall k, \forall m \\
 		\label{eq:in}
-	\sum_{\forall d} z^d_{v_{j},v_{k}} & \leq 1, \forall j, k \\
+	\sum_{\forall k} z^m_{v_{j},v_{k}} & \leq 1, \forall j, \forall m \\
 		\label{eq:mode}
-	\text{ \ab{does this capture subset deletion?} } & \\
-	\text{ \ab{how is connectivity ensured?} } & \\
-	\text{ \ab{how is ordering handled?} } & \\
-	\text{ \ab{are there other constraints in basic problem?} } &
+	\sum_{\forall m} z^m_{v_{j},v_{k}} & \leq 1, \forall j, k \\
+		\label{eq:connectivity}
+	\sum_{\forall j, \forall m} z^m_{v_{j},v_{i}} = \sum_{\forall k, \forall m} z^m_{v_{i},v_{k}} & = y_i, \forall i \\
+		\label{eq:nodechosen1}
+	\sum_{\forall m} z^m_{v_{j},v_{k}} & \leq y_j, \forall j,k \\
+		\label{eq:nodechosen2}
+	\sum_{\forall m} z^m_{v_{j},v_{k}} & \leq y_k, \forall j,k \\
+		\label{eq:edgechosen1}
+	\sum_{\forall k, \forall m} z^m_{v_{j},v_{k}} & \geq y_j, \forall j \\
+		\label{eq:edgechosen2}
+	\sum_{\forall j, \forall m} z^m_{v_{j},v_{k}} & \geq y_k, \forall k \\
+		\label{eq:self}
+	z^m_{v_{i},v_{i}} & = 0, \forall i, \forall m 
 \end{align}
 
-The above ILP solves the basic \trip problem.
-Eq.~\eqref{eq:max} represents the utility maximization problem.
-Eq.~\eqref{eq:y} marks the choice of POIs chosen for the optimal itinerary; however, Eq.~\eqref{eq:sd} mandates choosing the source and destination.
-Eq.~\eqref{eq:cost} and Eq.~\eqref{eq:time} put the cost and time budget constraints by adding up for the POIs that are chosen (i.e., the corresponding $y = 1$).
-Eq.~\eqref{eq:sout} and Eq.~\eqref{eq:din} ensure that the source and the destination is connected to one and only one POI in the \emph{correct direction}, i.e., via one outgoing edge and one incoming edge respectively only.
-Eq.~\eqref{eq:sin} and Eq.~\eqref{eq:dout} ensure that there is no incoming edge to the source and no outgoing edge from the destination.
-Eq.~\eqref{eq:out} and Eq.~\eqref{eq:in} constrain that each POI has at most one incoming and at most one outgoing edge.
-Eq.~\eqref{eq:mode} ensures that the chosen mode of travel is at most one of the $d$ possibilities.
+%\ab{does this capture subset deletion?}
+%\ab{how is ordering handled?}
+%\ab{are there other constraints in basic problem?}
+
+The above ILP solves the basic \trip problem.  Eq.~\eqref{eq:max} represents the
+\emph{utility maximization} problem.  Eq.~\eqref{eq:y} marks the choice of POIs
+chosen for the optimal itinerary; however, Eq.~\eqref{eq:sd} mandates choosing
+the source and destination.  Eq.~\eqref{eq:cost} and Eq.~\eqref{eq:time} put the
+cost and time \emph{budget constraints} by adding up the respective values for
+the POIs that are chosen (corresponding to $y = 1$).  Eq.~\eqref{eq:sout} and
+Eq.~\eqref{eq:din} ensure that the source and the destination is connected to
+one and only one POI in the \emph{correct direction}, i.e., via one outgoing
+edge and one incoming edge respectively only.  Eq.~\eqref{eq:sin} and
+Eq.~\eqref{eq:dout} ensure that there is no incoming edge to the source and no
+outgoing edge from the destination.  Eq.~\eqref{eq:out} and Eq.~\eqref{eq:in}
+constrain that each POI has at most one incoming and at most one outgoing edge.
+Eq.~\eqref{eq:mode} ensures that the chosen mode of travel is at most one of the
+$m$ possibilities.  Eq.~\eqref{eq:connectivity} imposes the \emph{connectivity
+constraint} by ensuring that a node, if chosen, has exactly one incoming edge
+and an outgoing edge.  Eq.~\eqref{eq:nodechosen1} and Eq.~\eqref{eq:nodechosen2}
+imposes the condition that if a node is chosen, corresponding edges in and out
+of it must be present as well.  Eq.~\eqref{eq:edgechosen1} and
+Eq.~\eqref{eq:edgechosen2} ensures the opposite, i.e., if an edge is chosen, the
+corresponding nodes are chosen as well.  Finally, Eq.~\eqref{eq:self} ensures
+that there is \emph{no self-loop}.
 
 \ignore{
 

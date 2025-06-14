@@ -39,20 +39,20 @@ destination has to be also taken into account.
 An itinerary $I$ of $n$ POIs is, thus, represented as a sequence
 %
 \begin{align}
-	I = [ s, v_1, \dots, v_n, d ]
+	I = [ S, v_1, \dots, v_n, D ]
 \end{align}
 %
 The total time spent for itinerary $I$ is
 %
 \begin{align}
-	t(I) = t_{s,v_1} + t_{v_1} + t_{v_1,v_2} + t_{v_2} + \dots + t_{v_{n-1,v_n}} + t_{v_n} + t_{v_n,d}
+	t(I) = t_{S,v_1} + t_{v_1} + t_{v_1,v_2} + t_{v_2} + \dots + t_{v_{n-1,v_n}} + t_{v_n} + t_{v_n,D}
 \end{align}
 %
 which takes into account both the travel time and visiting time.  Similarly,
 the total cost of itinerary $I$ is 
 %
 \begin{align}
-	c(I) = c_{s,v_1} + c_{v_1} + c_{v_1,v_2} + c_{v_2} + \dots + c_{v_{n-1,v_n}} + c_{v_n} + c_{v_n,d}
+	c(I) = c_{S,v_1} + c_{v_1} + c_{v_1,v_2} + c_{v_2} + \dots + c_{v_{n-1,v_n}} + c_{v_n} + c_{v_n,D}
 \end{align}
 %
 which again takes into account both the travel time and visiting time.  The
@@ -77,6 +77,12 @@ the same category may be included and/or at least one POI of a particular
 category must be included, etc.  She may also put in ordering
 constraints, such as a temple must be visited before a museum, etc.  The feasible itinerary $I$ must satisfy all these
 constraints.
+
+\ignore{
+
+ordering constraint: si + ... <= M (big-M constraint)
+
+}
 
 \ignore{
 
