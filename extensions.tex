@@ -1,3 +1,225 @@
+%\section{Extensions of \trip}
+
+\subsection{Personalized Constraints}
+\label{sec:personalized}
+
+We next the basic ILP problem, outlined in Eq.~\eqref{eq:max}--Eq.~\eqref{eq:mode} to personalized constraints.
+
+\subsubsection{Must-visit POIs}
+\label{sec:must}
+
+Suppose the traveler specifies a list of POIs $[m_1, \dots, m_k]$ that she
+must visit.  Simply enforcing the corresponding $y$ binary variables to
+$1$ ensures that these POIs are chosen in the optimal itinerary:
+%
+\begin{align}
+	y_{m_i} & = 1, \forall i = 1, \dots, k
+\end{align}
+
+\subsubsection{Must-avoid POIs}
+\label{sec:avoid}
+
+Similarly, if the traveler explicitly lists a set of POIs $[a_1, \dots,
+a_k]$ that she does not want to visit, the corresponding $y$ binary
+variables are simply set to $0$:
+%
+\begin{align}
+	y_{a_i} & = 0, \forall i = 1, \dots, k
+\end{align}
+
+\subsubsection{Category Constraints}
+\label{sec:category}
+
+To handle category contraints where a traveler specifies the range of
+number of POIs that she wants to visit for a category, we augment the
+variable $y$ associated with every POI with a category superscript.  For
+example, if there are $l$ categories, the corresponding variables $y^1,
+\dots, y^l$ represent the different possibilities.  If POI $i$ belongs to
+category $k$, then, by definition, $y^j_i = 0, \forall j \neq k$, for
+every other category $j$.  If every category $k$ has a lower bound $lb^k$
+and upper bound $ub^k$ on number of POIs to be visited, then the basic
+problem can be augmented by:
+%
+\begin{align}
+	lb^k \leq \sum_{\forall i} y^k_i & \leq ub^k
+\end{align}
+%
+If the traveler only specifies the minimum number of POIs of a category
+$k$ that she must visit, the upper bound $ub^k = N$; similarly, specifying
+only the maximum number puts the lower bound as $lb^k = 0$.  For
+categories where no constraint is mentioned, $lb^k = 0$ and $ub^k = N$.
+
+\ab{Ordering constraints require discussion!}
+
+\begin{itemize}
+
+\ignore{
+		
+\item \textbf{Must-see POIs}\\
+This constraint enforces that each POI marked as a must-see is visited exactly once over the duration of the trip:
+
+\begin{equation}
+\label{mul_day_7}
+    \sum_{d \in \text{days}} y_{i,d} = 1 \quad \quad \forall i \in \text{must\_see\_pois}
+\end{equation}
+
+where:
+\begin{itemize}
+  \item \texttt{must\_see\_pois} is the set of user-specified must-visit POIs
+\end{itemize}
+\item \textbf{Must-avoid POIs}\\
+This constraint enforces that each POI marked as excluded is never visited in the entire trip:
+
+\begin{equation}
+\label{mul_day_8}
+    \sum_{d \in \text{days}} y_{i,d} = 0 \quad \quad \forall i \in \text{excluded\_pois}
+\end{equation}
+
+where:
+\begin{itemize}
+  \item \texttt{excluded\_pois} is the set of user-specified excluded POIs
+\end{itemize}
+\item \textbf{Category Constraints}\\
+The user can specify the lower bound and upper bound for the categories of POIs to be visited across the trip. This constraint ensures that user's preferences over these themes are respected:
+
+\begin{align}
+\label{mul_day_11}
+lb_m \leq \sum_{i \in V_m} \sum_{d \in \text{days}} y_{i,d} \leq ub_m, \quad \forall m \in C 
+\end{align}
+
+where:
+\begin{itemize}
+  \item \( C \) represents all the categories (e.g., historical, cultural, adventure, etc.)
+  \item \( lb_m \) and \( ub_m \) are the lower and upper bounds for theme \( m \)
+\end{itemize}
+
+}
+
+\item \textbf{Ordering Constraints}\\
+If (a,b) is an ordering constraint, then POI a and POI b can be visited on different days, so this constraint makes sure that day of visit of POI a is before, or same as day of visit of POI b.
+\begin{align}
+\label{mul_day_12}
+\texttt{day\_visit}_a \leq \texttt{day\_visit}_b, \quad \forall (v_a, v_b) \in P
+\end{align}
+\noindent
+where:
+\begin{itemize}
+    \item \( \texttt{day\_visit}_a \): the day on which POI \( a \) is visited.
+    \item \( P \): the set of all ordered POI pairs with ordering constraints entered by the tourist.
+\end{itemize}
+
+\textbf{2. Intra-day Temporal Ordering Constraint}\\
+If (a,b) is an ordering constraint and both POI a and POI b are to be visited on same day, then this constraint ensures that arrival time of POI b is greater than or equal to sum of arrival time of POI a, visit duration of POI a and travel time from POI a to POI b.
+
+\begin{align}
+\label{mul_day_13}
+s_{i,d} + \left( t(v_i) + \left( t^{w}_{i,j} \cdot w_{i,j,d} + t^{t}_{i,j} \cdot x_{i,j,d} \right) \right) y_{i,d}
+&\leq s_{j,d} + T_{ij} (1 - y_{j,d})\\ \forall (v_i, v_j) \in P,\; \forall d \in \text{days} \nonumber \\
+\label{mul_day_14}
+T_{ij} = ct(v_i) + t(v_i) + t^{w}_{i,j} 
+\end{align}
+
+
+
+\noindent
+where:
+\begin{itemize}
+    \item \( s_{i,d} \): start time of visiting POI \( i \) on day \( d \).
+    \item \( t(v_i) \):visit time spent at POI \( i \).
+    \item \( ct(v_i) \): closing time of POI \(v_i\) \( i \).
+\end{itemize}
+
+\noindent
+The Big-M term \( T_{ij} (1 - y_{j,d}) \) ensures the constraint becomes non-restrictive when POI \( j \) is not selected on day \( d \).
+\end{itemize}
+
+
+\subsection{Utility Variants}
+
+\noindent \textbf{Fractional Visits to POIs}\\
+This feature enables partial visiting of Points of Interest (POIs), thus enhancing the flexibility and potential utility of the proposed itineraries. In comparison to the Binary approach used before which required the POI to be completely visited in order to collect its utility, the Fractional version built here grants proportional utility based on the proportion visited of the POI—improving time and cost budget efficiency.
+
+\textbf{Fractional POI Variable (ppoi[i])}
+\begin{itemize}
+    \item A real variable $\text{ppoi}[i] \in [0, 1]$ is defined for every POI i to reflect the portion of the POI's total visit time covered by the itinerary.
+
+    \item A threshold of 0.5 (50\%) is enforced: POIs must be visited for at least half of their average duration to be included. If ppoi[i] < 0.5, it is effectively set to 0 and the POI is excluded from the plan.
+\end{itemize}
+
+\textbf{Utility Calculation Variants}
+\label{Utility_Calculation}
+
+Two distinct methods are used to compute the utility in the fractional setting:
+
+\begin{itemize}
+\item {Continuous Linear Utility Model}
+
+In this version, the utility granted is directly proportional to the fraction of the POI visited.
+
+If a POI has utility $U$ and is visited for $p$ fraction of time (where $p \in [0.5, 1]$), the utility granted is $U \times p$.
+
+\item{Slab-Based Utility Model}
+\begin{itemize}[noitemsep, topsep=0pt]
+    \item Fraction $\in$ [0.5, 0.6) $\rightarrow$ 50\% utility
+    \item Fraction $\in$ [0.6, 0.7) $\rightarrow$ 60\% utility
+    \item Fraction $\in$ [0.7, 0.8) $\rightarrow$ 70\% utility
+    \item Fraction $\in$ [0.8, 0.9) $\rightarrow$ 80\% utility
+    \item Fraction $\in$ [0.9, 1.0) $\rightarrow$ 90\% utility
+    \item Fraction = 1.0 $\rightarrow$ 100\% utility
+\end{itemize}
+
+It is important to note that we provide 100\% utility if and only if POI is visited completely. The utility granted coincides with the lower bound because we do not want a situation like this to occur where even if we suggest that tourist visit 50\% POI and they get any utility greater than 50\% because that would scale up the actual utility as compared to the continuous linear function.
+\end{itemize}
+
+To enable fractional visits, the constraints were modified to make the visit duration at one POI proportional to a continuous variable \( ppoi_i \in [0,1] \), that represents the relative fraction of the overall visit duration spent at the POI \( v_i \). Accordingly, in all the constraints, the original visit times are multiplied by this fractional variable \( ppoi_i \), ensuring the constraints accurately reflect partial visits.
+
+When the utility function is a continuous linear function of visit time, the utility score obtained from a POI is also scaled proportionally, i.e., \( \text{utility}_i = U(v_i) \cdot ppoi_i \), where \( U(v_i) \) is the full utility for a complete visit to POI \( v_i \).
+
+For the slab-based utility variant, a continuous variable \( \text{effective\_utility}_i \) is used to capture the actual utility awarded based on the fraction of time spent at each POI. The utility is determined using discrete slab multipliers based on the visit duration. Each POI is assigned to at most one slab, and the utility is calculated as:
+
+\begin{align}
+\label{effective_utility}
+\text{effective\_utility}_i &= U(v_i) \cdot \big(0.5 \cdot s_1[i] + 0.6 \cdot s_2[i] + 0.7 \cdot s_3[i] \notag \\
+&\quad + 0.8 \cdot s_4[i] + 0.9 \cdot s_5[i] + 1.0 \cdot s_6[i] \big)
+\end{align}
+
+The optimization objective is to maximize the total utility accumulated across all POIs:
+
+\begin{align}
+\label{objective_fun_slabs}
+U(I) = \sum_{i=1}^N \text{effective\_utility}_i
+\end{align}
+
+To ensure only one slab level is chosen per POI, the following constraint is imposed:
+
+\begin{align}
+\sum_{k=1}^{6} s_k[i] \leq 1, \quad \forall i \in \{1, \dots, N\}
+\end{align}
+
+
+
+
+\subsection{Dynamic Itinerary Re-planning}
+The real tourist behavior and weather conditions, are dynamic and unpredictable in nature. They can be influenced by unforeseen delays, detours, longer-than-anticipated visits, or spontaneous user preferences, which can significantly impact the feasibility and correctness of an advanced preplanned itinerary. To close the gap between theory and practice, a dynamic approach is required.
+
+In contrast with the static approach used in \cite{taylor2018tour}, where rigid, precomputed travel times and POI visit times, we have taken real-time travel times using Google-Maps API (Routes API). 
+
+On the top of suggested times of visit and travel, user can enter the actual time they have taken to visit a POI and the travel time they took to reach the current POI.
+
+With every visit to a POI, the system replans the schedule based on the remaining time and cost budgets. The POIs already visited are not considered for further itineraries. This optimizes the rest of the day based on current progress and not stale assumptions.
+
+For the dynamic feature, a record of visited POIs was maintained. On visiting a POI, it was eliminated from the list to be taken into account in future itinerary calculations with the new remaining time and cost budgets.
+
+\begin{figure}[H]
+\textbf{Implementation of Dynamic Approach}
+\centering
+\includegraphics[width=0.5\textwidth]{binary dynamic flowchart.png}
+\caption{Implementation of Dynamic Approach}
+\label{fig:flowchart_dynamic}
+\end{figure}
+
+\ignore{
+
 \section{Extensions of \trip}
 
 \subsection{Personalized Constraints}
@@ -161,3 +383,5 @@ For the dynamic feature, a record of visited POIs was maintained. On visiting a 
 \caption{Implementation of Dynamic Approach}
 \label{fig:flowchart_dynamic}
 \end{figure}
+
+}

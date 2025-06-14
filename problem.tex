@@ -1,4 +1,5 @@
 \section{The Trip Itinerary Planning Problem}
+\label{sec:problem}
 
 We now introduce the \emph{Trip Itinerary Planning (TRIP) Problem}.
 We assume a city with different points of interest (POIs),
@@ -23,7 +24,7 @@ vary (\ab{Sec.~\ref{dynamic}}) for a user, with the associated
 utility also changing.  Additionally, a POI may have a feasible
 time-interval of visit in a day (say, a sunset spot, which can be
 visited only in the afternoon from 4-6 pm), beyond which visiting it
-gives an utility of $0$.  Each POI is also marked with a type (e.g.,
+gives an utility of $0$.  Each POI is also marked with a category or type (e.g.,
 park, museum, etc.).  Finally, we have a total time budget and a cost
 budget.  Both the time and the cost budgets are spent in traveling as
 well as visiting the POIs.  The objective of the \emph{TRIP} problem
@@ -72,8 +73,8 @@ itinerary $I$ that maximizes $U(I)$ subject to the budget constraints:
 The traveler may put additional constraints on the itinerary such as
 a particular POI must be visited (e.g., Eiffel Tower in Paris).  She
 may also put restrictions in the form that not more than $k$ POIs of
-the same type may be included and/or at least one POI of a particular
-type must be included, etc.  She may also put in ordering
+the same category may be included and/or at least one POI of a particular
+category must be included, etc.  She may also put in ordering
 constraints, such as a temple must be visited before a museum, etc.  The feasible itinerary $I$ must satisfy all these
 constraints.
 
@@ -226,7 +227,7 @@ walking and taxi respectively.
 	{
 		\begin{tabular}{c l rrr}
 			\toprule
-			\textbf{ID} & \textbf{Type} & \textbf{Visit Time} & \textbf{Utility} & \textbf{Visit Cost} \\
+			\textbf{ID} & \textbf{Category} & \textbf{Visit Time} & \textbf{Utility} & \textbf{Visit Cost} \\
 			\midrule
 			%S & Source      & 0  & 0   & 0    \\
 			1 & Park        & 90 & 886 & 1320 \\
@@ -291,13 +292,13 @@ walking and taxi respectively.
 
 Suppose a traveler has a time and cost budget of 300 and 3500 units respectively.
 Additionally, she puts in the contraints that (1)~POIs 1 and 2 must be visited, (2)~POI 2 must be visited before POI 1, and (3)~POI 3, if visited, must be before both POI 2 and POI 5 (if visited).
-Further, she must visit at least 2 POIs of the type Park, and will not visit more than 2 POIs of the type Museum.
+Further, she must visit at least 2 POIs of the category Park, and will not visit more than 2 POIs of the category Museum.
 
-Respecting all these constraints, the optimal itinerary is $[S, 3, 5, 2,
-1, D]$, as shown in Figure~\ref{fig:example_graph}.  The total utility
-obtained from the itinerary is 1738 units, and the time and cost spent
-in the itinerary are, respectively, 3211 ($<$3500) and 256.75 ($<$300)
-units.
+Respecting all these constraints, the optimal itinerary is $[S, 3, 5,
+2, 1, D]$, as shown in Figure~\ref{fig:example_graph}.  Note that the
+POIs 4 and 6 were not included.  The total utility obtained from the
+itinerary is 1738 units, and the time and cost spent in the itinerary
+are, respectively, 3211 ($<$3500) and 256.75 ($<$300) units.
 
 \ignore{
 
@@ -354,4 +355,3 @@ which is $0.938$ times the complete utility i.e. $237.314$, Here in slabs varian
 \end{itemize}
 
 }
-
