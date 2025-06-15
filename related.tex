@@ -28,7 +28,7 @@ Current efforts have generally been limited to a subset of dimensions like time 
 & \bf \makecell{Cost\\Budget} 
 & \bf \makecell{Multi-modal\\Trips}
 & \bf \makecell{Multi-day\\Trips} 
-& \bf \makecell{POI\\Operational Timings} 
+& \bf \makecell{POI\\Timings} 
 & \bf \makecell{Working\\Days}  
 & \bf \makecell{Category\\Constraint} 
 & \bf \makecell{Must-see\\POIs}  
@@ -56,22 +56,22 @@ Current efforts have generally been limited to a subset of dimensions like time 
 \cite{bolzoni2014efficient}    & \cmark &   &   &    &  &   & \cmark &  &  & \cmark  &   \\
 %\midrule
 \midrule
-{Our Work}             & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark \\
+\bf {\trip}             & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\caption{Comparison of recent work addressing the orienteering problem with complex constraints}
+\caption{Comparison of recent work addressing the orienteering problem with complex constraints -- \ab{transpose this table -- take help of chatgpt}}
 \label{tab:otherworks}
 \end{table*}
 
 
 
-\begin{table*}[tbp]
+\begin{table}[t]
 \centering
-\begin{adjustbox}{max width=\textwidth}
+\begin{adjustbox}{max width=\columnwidth}
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Feature} & \textbf{citytripplanner.com} & \textbf{yourtour.com} & \textbf{plnnr.com} & \textbf{mtrip} & \textbf{Our study} \\
+\textbf{Feature} & \textbf{citytripplanner} & \textbf{yourtour} & \textbf{plnnr} & \textbf{mtrip} & \textbf{\trip} \\
 \midrule
 Personal Interest Modeling          & \cmark & \cmark & \cmark & \cmark & \cmark \\
 Automatic POI Selection             & \cmark & \cmark & \cmark & \cmark & \cmark \\
@@ -85,16 +85,16 @@ POI Opening Hours                   & \cmark &        &        &        & \cmark
 Weather-aware Travel Time           &        &        &        &        & \cmark \\
 Context-awareness (Current Location)&        &        &        & \cmark & \cmark \\
 POI Popularity Consideration        &        &        & \cmark & \cmark & \cmark \\
-Hotel Selection                     &        & \cmark & \cmark & \cmark &        \\
+\ab{Hotel Selection}                     &        & \cmark & \cmark & \cmark &        \\
 Multi-day Trip Planning             & \cmark & \cmark & \cmark & \cmark & \cmark \\
 Budget Constraints                  &        & \cmark &        &        & \cmark \\
 Adaptive Itinerary Replanning       &        &        &        & \cmark & \cmark \\
-Group Tours and Preferences         &        & \cmark & \cmark &        &        \\
+\ab{Group Tours and Preferences}         &        & \cmark & \cmark &        &        \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\caption{Comparative summary of trip planning systems and our proposed method}
+\caption{Comparative summary of trip planning systems and our proposed method -- \ab{why two tables?}}
 \label{tab:websites}
-\end{table*}
+\end{table}
 
 Our system surmounts these limitations with the incorporation of a broad spectrum of state-of-the-art planning capabilities including real-time responsiveness, cost and time budgeting, priority-based POI inclusion, category filtering, and fractional visit support. Multimodal travel guidance and visit ordering constraints are also included. Group planning and lodging logistics cannot yet be done by the system but does excellent work generating highly personalized, constraint-based itineraries for solo travelers seeking optimized and flexible experiences.

@@ -205,6 +205,7 @@ The plot~\ref{fig:comparisonWithBaselinePlot} compares the performance of our pr
 \noindent\textbf{Effect of Multi-modality}
 
 \begin{figure}[th]
+\centering
 \includegraphics[width=0.4\textwidth]{plots/multimodality1.png}
 \label{fig:mm1}
 \includegraphics[width=0.4\textwidth]{plots/multimodality2.png}
@@ -268,21 +269,21 @@ Figures~\ref{fig:TimeUtilization} and ~\ref{fig:TimeUtilization1} present a comp
 \label{fig:CostUtilization2}
 \end{figure}
 
-No definite trends in these plots what to explain in them????\\
+These plots in Figures~\ref{fig:CostUtilization1} and ~\ref{fig:CostUtilization2} highlight that in itinerary optimization, cost utilization and utility maximization do not always go hand in hand — the system’s goal is to maximize utility under given constraints rather than simply minimizing or maximizing cost. The entrance (visiting) cost is not directly proportional to the utility score, as some high-utility POIs may have lower entrance costs while others with higher costs may not contribute proportionally to utility. In pure taxi mode, although faster travel allows reaching distant POIs, the high travel cost often exhausts the budget before accessing faraway high-utility POIs, leaving unutilized time. In contrast, the hybrid mode (walking + taxi) leverages walking to access distant, high-utility POIs without incurring excessive travel costs, leading to higher utility even when total cost utilization appears lower. The plots also depict that after a certain threshold, increasing the cost budget yields diminishing returns since time becomes the primary limiting resource.
 
 
 \noindent\textbf{Utility vs Time budget on different cost budgets}\\
 
 \begin{figure*}[htbp]
     \centering
-    \includegraphics[width=0.33\textwidth]{plots/exp1-osaka_pkj.png}
-    \includegraphics[width=0.33\textwidth]{plots/exp1-budapest_pkj.png}
-    \includegraphics[width=0.33\textwidth]{plots/exp1-delhi_pkj.png}
-    \includegraphics[width=0.33\textwidth]{plots/exp1-glasgow_pkj.png}
-    \includegraphics[width=0.33\textwidth]{plots/exp1-vienna_pkj.png}
-    \includegraphics[width=0.33\textwidth]{plots/exp1-edinburgh_pkj.png}
+    \includegraphics[width=0.4\textwidth]{plots/exp1-osaka_pkj.png}
+    \includegraphics[width=0.4\textwidth]{plots/exp1-budapest_pkj.png}
+    \includegraphics[width=0.4\textwidth]{plots/exp1-delhi_pkj.png}
+    \includegraphics[width=0.4\textwidth]{plots/exp1-glasgow_pkj.png}
+    \includegraphics[width=0.4\textwidth]{plots/exp1-vienna_pkj.png}
+    \includegraphics[width=0.4\textwidth]{plots/exp1-edinburgh_pkj.png}
     \includegraphics[width=0.8\textwidth]{plots/legend_pkj.png}
-    \caption{Utility variation with time and cost in 7 cities}
+    \caption{Utility variation with time and cost in 6 cities}
     \label{fig:cities}
 \end{figure*}
 
@@ -310,7 +311,7 @@ Figure ~\ref{fig:util_md} presents the utility trends for the multi-day variant 
 \noindent\textbf{Multi-day Trips vs 3 single day trips}
 \begin{figure}[th]
 \centering
-\includegraphics[width=0.5\textwidth]{plots/multivssingle.png}
+\includegraphics[width=0.45\textwidth]{plots/multivssingle.png}
 \caption{Comparison of aggregated Single day trips with 2 day and 3 day multi-day trips}
 \label{fig:singlevsmultiday}
 \end{figure}
