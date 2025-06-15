@@ -53,12 +53,11 @@ only the maximum number puts the lower bound as $lb^k = 0$.  For
 categories where no constraint is mentioned, $lb^k = 0$ and $ub^k = N$.
 
 \subsubsection{Ordering Constraints}
-\label{eq:ordering}
+\label{sec:ordering}
 
 A traveler can impose an ordering constraint, where she states that she will
 visit POI $j$ before POI $k$, if the itinerary contains both of them.
 To impose these ordering constraints, we introduce a \emph{start time} value for each POI, denoted by $s_i$ for node $v_i$.
-%Correspondingly, an \emph{end time} value $e_i$ can be also declared.
 If POI $j$ must be visited before POI $k$ (denoted as $j \prec k$), then $s_k$ must be after $s_j$ plus
 the time it takes to visit $v_j$ (i.e., $t_{v_j}$) and the time it takes to
 reach $v_k$ from $v_j$ (i.e., $t_{v_j,v_k}$).
@@ -80,9 +79,9 @@ Together, the ordering constraint equation becomes
 	\label{eq:ordering}
 	s_j + (t_{j} + t_{j,k}) \cdot y_j & \leq s_k + M \cdot (1 - y_k), \forall j \prec k
 \end{align}
-%
 
 \subsection{POI Timings}
+\label{sec:timings}
 
 Many POIs have certain operating times.  For example, a temple may be open
 only in the morning, from 9-11am.  Even otherwise, a traveler may specify that she wants to visit the temple in the morning hours only.  To handle this constraint, the start and
@@ -163,8 +162,6 @@ s_{i,d} + \left( t(v_i) + \left( t^{w}_{i,j} \cdot w_{i,j,d} + t^{t}_{i,j} \cdot
 T_{ij} = ct(v_i) + t(v_i) + t^{w}_{i,j} 
 \end{align}
 
-
-
 \noindent
 where:
 \begin{itemize}
@@ -193,42 +190,44 @@ different types of rooms, such as sculpture, paintings, jewelry, etc., and a
 traveler may not like to visit the jewelry section.  She may, thus, decide to
 spend only a part of the total visit time for the other sections, get a partial
 utility, and exit to go to another POI.  To capture this, we model the utility
-in three variants:
-
-\begin{enumerate}
-
-	\item \textbf{Binary:} This is the standard utlity variant, where a
-		traveler spends full time in a POI, and gets the complete utility.
-		If she does not spend that time, she gets no utility at all. \ab{Is
-		this right?}
-
-	\item \textbf{Slab:} Here, the total visit time is divided into various
-		slabs, starting from 50\%.  (We assume that a POI must be visited
-		for at least 50\% of its time to get any utility.) Each slab is an
-		interval of time spent as a percentage of the total visit time.
-		When a traveler spends time in a slab of interval, she gets a
-		percentage of utility equal to the lower end of the interval.
-		Thus, if a slab is [60-70)\%, and a traveler spends 67\% time, she
-		gets a utility equal to 60\% of the total utility.
-
-	\item \textbf{Continuous:} The third variant models the utility as a
-		continuous function equal to the percentage of time spent.  (Again,
-		we impose the minimum time to be spent as 50\% for non-zero
-		utility.) Thus, if a traveler spends 67\% time, she gets 67\%
-		utility.
-
-\end{enumerate}
+in three variants, as described next.
 
 Note that in all of these variants, if a traveler spends \emph{more} time
 than the prescribed time of visit, her utility is capped to 100\% only.
 
-The binary utility $U^b_i$ of a POI $i$ for the binary variant is captured
-by the simple model: $U^b_i = U_i$.
+\subsubsection{Binary}
+\label{sec:binary}
 
-For the slab variant, we divide the utility into 6 slabs: [50-60), [60-70),
-[70-80), [80-90), [90-100), [100-$\infty$).  Correspondingly, we have 6 binary \emph{slab
-variables} for every POI, $u^1, \dots, u^6$, with the constraint that at
-most one of them is chosen (using the condition $\sum_{l=1}^6 u^l_i \leq 1$).  The \emph{effective
+This is the standard utlity variant, where a traveler spends full time in a
+POI, and gets the complete utility.  If she does not spend that time, she
+gets no utility at all.
+
+The binary utility $U^b_i$ of a POI $i$ for the binary variant is captured
+simply by
+%
+\begin{align}
+	\label{eq:binary}
+	U^b_i & = U_i, \forall i
+\end{align}
+
+\subsubsection{Slab}
+\label{sec:slab}
+
+The binary utility variant is too strict, and does not allow any leeway.
+In the slab utility variant, the total visit time is divided into various slabs, starting from
+50\%.  (We assume that a POI must be visited for at least 50\% of its time
+to get any utility.) Each \emph{slab} is an interval of time spent as a percentage
+of the total visit time.  When a traveler spends time in a slab of
+interval, she gets a percentage of utility equal to the lower end of the
+interval.  Thus, if a slab is [60-70)\%, and a traveler spends 67\% time,
+she gets a utility equal to 60\% of the total utility.
+
+The utility value is divided into the same number of slabs as the visit
+time.  In this paper, we divide into 6 slabs: [50-60), [60-70), [70-80),
+[80-90), [90-100), [100-$\infty$), although this can be altered.
+Correspondingly, we have 6 binary \emph{slab variables} for every POI,
+$u^1, \dots, u^6$, with the constraint that at most one of them is chosen
+(using the condition $\sum_{l=1}^6 u^l_i \leq 1$).  The \emph{effective
 utility} of a POI $i$ is then:
 %
 \begin{align}
@@ -236,12 +235,41 @@ utility} of a POI $i$ is then:
 	U^s_i = U_i \cdot ( & 0.5 \times u^1_i + 0.6 \times u^2_i + 0.7 \times u^3_i \nonumber \\
 		& + 0.8 \times u^4_i + 0.9 \times u^5_i + 1.0 \times u^6_i )
 \end{align}
-%
 
-The continuous variant introduces another variable $f_i$ to denote the fraction of time spent in a POI.
-Its upper and lower bounds are set to 1.0 and 0.5 respectively.
-The utility $U^c_i$ is simply $U^c_i = U_i \cdot f_i$.
-\ab{how does it actually cap to 0.5 and 1.0?}
+\subsubsection{Continuous}
+\label{sec:continuous}
+
+The third variant models the utility as a continuous function equal to the
+percentage of time spent.  (Again, we impose the minimum time to be spent
+as 50\% for non-zero utility.) Thus, if a traveler spends 67\% time, she
+gets 67\% utility.
+
+The continuous variant introduces a variable $f_i$ to denote the fraction of utility got from a POI, corresponding to the time spent there.
+Its upper and lower bounds are set to 1.0 and 0.5 respectively in the following manner:
+%
+\begin{align}
+	\label{eq:fbound1}
+	f_i & \geq 0.5 \cdot y_i \\
+	\label{eq:fbound2}
+	f_i & \leq y_i \\
+	\label{eq:ybound1}
+	f_i & \leq (0.5 - \epsilon) + y_i \\
+	\label{eq:ybound2}
+	f_i & \geq (0.5 - \epsilon) - (1 - y_i)
+\end{align}
+%
+Eq.~\eqref{eq:fbound1} and Eq.~\eqref{eq:fbound2} put the bounds on $f_i$.
+Eq.~\eqref{eq:ybound1} ensures that if $f_i \geq 0.5$, then $y_i = 1$,
+i.e., the POI must be chosen.  Eq.~\eqref{eq:ybound2} ensures that if $f_i
+< 0.5$, then $y_i = 0$, i.e., the POI must not be chosen.  ($\epsilon$ is a
+tiny positive constant.)
+
+The utility $U^c_i$ is then simply
+%
+\begin{align}
+	\label{eq:continuous}
+	U^c_i = U_i \cdot f_i
+\end{align}
 
 \ignore{
 
@@ -308,6 +336,7 @@ To ensure only one slab level is chosen per POI, the following constraint is imp
 }
 
 \subsection{Multi-Day Itinerary}
+\label{sec:multiday}
 
 For large tourist-forendly cities, covering all the POIs may not be
 possible within a single day, and travelers typically look for
@@ -341,6 +370,7 @@ Choosing a POI at most once automatically constraints choosing any incoming
 or outgoing edge to or from it to at most once as well.
 
 \subsection{Dynamic Itinerary Re-planning}
+\label{sec:dynamic}
 
 So far, we have discussed only static plans.
 Once an optimal tour is decided, it is not altered.
@@ -372,6 +402,8 @@ For the dynamic feature, a record of visited POIs was maintained. On visiting a 
 
 }
 
+\ignore{
+
 \begin{figure}[th]
 \textbf{Implementation of Dynamic Approach}
 \centering
@@ -379,4 +411,6 @@ For the dynamic feature, a record of visited POIs was maintained. On visiting a 
 	\caption{Implementation of Dynamic Approach -- \ab{is this figure needed? May be simplify}}
 \label{fig:flowchart_dynamic}
 \end{figure}
+
+}
 
