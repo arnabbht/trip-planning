@@ -65,7 +65,7 @@ reach $v_k$ from $v_j$ (i.e., $t_{v_j,v_k}$).
 Hence,
 %
 \begin{align}
-	s_j + t_{v_j} + t_{v_j,v_k} & \leq s_k, \forall j \prec k
+	s_j + t_{j} + t_{j,k} & \leq s_k, \forall j \prec k
 \end{align}
 %
 The above equation assumes that both POIs $j$ and $k$ are vsiited.
@@ -78,9 +78,22 @@ Together, the ordering constraint equation becomes
 %
 \begin{align}
 	\label{eq:ordering}
-	s_j + (t_{v_j} + t_{v_j,v_k}) \cdot y_j & \leq s_k + M \cdot (1 - y_k), \forall j \prec k
+	s_j + (t_{j} + t_{j,k}) \cdot y_j & \leq s_k + M \cdot (1 - y_k), \forall j \prec k
 \end{align}
 %
+
+\subsubsection{POI Timings}
+
+Many POIs have certain operating times.  For example, a temple may be open
+only in the morning, from 9-11am.  To handle this constraint, the start and
+end time of the POI must be within this operational time.  Hence, if a POI
+$i$ has an operational time denoted by entry and exit times $[en_i, ex_i]$,
+then
+%
+\begin{align}
+	\label{eq:operational}
+	s_i \geq en_i \text{ and } & s_i + t_{i} \leq ex_i
+\end{align}
 
 \ignore{
 		
@@ -208,7 +221,7 @@ The binary utility $U^b_i$ of a POI $i$ for the binary variant is captured
 by the simple model: $U^b_i = U_i$.
 
 For the slab variant, we divide the utility into 6 slabs: [50-60), [60-70),
-[70-80), [80-90), [90-100), [100-).  Correspondingly, we have 6 binary \emph{slab
+[70-80), [80-90), [90-100), [100-$\infty$).  Correspondingly, we have 6 binary \emph{slab
 variables} for every POI, $s^1, \dots, s^6$, with the constraint that at
 most one of them is chosen (using the condition $\sum_{l=1}^6 s^l_i \leq 1$).  The \emph{effective
 utility} of a POI $i$ is then:
@@ -291,7 +304,56 @@ To ensure only one slab level is chosen per POI, the following constraint is imp
 
 \subsection{Multi-Day Itinerary}
 
+For large tourist-forendly cities, covering all the POIs may not be
+possible within a single day, and travelers typically look for
+\emph{multi-day} tour itineraries.  Most work solve it trivially by first
+running for a single-day, getting rid of the POIs covered in that day, and
+then running again for the next day, and so on.  Instead, we solve the
+problem as one single optimization problem.  For each day, we can specify a
+source and destination, and the time budget.  This caters to tours where
+the time in the first and last days are typically less due to arrival and
+departure constraints.  Also, the first day's source and the last day's
+destination may be an airport or a rail station, while for other days, it
+is a hotel.
+
+For an itinerary having $d$ days, we augment all the variables with a
+superscript that indicates the day of the visit.  Thus, the $y$ and $z$
+binary variables are replicated for each day: $y^d_i$ and $z^{m,d}_{j,k}$
+for all POIs $i$, modes of transport $m$ and days of visit $d$.  While the
+cost budget (Eq.~\eqref{eq:cost}) is imposed on the overall tour, the time
+budget constraints (Eq.~\eqref{eq:time}) are imposed per day.  The rest of
+the constraints--incoming, outgoing, mode, connectivity, nodechoice,
+edgechoice, and no self loop--(Eq.~\eqref{eq:sout} to Eq.~\eqref{eq:self})
+remain the same, and are applied for each day.  Additionally, the following
+conditions ensure that a POI is chosen at most once within $d$ days:
+%
+\begin{align}
+	\label{eq:multiday}
+	\sum_{\forall d} y^d_i & \leq 1, \forall i
+\end{align}
+%
+Choosing a POI at most once automatically constraints choosing any incoming
+or outgoing edge to or from it to at most once as well.
+
 \subsection{Dynamic Itinerary Re-planning}
+
+So far, we have discussed only static plans.
+Once an optimal tour is decided, it is not altered.
+However, in real life, both tourist behavior as well as other conditions including weather, traffic, etc. are not deterministic in nature, and change over time.
+To handle this, we introduce \emph{dynamic tour re-planning} where we keep computing the best tour given the current situation.
+To the best of our knowledge, no other tour planner does that.
+
+We initially start with an optimal static plan using our solver that takes into account the traveler's preferences.
+However, after visit of every POI, we provide an option to her to \emph{re-optimize} the rest of the plan based on the current situation.
+This may happen since she may have spent substantially less or more time in a POI, or the current traffic condition has somehow altered significantly due to accidents, etc.
+
+Our solver now replans the schedule based on the remaining time and cost
+budgets. The POIs already visited are not considered further (they are
+added as must-avoid POIs), and the current POI is considered the source.
+This optimizes the rest of the tour based on current progress and not
+static assumptions.
+
+\ignore{
 
 The real tourist behavior and weather conditions, are dynamic and unpredictable in nature. They can be influenced by unforeseen delays, detours, longer-than-anticipated visits, or spontaneous user preferences, which can significantly impact the feasibility and correctness of an advanced preplanned itinerary. To close the gap between theory and practice, a dynamic approach is required.
 
@@ -303,11 +365,13 @@ With every visit to a POI, the system replans the schedule based on the remainin
 
 For the dynamic feature, a record of visited POIs was maintained. On visiting a POI, it was eliminated from the list to be taken into account in future itinerary calculations with the new remaining time and cost budgets.
 
+}
+
 \begin{figure}[th]
 \textbf{Implementation of Dynamic Approach}
 \centering
 \includegraphics[width=0.5\textwidth]{binary dynamic flowchart.png}
-\caption{Implementation of Dynamic Approach}
+	\caption{Implementation of Dynamic Approach -- \ab{is this figure needed? May be simplify}}
 \label{fig:flowchart_dynamic}
 \end{figure}
 
