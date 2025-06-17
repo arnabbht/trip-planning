@@ -96,22 +96,30 @@
 \usepackage{pifont}
 \usepackage{xspace}
 \usepackage{xcolor}
+\usepackage{float}
+
+\usepackage{fontawesome}
 
 \setlist{nosep,leftmargin=*}
 
 \newcommand{\trip}{TRIP\xspace}
-\newcommand{\cmark}{\ding{51}} % ✓
+\definecolor{darkgreen}{RGB}{0,150,0}
+\newcommand{\cmark}{{\color{darkgreen}\ding{51}}}
+
+\definecolor{darkred}{RGB}{200,0,0}
+\newcommand{\xmark}{{\color{darkred}\ding{55}}}
 
 %\newcommand{\comment}[1]{}
 \newcommand{\ignore}[1]{}
 
 \newcommand{\ab}[1]{\textcolor{red}{Arnab: #1}}
 \newcommand{\ari}[1]{\textcolor{blue}{Arindam: #1}}
+\newcommand{\sm}[1]{\textcolor{blue}{Shubhadip: #1}}
 
 \begin{document}
 
 \title
-{Planning the Perfect Itinerary:\\Optimal Multimodal Tour with\\Personalized Constraints and Dynamic Rerouting}
+{TRIP: Optimal Personalized Multiday Itinerary with\\Multi-modal Transportation and Dynamic Rerouting}
 
 %\renewcommand{\shorttitle}{Planning the Perfect Itinerary}
 
@@ -142,21 +150,21 @@ priyanshuj23@iitk.ac.in
 }
 \and
 \IEEEauthorblockN{Shubhadip Mitra}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address or ORCID}
+\IEEEauthorblockA{\textit{Blue Yonder India Pvt. Ltd.} \\
+\textit{Bengaluru}\\
+Bengaluru, India \\
+shubhadip.mitra@blueyonder.com}
 \and
 \IEEEauthorblockN{Arindam Pal}
 \IEEEauthorblockA{\textit{TechSoftX Corporation}\\
 Sydney, NSW, Australia \\
 arindamp@techsoftx.com.au}
 \and
-\IEEEauthorblockN{Oswald Christopher}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address or ORCID}
+\IEEEauthorblockN{Oswald C}
+\IEEEauthorblockA{\textit{Computer Science and Engineering} \\
+\textit{National Institute of Technology Tiruchirappalli}\\
+Tiruchirappalli, India \\
+oswald@nitt.edu }
 \and
 \IEEEauthorblockN{Arnab Bhattacharya}
 \IEEEauthorblockA{\textit{Computer Science and Engineering} \\
@@ -165,6 +173,7 @@ Kanpur, India \\
 arnabb@iitk.ac.in
 %ORCID
 }
+
 }
 
 \ignore{
@@ -202,7 +211,7 @@ arnabb@iitk.ac.in
   \email{arindamp@techsoftx.com.au}
 }
 
-\author{Oswald Christopher}
+\author{Oswald C}
 \affiliation{%
   \institution{Dept. of Computer Science and Engineering}
   \city{NIT Tiruchirappalli}
@@ -222,7 +231,7 @@ arnabb@iitk.ac.in
 
 %\renewcommand{\shortauthors}{Trovato et al.}
 
-%\author{Neelu Lalchandani, Priyanshu Jha, Shubhadip Mitra, Arnab Bhattacharya, Arindam Pal, C Oswald}
+%\author{Neelu Lalchandani, Priyanshu Jha, Shubhadip Mitra, Arindam Pal, Oswald C, Arnab Bhattacharya}
 
 \maketitle
 
@@ -246,7 +255,7 @@ Itinerary Planning, Graph Algorithms, Mathematical Programming, Optimization, Po
 \end{IEEEkeywords}
 
 \input{introduction}
-\input{related}
+\input{related_short}
 \input{problem}
 \input{ilp}
 \input{extensions}

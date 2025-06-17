@@ -1,8 +1,9 @@
-\section{Integer Linear Programming Solution}
+\section{The \trip Solution}
 \label{sec:ilp}
 
 In this section, we first outline the basic solution, before expanding it for
 the different extensions.
+\ab{write about optimality}
 
 \subsection{Basic Solution}
 \label{sec:basic}
@@ -23,45 +24,47 @@ $c_i$ and $t_i$ respectively, while the cost and time of traveling from
 POI $j$ to POI $k$ is denoted by $c_{j,k}$ and $t_{j,k}$ respectively.
 
 \begin{align}
-		\label{eq:max}
-	\max & \sum_{\forall i} U_{{i}} . y_{i} \\
-	\text{subject to } & \nonumber \\
-		\label{eq:y}
+	\label{eq:max}
+	\max \quad & \sum_{\forall i} U_{{i}} \cdot y_{i} \\
+	\text{subject to } \quad & \nonumber \\
+	\label{eq:y}
 	y_{i} & \in \{ 0, 1 \}, \forall i \\
-		\label{eq:z}
+	\label{eq:z}
 	z^m_{j,k} & \in \{ 0, 1 \}, \forall j,k, \forall m \\
-		\label{eq:sd}
+	\label{eq:sd}
 	y_{0} = y_{{N+1}} & = 1 \\
-		\label{eq:cost}
-	\sum_{\forall j, k, \forall m} c_{{j},{k}} . z^m_{j,k} + \sum_{\forall i} c_{i} . y_{i} & \leq C \\
-		\label{eq:time}
-	\sum_{\forall j, k, \forall m} t_{{j},{k}} . z^m_{j,k} + \sum_{\forall i} t_{i} . y_{i} & \leq T \\
-		\label{eq:sout}
+	\label{eq:cost}
+	\sum_{\forall j, k, \forall m} c_{{j},{k}} \cdot z^m_{j,k} + \sum_{\forall i} c_{i} \cdot y_{i} & \leq C \\
+	\label{eq:time}
+	\sum_{\forall j, k, \forall m} t_{{j},{k}} \cdot z^m_{j,k} + \sum_{\forall i} t_{i} \cdot y_{i} & \leq T \\
+	\label{eq:sout}
 	\sum_{\forall k} z^m_{{0},{k}} & = 1, \forall m \\
-		\label{eq:sin}
+	\label{eq:sin}
 	\sum_{\forall j} z^m_{{j},{0}} & = 0, \forall m \\
-		\label{eq:din}
+	\label{eq:din}
 	\sum_{\forall j} z^m_{{j},{N+1}} & = 1, \forall m \\
-		\label{eq:dout}
+	\label{eq:dout}
 	\sum_{\forall k} z^m_{{N+1},{k}} & = 0, \forall m \\
-		\label{eq:out}
+	\label{eq:out}
 	\sum_{\forall j} z^m_{{j},{k}} & \leq 1, \forall k, \forall m \\
-		\label{eq:in}
+	\label{eq:in}
 	\sum_{\forall k} z^m_{{j},{k}} & \leq 1, \forall j, \forall m \\
-		\label{eq:mode}
+	\label{eq:mode}
 	\sum_{\forall m} z^m_{{j},{k}} & \leq 1, \forall j, k \\
-		\label{eq:connectivity}
+	\label{eq:connectivity}
 	\sum_{\forall j, \forall m} z^m_{{j},{i}} = \sum_{\forall k, \forall m} z^m_{{i},{k}} & = y_i, \forall i \\
-		\label{eq:nodechosen1}
+	\label{eq:nodechosen1}
 	\sum_{\forall m} z^m_{{j},{k}} & \leq y_j, \forall j,k \\
-		\label{eq:nodechosen2}
+	\label{eq:nodechosen2}
 	\sum_{\forall m} z^m_{{j},{k}} & \leq y_k, \forall j,k \\
-		\label{eq:edgechosen1}
+	\label{eq:edgechosen1}
 	\sum_{\forall k, \forall m} z^m_{{j},{k}} & \geq y_j, \forall j \\
-		\label{eq:edgechosen2}
-	\sum_{\forall j, \forall m} z^m_{{j},{k}} & \geq y_k, \forall k \\
-		\label{eq:self}
-	z^m_{{i},{i}} & = 0, \forall i, \forall m 
+	\label{eq:edgechosen2}
+    \sum_{\forall j, \forall m} z^m_{{j},{k}} & \geq y_k, \forall k \\
+	\label{eq:self}
+	z^m_{{i},{i}} & = 0, \forall i, \forall m  \\
+	\label{eq:subtour}
+	(s_j + t_{j} + t_{j,k}) \cdot z_{j,k} & \leq s_k, \forall j,k
 \end{align}
 
 %\ab{does this capture subset deletion?}
@@ -72,7 +75,7 @@ The above ILP solves the basic \trip problem.  Eq.~\eqref{eq:max}
 represents the \emph{utility maximization} problem, where the
 utility of a POI $i$ is denoted by $U_i$.  Eq.~\eqref{eq:y} marks
 the choice of POIs chosen for the optimal itinerary; however,
-Eq.~\eqref{eq:sd} mandates choosing the source and destination.
+Eq.~\eqref{eq:sd} mandates the choice of the source and destination.
 Eq.~\eqref{eq:z} marks the choice of edges for the optimal
 itinerary.  Eq.~\eqref{eq:cost} and Eq.~\eqref{eq:time} put the
 cost and time \emph{budget constraints} by adding up the
@@ -96,6 +99,8 @@ Eq.~\eqref{eq:edgechosen1} and Eq.~\eqref{eq:edgechosen2} ensures
 the opposite, i.e., if an edge is chosen, the corresponding nodes
 are chosen as well.  Finally, Eq.~\eqref{eq:self} ensures that
 there is \emph{no self-loop}.
+\ab{no subtour}
+
 
 \ignore{
 

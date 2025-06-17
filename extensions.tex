@@ -5,7 +5,7 @@
 
 We next the basic ILP problem, outlined in Eq.~\eqref{eq:max}--Eq.~\eqref{eq:self} to personalized constraints.
 
-\subsubsection{Must-visit POIs}
+\subsubsection{\textbf{Must-visit POIs}}
 \label{sec:must}
 
 Suppose the traveler specifies a list of POIs $[m_1, \dots, m_k]$ that she
@@ -17,7 +17,7 @@ $1$ ensures that these POIs are chosen in the optimal itinerary:
 	y_{m_i} & = 1, \forall i = 1, \dots, k
 \end{align}
 
-\subsubsection{Must-avoid POIs}
+\subsubsection{\textbf{Must-avoid POIs}}
 \label{sec:avoid}
 
 Similarly, if the traveler explicitly lists a set of POIs $[a_1, \dots,
@@ -29,7 +29,7 @@ variables are simply set to $0$:
 	y_{a_i} & = 0, \forall i = 1, \dots, k
 \end{align}
 
-\subsubsection{Category Constraints}
+\subsubsection{\textbf{Category Constraints}}
 \label{sec:category}
 
 To handle category contraints where a traveler specifies the range of
@@ -44,7 +44,7 @@ problem can be augmented by:
 %
 \begin{align}
 	\label{eq:category}
-	lb^k \leq \sum_{\forall i} y^k_i & \leq ub^k, \forall k
+	lb^k \leq \sum_{i} y^k_i & \leq ub^k, \forall k
 \end{align}
 %
 If the traveler only specifies the minimum number of POIs of a category
@@ -52,23 +52,22 @@ $k$ that she must visit, the upper bound $ub^k = N$; similarly, specifying
 only the maximum number puts the lower bound as $lb^k = 0$.  For
 categories where no constraint is mentioned, $lb^k = 0$ and $ub^k = N$.
 
-\subsubsection{Ordering Constraints}
+\subsubsection{\textbf{Ordering Constraints}}
 \label{sec:ordering}
 
-A traveler can impose an ordering constraint, where she states that she will
-visit POI $j$ before POI $k$, if the itinerary contains both of them.
-To impose these ordering constraints, we introduce a \emph{start time} value for each POI, denoted by $s_i$ for node $v_i$.
+A traveler can impose an ordering constraint, where she will visit POI $j$ before POI $k$, if the itinerary contains both of them.
+To impose these ordering constraints, we introduce a \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
 If POI $j$ must be visited before POI $k$ (denoted as $j \prec k$), then $s_k$ must be after $s_j$ plus
 the time it takes to visit $v_j$ (i.e., $t_{v_j}$) and the time it takes to
 reach $v_k$ from $v_j$ (i.e., $t_{v_j,v_k}$).
 Hence,
 %
 \begin{align}
-	s_j + t_{j} + t_{j,k} & \leq s_k, \forall j \prec k
+	s_j + t_{j} + t_{v_j,v_k} & \leq s_k, \forall j \prec k
 \end{align}
 %
-The above equation assumes that both POIs $j$ and $k$ are vsiited.
-However, it may be the case that either $j$ or $k$ or both is not visited at all.
+The above equation assumes that both POIs $j$ and $k$ are visited.
+However, it may be the case that $j$ or $k$ or both are not visited at all.
 To handle the case that $j$ is not visited, the lower bound of $s_j$ for any
 node is kept as $0$, and the times are added only if $y_j = 1$.
 To handle the case that $k$ is not visited, a large value $M$ is added to $s_k$
@@ -79,6 +78,8 @@ Together, the ordering constraint equation becomes
 	\label{eq:ordering}
 	s_j + (t_{j} + t_{j,k}) \cdot y_j & \leq s_k + M \cdot (1 - y_k), \forall j \prec k
 \end{align}
+
+\noindent Subtours are inherently prevented in our formulation through the arrival time constraints as shown in Eq.~\eqref{eq:arrival_time_constraint}. Specifically, if there is a directed edge from point of interest POI $v_j$  to POI $v_k$, then the arrival time at $v_k$ must be strictly greater than the arrival time at $v_j$. This temporal ordering ensures that cycles cannot form, as no POI can have an arrival time both greater than and less than another within the same tour.
 
 \subsection{POI Timings}
 \label{sec:timings}
@@ -195,7 +196,7 @@ in three variants, as described next.
 Note that in all of these variants, if a traveler spends \emph{more} time
 than the prescribed time of visit, her utility is capped to 100\% only.
 
-\subsubsection{Binary}
+\subsubsection{\textbf{Binary}}
 \label{sec:binary}
 
 This is the standard utlity variant, where a traveler spends full time in a
@@ -210,22 +211,31 @@ simply by
 	U^b_i & = U_i, \forall i
 \end{align}
 
-\subsubsection{Slab}
+\ignore{
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{plots/UF_Binary.png}
+\caption{Graph representing Utility Awarded in different versions of Itinerary Planner Fraction of time spent on a POI for Binary Variant}
+\label{fig:UF_Binary}
+\end{figure}
+}
+
+\subsubsection{\textbf{Slab}}
 \label{sec:slab}
 
-The binary utility variant is too strict, and does not allow any leeway.
+The binary utility variant is too strict and does not allow any leeway.
 In the slab utility variant, the total visit time is divided into various slabs, starting from
-50\%.  (We assume that a POI must be visited for at least 50\% of its time
-to get any utility.) Each \emph{slab} is an interval of time spent as a percentage
+0.5.  (We assume that a POI must be visited for at least half of its prescribed time
+to obtain any utility.) Each \emph{slab} is an interval of time spent as a percentage
 of the total visit time.  When a traveler spends time in a slab of
 interval, she gets a percentage of utility equal to the lower end of the
-interval.  Thus, if a slab is [60-70)\%, and a traveler spends 67\% time,
-she gets a utility equal to 60\% of the total utility.
+interval.  Thus, if a slab is $[0.6-0.7)$ and a traveler spends $0.67$ time,
+she gets a utility equal to $0.6$ of the total utility.
 
 The utility value is divided into the same number of slabs as the visit
-time.  In this paper, we divide into 6 slabs: [50-60), [60-70), [70-80),
-[80-90), [90-100), [100-$\infty$), although this can be altered.
-Correspondingly, we have 6 binary \emph{slab variables} for every POI,
+time.  In this paper, we divide into 6 slabs: $[0.5-0.6), [0.6-0.7), [0.7-0.8),
+[0.8-0.9), [0.9-1.0), [1.0-\infty)$, although this can be altered.
+Consequently, we have six binary \emph{slab variables} for every POI,
 $u^1, \dots, u^6$, with the constraint that at most one of them is chosen
 (using the condition $\sum_{l=1}^6 u^l_i \leq 1$).  The \emph{effective
 utility} of a POI $i$ is then:
@@ -236,7 +246,17 @@ utility} of a POI $i$ is then:
 		& + 0.8 \times u^4_i + 0.9 \times u^5_i + 1.0 \times u^6_i )
 \end{align}
 
-\subsubsection{Continuous}
+\ignore{
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{plots/UF_Slabs.png}
+\caption{Graph representing Utility Awarded vs Fraction of time spent on a POI for Slabs Variant}
+\label{fig:UF_Slabs}
+\end{figure}
+}
+
+
+\subsubsection{\textbf{Continuous}}
 \label{sec:continuous}
 
 The third variant models the utility as a continuous function equal to the
@@ -255,21 +275,27 @@ Its upper and lower bounds are set to 1.0 and 0.5 respectively in the following 
 	\label{eq:ybound1}
 	f_i & \leq (0.5 - \epsilon) + y_i \\
 	\label{eq:ybound2}
-	f_i & \geq (0.5 - \epsilon) - (1 - y_i)
+	f_i & \geq (0.5 - \epsilon) - (1 - y_i) \ab{0.5 + \epsilon}
 \end{align}
 %
 Eq.~\eqref{eq:fbound1} and Eq.~\eqref{eq:fbound2} put the bounds on $f_i$.
-Eq.~\eqref{eq:ybound1} ensures that if $f_i \geq 0.5$, then $y_i = 1$,
-i.e., the POI must be chosen.  Eq.~\eqref{eq:ybound2} ensures that if $f_i
-< 0.5$, then $y_i = 0$, i.e., the POI must not be chosen.  ($\epsilon$ is a
+Eq.~\eqref{eq:ybound1} ensures that if $f_i \geq 0.5$, then $y_i = 1$, \ari{if $f_i \geq 0.5$, then $y_i \ge \epsilon$.} i.e., the POI must be chosen.  Eq.~\eqref{eq:ybound2} ensures that if $f_i
+< 0.5$, then $y_i = 0$, \ari{if $f_i < 0.5$, then $y_i < 1 + \epsilon$.} i.e., the POI must not be chosen.  ($\epsilon$ is a
 tiny positive constant.)
 
-The utility $U^c_i$ is then simply
+The utility $U^c_i$ is then simply the following.
 %
 \begin{align}
 	\label{eq:continuous}
 	U^c_i = U_i \cdot f_i
 \end{align}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{plots/UF_Combined.png}
+\caption{Graph representing Utility Function in different versions of Itinerary Planner}
+\label{fig:UF_Combined}
+\end{figure}
 
 \ignore{
 
@@ -334,6 +360,7 @@ To ensure only one slab level is chosen per POI, the following constraint is imp
 \end{align}
 
 }
+
 
 \subsection{Multi-Day Itinerary}
 \label{sec:multiday}

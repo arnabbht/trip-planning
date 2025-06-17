@@ -11,7 +11,7 @@ pair of POIs.  The weights on an edge $e$ is a tuple $\langle t_e,
 c_e \rangle$ that represent the time of travel and the cost of travel
 respectively for the particular travel mode.  The time of travel is
 typically measured using a constant speed.  Thus, the distance
-between the pair of POIs is divided by the constant speed to convert
+between the pair of POIs is divided by the constant speed to convert it
 to time.  Similarly, the taxi cost is computed using a fixed formula
 on the distance.  For walking, the cost is $0$.  Each POI $v$ has a
 tuple $\langle t_v, c_v, U_v \rangle$ associated with it that
@@ -210,11 +210,11 @@ where B is the cost budget for whole trip.
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.75\columnwidth]{plots/updatedExample.png}
-	\caption{Example -- \ab{mention what the numbers are}}
+	\caption{Example: Solid Edges represent walking and Dashed edges represent Taxi, Edge labels depict \{travel cost, travel time\} and Vertex labels depict \{Visit cost, Visit  time, Utility score\}}
 	\label{fig:example_graph}
 \end{figure}
 
-Consider an example of a toy city that has only 6 POIs.
+Consider an example of a city that has 6 POIs.
 Table~\ref{tab:example_poi} shows the various time and cost values for
 the POIs while Table~\ref{tab:example_walk} and
 Table~\ref{tab:example_taxi} shows the travel times among the POIs and
@@ -290,22 +290,21 @@ walking and taxi respectively.
 	\label{tab:example_taxi}
 \end{table}
 
-Suppose a traveler has a time and cost budget of 300 and 3500 units respectively.
+Suppose a traveler has a time and cost budget of 360 and 3500 units respectively.
 Additionally, she puts in the contraints that (1)~POIs 1 and 2 must be visited, (2)~POI 2 must be visited before POI 1, and (3)~POI 3, if visited, must be before both POI 2 and POI 5 (if visited).
 Further, she must visit at least 2 POIs of the category Park, and will not visit more than 2 POIs of the category Museum.
 
-Respecting all these constraints, the optimal itinerary is $[S, 3, 5,
-2, 1, D]$, as shown in Figure~\ref{fig:example_graph}.  Note that the
-POIs 4 and 6 were not included.  The total utility obtained from the
-itinerary is 1738 units, and the time and cost spent in the itinerary
-are, respectively, 3211 ($<$3500) and 256.75 ($<$300) units.
-\ab{change the numbers!}
+Respecting all these constraints, the optimal itinerary is $[S, 2, 5, 6, 1, D]$, as shown in Figure~\ref{fig:example_graph}.  Note that the
+POIs 3 and 4 were not included.  The total utility obtained from the
+itinerary is 2114 units, and the time and cost spent in the itinerary
+are, respectively, $341.9 (<360)$ and $3260 (<3500)$ units.
+\ab{change the numbers!} \ari{Done!}
 
 \ignore{
 
 \textbf{Constraints applied:}
 \begin{enumerate}[label=\textbf{\arabic*.}]
-    \item \textbf{Time budget:} 300 minutes (5 hours)
+    \item \textbf{Time budget:} 360 minutes (5 hours)
     \item \textbf{Cost budget:} 3500 units
     \item \textbf{Must-see POIs:} POIs 1 and 2 must be included in the itinerary
     \item \textbf{Ordering constraints:} (Applied if both POIs are included in the itinerary)
@@ -321,39 +320,5 @@ are, respectively, 3211 ($<$3500) and 256.75 ($<$300) units.
     \end{itemize}
     \item \textbf{Modes of travel allowed:} Taxi and walking
 \end{enumerate}
-
-\noindent \textbf{Itinerary suggested in Binary Version:}
-Start from S, spend exact amount of visiting time on POIs 1,2 and 3 and gain complete utility from them, reach D.
-\begin{itemize}
-    \item \textbf{Utility Score:} 1738
-    \item \textbf{Total trip cost:} 3211 units
-    \item \textbf{Total time taken:} 256.75 minutes
-\end{itemize}
-
-\noindent \textbf{Itinerary suggested in Fractional Version}\\
-\textbf{Variant of utility calculation: Continuous Linear Function}
-Start from S, arrive on 3, visit it completely and gain full utility, arrive on 5, visit it completely and gain full utility, arrive on 2, spend 28.14 minutes here instead of 30 minutes, gain proportional utility, then arrive on 1, spend complete visiting time and gain full utility, then reach destination.
-\begin{itemize}
-    \item \textbf{Utility Score:} 2037.31
-    \item \textbf{Total trip cost:} 3475.25 units
-    \item \textbf{Total time taken:} 300 minutes
-\end{itemize}
-
-\noindent \textbf{Variant of utility calculation: Slabs}
-Same itinerary as CLF variant except on POI 2, the utility granted to tourist was $28.14/30$
-which is $0.938$ times the complete utility i.e. $237.314$, Here in slabs variant, spending $93.8\%$ utility grants $90\%$ of complete utility according to Slab 5, and tourist will gain the same utility on POI 2 if he spends $27$ minutes here, hence utility granted is $227.7$ and time spent is $27$ minutes instead of $28.14$ minutes.
-\begin{itemize}
-    \item \textbf{Utility Score:} 2027.7
-    \item \textbf{Total trip cost:} 3475.25 units
-    \item \textbf{Total time taken:} 298.86 minutes
-\end{itemize}
-
-\noindent \textbf{Insights}
-\begin{itemize}
-    \item Fractional Version gains ~$17\%$ more utility than Binary Version.
-    \item More effecient Time and Cost budget utilization can be observed in the Fractional version.
-    \item The Slabs variant gives approximately similar utility as CLF variant with slight changes due to the modelling of slabs.
-\end{itemize}
-
 }
 
