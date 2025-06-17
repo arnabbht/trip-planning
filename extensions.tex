@@ -3,7 +3,7 @@
 \subsection{Personalized Constraints}
 \label{sec:personalized}
 
-We next the basic ILP problem, outlined in Eq.~\eqref{eq:max}--Eq.~\eqref{eq:self} to personalized constraints.
+We next the basic ILP problem, outlined in Eq.~\eqref{eq:max}--Eq.~\eqref{eq:subtour} to personalized constraints.
 
 \subsubsection{\textbf{Must-visit POIs}}
 \label{sec:must}
@@ -56,7 +56,7 @@ categories where no constraint is mentioned, $lb^k = 0$ and $ub^k = N$.
 \label{sec:ordering}
 
 A traveler can impose an ordering constraint, where she will visit POI $j$ before POI $k$, if the itinerary contains both of them.
-To impose these ordering constraints, we introduce a \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
+To impose these ordering constraints, we use the \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
 If POI $j$ must be visited before POI $k$ (denoted as $j \prec k$), then $s_k$ must be after $s_j$ plus
 the time it takes to visit $v_j$ (i.e., $t_{v_j}$) and the time it takes to
 reach $v_k$ from $v_j$ (i.e., $t_{v_j,v_k}$).

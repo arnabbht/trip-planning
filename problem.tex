@@ -210,7 +210,7 @@ where B is the cost budget for whole trip.
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.75\columnwidth]{plots/updatedExample.png}
-	\caption{Example: Solid Edges represent walking and Dashed edges represent Taxi, Edge labels depict \{travel cost, travel time\} and Vertex labels depict \{Visit cost, Visit  time, Utility score\}}
+	\caption{Example of an optimal itinerary (solid edges represent walking and dashed edges represent taxi; edge labels depict \{travel cost, travel time\} while vertex labels depict \{visit cost, visit  time, utility\}; S and D are source and destination)}
 	\label{fig:example_graph}
 \end{figure}
 
@@ -290,15 +290,14 @@ walking and taxi respectively.
 	\label{tab:example_taxi}
 \end{table}
 
-Suppose a traveler has a time and cost budget of 360 and 3500 units respectively.
+Suppose a traveler has a time and cost budget of $360$ and $3500$ units respectively.
 Additionally, she puts in the contraints that (1)~POIs 1 and 2 must be visited, (2)~POI 2 must be visited before POI 1, and (3)~POI 3, if visited, must be before both POI 2 and POI 5 (if visited).
 Further, she must visit at least 2 POIs of the category Park, and will not visit more than 2 POIs of the category Museum.
 
 Respecting all these constraints, the optimal itinerary is $[S, 2, 5, 6, 1, D]$, as shown in Figure~\ref{fig:example_graph}.  Note that the
 POIs 3 and 4 were not included.  The total utility obtained from the
-itinerary is 2114 units, and the time and cost spent in the itinerary
-are, respectively, $341.9 (<360)$ and $3260 (<3500)$ units.
-\ab{change the numbers!} \ari{Done!}
+itinerary is $2114$ units, and the time and cost spent 
+are, respectively, $341.9$ and $3260$ units.
 
 \ignore{
 

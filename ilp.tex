@@ -3,7 +3,10 @@
 
 In this section, we first outline the basic solution, before expanding it for
 the different extensions.
-\ab{write about optimality}
+Our solution is based on \emph{mixed integer linear programming} and is, hence,
+\emph{optimal}.
+In other words, no other algorithm can get a strictly better solution in terms
+of utility with the given constraints.
 
 \subsection{Basic Solution}
 \label{sec:basic}
@@ -22,6 +25,8 @@ destination $D$ as POI $v_{0}$ and $v_{{N+1}}$ respectively for uniform
 treatment.  The cost and time of visit of a POI $v_i$ is denoted by
 $c_i$ and $t_i$ respectively, while the cost and time of traveling from
 POI $j$ to POI $k$ is denoted by $c_{j,k}$ and $t_{j,k}$ respectively.
+In addition, 
+we introduce a \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
 
 \begin{align}
 	\label{eq:max}
@@ -67,10 +72,6 @@ POI $j$ to POI $k$ is denoted by $c_{j,k}$ and $t_{j,k}$ respectively.
 	(s_j + t_{j} + t_{j,k}) \cdot z_{j,k} & \leq s_k, \forall j,k
 \end{align}
 
-%\ab{does this capture subset deletion?}
-%\ab{how is ordering handled?}
-%\ab{are there other constraints in basic problem?}
-
 The above ILP solves the basic \trip problem.  Eq.~\eqref{eq:max}
 represents the \emph{utility maximization} problem, where the
 utility of a POI $i$ is denoted by $U_i$.  Eq.~\eqref{eq:y} marks
@@ -99,8 +100,13 @@ Eq.~\eqref{eq:edgechosen1} and Eq.~\eqref{eq:edgechosen2} ensures
 the opposite, i.e., if an edge is chosen, the corresponding nodes
 are chosen as well.  Finally, Eq.~\eqref{eq:self} ensures that
 there is \emph{no self-loop}.
-\ab{no subtour}
-
+Eq.~\eqref{eq:subtour} models an important constraint, that of \emph{subtour
+elimination}.
+Since the optimization is a \emph{maximization} problem, without this subtour
+elimination constraint, the solution may include isolated cycles of POIs.
+Eq.~\eqref{eq:subtour} prevents it by ensuring that if POI $k$ is visited
+immediately after POI $j$, the start time of $v_k$ should be more than that of
+$v_j$ plus the time of visit of $v_j$ and the travel time from $v_j$ to $v_k$.
 
 \ignore{
 
