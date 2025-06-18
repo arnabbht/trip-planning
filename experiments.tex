@@ -133,12 +133,12 @@ The \trip variants run optimized multi-day planning models and, consequently, pe
 
 \begin{figure*}[t]
 	\centering
-    \includegraphics[width=0.60\columnwidth]{plots/exp1-osaka.png}
-    \includegraphics[width=0.60\columnwidth]{plots/exp1-budapest.png}
-    \includegraphics[width=0.60\columnwidth]{plots/exp1-delhi.png}
-    \includegraphics[width=0.60\columnwidth]{plots/exp1-glasgow.png}
-    \includegraphics[width=0.60\columnwidth]{plots/exp1-vienna.png}
-    \includegraphics[width=0.60\columnwidth]{plots/exp1-edinburgh.png}
+    \includegraphics[width=0.65\columnwidth]{plots/exp1-osaka.png}
+    \includegraphics[width=0.65\columnwidth]{plots/exp1-budapest.png}
+    \includegraphics[width=0.65\columnwidth]{plots/exp1-delhi.png}
+    \includegraphics[width=0.65\columnwidth]{plots/exp1-glasgow.png}
+    \includegraphics[width=0.65\columnwidth]{plots/exp1-vienna.png}
+    \includegraphics[width=0.65\columnwidth]{plots/exp1-edinburgh.png}
     \figcaption{Utility variation with different time and cost budgets for 6 cities}
     \label{fig:cities}
 \end{figure*}
@@ -260,17 +260,19 @@ Binary shows the sharpest drops since it has the least leeway; Slab and Continuo
 The next experiment captures the changes in utility when dynamic re-planning is done.
 Fig.~\ref{fig:dynamic} covers five different scenarios for a POI, according to the time spent in visiting it: (1)~\emph{50\% less}, i.e., when the traveler spends 50\% of the visit time prescribed, (2)~\emph{25\% less}, i.e., 75\% of the prescribed time, (3)~\emph{ontime}, i.e., when the traveler spends the exact prescribed time, (4)~\emph{50\% more}, i.e., 150\% of the prescribed time, and (5)~\emph{100\% more}, i.e., 200\% of the prescribed time.
 The different groups specify the \emph{order} of the POI where the change is made (all other POIs spent the exact prescribed time).
-In order to take the readings for the plot, we modified the average visit time of the POIs of Osaka so as to bring more clarity in the result, which made the trends observed in the case of the variable time spent by the user on the POI.
+In order to take the readings for the plot, we modified the average visit time of the POIs of Osaka so as to bring more clarity in the result; this made the trends more pronounced in the case of the variable time spent by the user on the POI.
 This was done only for this experiment.
 The time and cost budget are 480 minutes and 6000 units respectively.
 The optimal static itinerary consists of 4 POIs.
-Our planner dynamically recalculates the itinerary by considering the actual time a user spends at each Point of Interest (POI) and the time taken to travel between them, in contrast to the initially suggested schedule.
+Our planner dynamically recalculates the itinerary by considering the actual time a user spends at each POI and the time taken to travel between them, in contrast to the initially suggested static schedule.
 
-The figure shows that the effect of spending a substantially different time on the first POI does not have much effect, since there is enough time for the planner to find another itinerary with a similar utility.
+The plot shows that the effect of spending a substantially different time on the first POI does not have much effect, since there is enough time for the planner to find another itinerary with a similar utility.
 Similarly, spending less time in the third POI does not give a much better itinerary since there is not much scope to maneuver, given the time budget already spent. Spending a lot of extra time may, however, decrease the utility significantly, especially if this does not allow reaching the fourth and subsequent POIs.
 The most amount of variability is visible for the second POI.
 Spending lesser times results in re-planning significantly better itineraries, while spending much longer times results in lesser utility itineraries, despite re-planning.
-
+There is another effect.
+If a POI has a large visit time, then spending lesser percentage time there
+saves more absolute time. This, thus, provides the planner a better chance of getting another good plan. Similarly, it can consume more absolute time for a larger percentage and, hence, provides lesser chance later to find a good plan.
 Overall, this variation in utility values underscores the importance of adapting the itinerary based on real-time user behavior, demonstrating the effectiveness of our dynamically responsive planning approach.
 
 \subsection{Scalability}
