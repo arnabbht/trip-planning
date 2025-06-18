@@ -523,30 +523,40 @@ This trend can be explained as follows:
 
 \subsection{Scalability}
 
-Figure~\ref{fig:number-of-pois} 
+In this section, we test the scalability of our MILP solution in terms of running time for various parameters.
+
+Figure~\ref{fig:number-of-pois} and Figure~\ref{fig:number-of-days} show that the time increases exponentially with number of POIs and number of days in the trip, which is expected for a linear programming solution.
+Importantly, the computation times remain \emph{practical} even when the number of POIs or the number of days is very high.
+
+\ignore{
 
 To evaluate the scalability of our itinerary planning system, we examine how the computation time required to generate a complete itinerary varies with the number of Points of Interest (POIs) in a city, while keeping the time and cost budgets fixed at sufficiently accommodating values of 480 minutes and 6000 units respectively. As illustrated in Figure~\ref{fig:dynamic}, the observed increase in computation time with the number of POIs is expected, given that our approach is formulated as an Integer Linear Program (ILP). This growth aligns with the theoretical complexity of the underlying problem — a variant of the Team Orienteering Problem — which is known to be NP-Hard. Despite this, our formulation remains tractable for problem sizes typical of real-world tourist cities. Despite this theoretical complexity, our system demonstrates strong practical performance. For instance, with approximately 180 POIs, the itinerary is generated in under 1 minute. Even with nearly 260 POIs, the computation time remains approximately 5 minutes. These results highlight that, for realistically sized cities, our system maintains high computational efficiency, making it a viable and scalable solution for real-world deployment.
 % \pri{was the content for optimal utility vs AI added?}
 
+}
+
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.50\textwidth]{plots/scalability_new_pkj.png}
+    \includegraphics[width=\columnwidth]{plots/scalability_new_pkj.png}
     \caption{Scalability with number of POIs}
     \label{fig:number-of-pois}
 \end{figure}
+
+\ignore{
 
 In order to further check the scalability of the suggested itinerary planning system, we designed an experiment by increasing the number of days in the trip as shown in figure~\ref{fig:scalability2}. The time budget was chosen as 480 minutes per day and the cost budget for day 1 was kept 2000 units for the whole trip. We kept increasing the cost budget by 2000 units on each subsequent day. The experiment was run for trips from 1 to 6 days.
 
 The Time of Computation (TOC) for each case was measured. As anticipated, the TOC grows large as the days increase, mostly owing to the exponential increase in the solution space with the more days. It thereby aptly captures the scalability issue while the computation time still remains scalable for a practical constraint.\\
 \nl{Please read this once}
 
+}
+
 \begin{figure}[th]
     \centering
-\includegraphics[width=0.4\textwidth]{plots/multidayvstoc.png}
-     \caption{Time of computation on increasing number of days in multi-day trips}
-    \label{fig:scalability2}
+\includegraphics[width=\columnwidth]{plots/multidayvstoc.png}
+     \caption{Scalability with number of days in multi-day trips}
+    \label{fig:number-of-days}
 \end{figure}
-
 
 % \begin{figure*}[htbp]
 %     \centering
@@ -564,22 +574,28 @@ The Time of Computation (TOC) for each case was measured. As anticipated, the TO
 %     \label{fig:timebudgetvstoc}
 % \end{figure*}
 
+We next show the change in computation time when the cost and time budget change.
+As shown in Figure~\ref{fig:cost-budget}, for extremely low cost budgets, the time taken is small, but it increases rapidly with increasing cost budget. This is due to the fact that more choices become available when the cost budget increases. However, once the cost budget exceeds a threshold, the solver can effectively ignore about it, since almost all solutions become feasible in terms of cost.
+Similarly, the computation time remains very low, unless the time budget is extremely high (Figure~\ref{fig:time-budget}) since only then almost all solutions become feasible in terms of time.
 
+\ignore{
 
 \noindent The computational efficiency of the suggested itinerary optimization model was tested against both cost budget and time budget changes. In figure~\ref{fig:costbudgetvstoc}, as the cost budget rises from low values, the computation time records a minimal increment and hits a plateau, perhaps as the solution space complexity is raised. But above some cost budget limit (approximately 6000), the computation time levels off and is always low for a broad range of cost budgets. This indicates that after the feasible space is large enough, further increases in the budget no longer have a major effect on solver performance. On the contrary, figure~\ref{fig:timebudgetvstoc} illustrates that computation time is much less robust to the time budget. While initially the increase in time budget leads to only a gradual rise in computation time, beyond 900 minutes, the solver time escalates sharply, indicating the rapidly growing complexity of exploring a significantly larger feasible space. Particularly towards the upper end, computation time skyrockets, pointing out that cost budget is less important than time budget in defining the computational complexity of the problem.
 
-\begin{figure}[H]
+}
+
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.50\textwidth]{plots/costbudgetvstoc.png}
+    \includegraphics[width=\columnwidth]{plots/costbudgetvstoc.png}
     \caption{Time of computation on increasing cost budget at fixed time budget 480 minutes}
-    \label{fig:costbudgetvstoc}
+    \label{fig:cost-budget}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.50\textwidth]{plots/timebudgetvstoc.png}
+    \includegraphics[width=\columnwidth]{plots/timebudgetvstoc.png}
     \caption{Time of computation on increasing time budget at fixed cost budget 6000 units}
-    \label{fig:timebudgetvstoc}
+    \label{fig:time-budget}
 \end{figure}
 
 %\noindent\textbf{Conclusions}\\
@@ -590,4 +606,17 @@ The Time of Computation (TOC) for each case was measured. As anticipated, the TO
 
 \subsection{Summary of Experimental Results}
 
+Overall, our experimental results provide the following insights.
+The \trip variants outperform the baseline significantly.
+The Hybrid is the best mode of transport.
+The Continuous utility variant gives slightly better results than the Slab variant, and both of them outperform the Binary variant due to lack of flexibility for the Binary variant.
+Optimizing for multiple days in one shot gives significantly better results than solving for single days, and adding them up.
+Personalized constraints are handled efficiently by our \trip solution.
+Dynamic re-planning can increase the utility when there is scope to maneuver the rest of the plan.
+Finally, \trip solver, despite being a MILP solution, is practical.
+
+\ignore{
+
 Moving forward, as observed in all the figures of this section, both the Continuous and Slab variants of the itinerary planner demonstrate superior performance over the Binary variant by enabling users to achieve higher utility values. This provides sufficient evidence to establish that the Continuous and Slab variants are more effective than the Binary variant. However, while the Continuous variant generally yields higher utility compared to the Slab variant, it is not appropriate to directly compare these two approaches. The Slab variant was specifically introduced to address the challenge of modeling non-linear utility functions, which cannot be directly handled by ILP solvers. By discretizing such non-linear functions into multiple slabs, they can be mathematically formulated and optimized within the ILP framework. Therefore, Continuous and Slab variants serve distinct purposes and address different problem complexities; any direct comparison in terms of utility alone would be misleading. Both variants offer unique advantages in handling different utility modeling scenarios, and hence, we continue the subsequent analysis with both, without declaring either one superior over the other.
+
+}
