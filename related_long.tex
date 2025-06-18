@@ -5,38 +5,39 @@
 \begin{adjustbox}{width=\textwidth,center}
 \begin{tabular}{lcccccccccccc}
 \toprule
+& \bf \makecell{Multi-modal\\Trans.}
+& \bf \makecell{Dynamic\\Re-planning}
 & \bf \makecell{Multi-day\\Trips}
-& \bf \makecell{Multi-modal\\Trips}
-& \bf \makecell{Dynamic\\Itineraries}
 & \bf \makecell{No. of Utility\\Variants}
 & \bf \makecell{Time\\Budget} 
 & \bf \makecell{Cost\\Budget} 
 & \bf \makecell{POI\\Timings} 
 & \bf \makecell{Must-see\\POIs} 
 & \bf \makecell{Must-avoid\\POIs}
-& \bf \makecell{Category\\Constraint} 
-& \bf \makecell{Ordering\\Constraint}\\
+& \bf \makecell{Category\\Constraints} 
+& \bf \makecell{Ordering\\Constraints}\\
 \midrule
-\cite{chen2014automatic}      & \cmark & \cmark  &  & 0 &   &   & &  \cmark &  &  & \\
-\midrule
-\cite{vanzelst2016itinerary}  & \cmark  &  &   & 0 & \cmark &  & \cmark  &   &   & \cmark & \\
-\midrule
-\cite{taylor2018tour}         & & \cmark  &   & 1  &   &   & &  \cmark &   &  &\\
-\midrule
-\cite{vu2022branch}           & & \cmark &   & 0  & \cmark & & \cmark & \cmark & \cmark  & \cmark & \cmark &\\
-\midrule
-\cite{panagiotakis2024expectation}      &  & \cmark  &   & 0  &   &  & & \cmark &   & \cmark & \cmark &\\
-\midrule
-\cite{liu2024personalized}     & \cmark & \cmark  &   & 0 &  &  & \cmark & \cmark   & &  \cmark  &\\
-\midrule
-\cite{rambha2024optimized}  & \cmark &  &   &  0  & \cmark  &   & \cmark &  &    &  & &\\
-\midrule
-\cite{lim2018personalized}    &  & \cmark  &   & 0  & \cmark  &  & \cmark &  \cmark &  & \cmark & \\
-\midrule
-\cite{bolzoni2014efficient}    &  &  \cmark &   & 2   &  &  &  &  & & \cmark & \\
-
-\midrule
-\bf {\trip}             & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & 3 & \cmark & \\
+%\midrule
+\bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \\
+\midrule 
+\cite{chen2014automatic}      & \xmark & \xmark & \cmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark\\
+%\midrule
+\cite{vanzelst2016itinerary}  & \xmark  & \xmark & \cmark  & 0 & \xmark & \cmark & \cmark  & \xmark  &  \xmark & \cmark & \xmark \\
+%\midrule
+\cite{taylor2018tour}         & \xmark & \xmark & \xmark  & 1  & \cmark & \xmark  & \xmark &  \cmark & \xmark  & \xmark & \xmark \\
+%\midrule
+\cite{vu2022branch}           & \xmark & \xmark &  \xmark & 0  & \cmark & \cmark & \cmark & \cmark & \cmark  & \cmark & \cmark &\\
+%\midrule
+\cite{panagiotakis2024expectation}      & \xmark & \xmark & \xmark & 0  & \cmark  & \xmark & \xmark & \cmark &  \xmark & \cmark & \cmark &\\
+%\midrule
+\cite{liu2024personalized}     & \xmark & \xmark & \cmark  & 0 & \cmark & \xmark & \cmark & \cmark   & \xmark &  \cmark  & \xmark\\
+%\midrule
+\cite{rambha2024optimized}  & \xmark & \xmark & \cmark  &  0  & \xmark  & \cmark  & \cmark &  \xmark & \xmark & \xmark & \xmark &\\
+%\midrule
+\cite{lim2018personalized}    & \xmark & \xmark & \xmark  & 0  & \cmark  & \cmark & \cmark &  \cmark & \xmark & \cmark & \xmark \\
+%\midrule
+\cite{bolzoni2014efficient}    & \xmark & \xmark & \xmark  & 2   & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark \\
+%\midrule
 \bottomrule
 \end{tabular}
 \end{adjustbox}

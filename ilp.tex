@@ -11,7 +11,7 @@ of utility with the given constraints.
 \subsection{Basic Solution}
 \label{sec:basic}
 
-We propose a \emph{mixed integer linear programming (ILP)} solution for
+We propose a \emph{mixed integer linear programming (MILP)} solution for
 the \trip problem.  Each POI $v_{j}$ is associated with a binary
 variable $y_{j}$, which is $1$ if it is included in the optimal
 itinerary, and $0$ otherwise.  Each edge (i.e., a connection between
@@ -26,7 +26,7 @@ treatment.  The cost and time of visit of a POI $v_i$ is denoted by
 $c_i$ and $t_i$ respectively, while the cost and time of traveling from
 POI $j$ to POI $k$ is denoted by $c_{j,k}$ and $t_{j,k}$ respectively.
 In addition, 
-we introduce a \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
+we introduce a \emph{arrival time} for each POI, denoted by $s_i$ for node $v_i$.
 
 \begin{align}
 	\label{eq:max}
@@ -69,10 +69,10 @@ we introduce a \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
 	\label{eq:self}
 	z^m_{{i},{i}} & = 0, \forall i, \forall m  \\
 	\label{eq:subtour}
-	(s_j + t_{j} + t_{j,k}) \cdot z_{j,k} & \leq s_k, \forall j,k
+	s_j + (t_{j} + t_{j,k}) \cdot z_{j,k} & \leq s_k, \forall j,k
 \end{align}
 
-The above ILP solves the basic \trip problem.  Eq.~\eqref{eq:max}
+The above MILP solves the basic \trip problem.  Eq.~\eqref{eq:max}
 represents the \emph{utility maximization} problem, where the
 utility of a POI $i$ is denoted by $U_i$.  Eq.~\eqref{eq:y} marks
 the choice of POIs chosen for the optimal itinerary; however,

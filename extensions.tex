@@ -3,7 +3,7 @@
 \subsection{Personalized Constraints}
 \label{sec:personalized}
 
-We next the basic ILP problem, outlined in Eq.~\eqref{eq:max}--Eq.~\eqref{eq:subtour} to personalized constraints.
+We next extend the basic MILP problem, outlined in Eq.~\eqref{eq:max}--Eq.~\eqref{eq:subtour} to incorporate personalized constraints.
 
 \subsubsection{\textbf{Must-visit POIs}}
 \label{sec:must}
@@ -50,13 +50,13 @@ problem can be augmented by:
 If the traveler only specifies the minimum number of POIs of a category
 $k$ that she must visit, the upper bound $ub^k = N$; similarly, specifying
 only the maximum number puts the lower bound as $lb^k = 0$.  For
-categories where no constraint is mentioned, $lb^k = 0$ and $ub^k = N$.
+categories where no constraint is mentioned, $lb^k = 0$ and $ub^k = N$, where N is the number of POIs of that category.
 
 \subsubsection{\textbf{Ordering Constraints}}
 \label{sec:ordering}
 
 A traveler can impose an ordering constraint, where she will visit POI $j$ before POI $k$, if the itinerary contains both of them.
-To impose these ordering constraints, we use the \emph{start time} for each POI, denoted by $s_i$ for node $v_i$.
+To impose these ordering constraints, we use the \emph{arrival time} for each POI, denoted by $s_i$ for node $v_i$.
 If POI $j$ must be visited before POI $k$ (denoted as $j \prec k$), then $s_k$ must be after $s_j$ plus
 the time it takes to visit $v_j$ (i.e., $t_{v_j}$) and the time it takes to
 reach $v_k$ from $v_j$ (i.e., $t_{v_j,v_k}$).
@@ -76,10 +76,10 @@ Together, the ordering constraint equation becomes
 %
 \begin{align}
 	\label{eq:ordering}
-	s_j + (t_{j} + t_{j,k}) \cdot y_j & \leq s_k + M \cdot (1 - y_k), \forall j \prec k
+	s_j + (t_{j} + t_{v_j,v_k}) \cdot y_j & \leq s_k + M \cdot (1 - y_k), \forall j \prec k
 \end{align}
 
-\noindent Subtours are inherently prevented in our formulation through the arrival time constraints as shown in Eq.~\eqref{eq:arrival_time_constraint}. Specifically, if there is a directed edge from point of interest POI $v_j$  to POI $v_k$, then the arrival time at $v_k$ must be strictly greater than the arrival time at $v_j$. This temporal ordering ensures that cycles cannot form, as no POI can have an arrival time both greater than and less than another within the same tour.
+% \noindent Subtours are inherently prevented in our formulation through the arrival time constraints as shown in Eq.~\eqref{eq:subtour}. Specifically, if there is a directed edge from point of interest POI $v_j$  to POI $v_k$, then the arrival time at $v_k$ must be strictly greater than the arrival time at $v_j$. This temporal ordering ensures that cycles cannot form, as no POI can have an arrival time both greater than and less than another within the same tour.
 
 \subsection{POI Timings}
 \label{sec:timings}
@@ -92,7 +92,7 @@ then
 %
 \begin{align}
 	\label{eq:operational}
-	s_i \geq en_i \text{ and } & s_i + t_{i} \leq ex_i
+	s_i \geq en_i \text{ and } & s_i + t_{i} \leq ex_i, \forall i
 \end{align}
 
 \ignore{
@@ -192,7 +192,7 @@ traveler may not like to visit the jewelry section.  She may, thus, decide to
 spend only a part of the total visit time for the other sections, get a partial
 utility, and exit to go to another POI.  To capture this, we model the utility
 in three variants, as described next.
-
+Fig.~\ref{fig:utility} graphically shows the three variants.
 Note that in all of these variants, if a traveler spends \emph{more} time
 than the prescribed time of visit, her utility is capped to 100\% only.
 
@@ -255,7 +255,6 @@ utility} of a POI $i$ is then:
 \end{figure}
 }
 
-
 \subsubsection{\textbf{Continuous}}
 \label{sec:continuous}
 
@@ -264,23 +263,23 @@ percentage of time spent.  (Again, we impose the minimum time to be spent
 as 50\% for non-zero utility.) Thus, if a traveler spends 67\% time, she
 gets 67\% utility.
 
-The continuous variant introduces a variable $f_i$ to denote the fraction of utility got from a POI, corresponding to the time spent there.
+The continuous variant introduces a variable $f_i \in (0,1)$ to denote the fraction of utility got from a POI, corresponding to the time spent there.
 Its upper and lower bounds are set to 1.0 and 0.5 respectively in the following manner:
 %
 \begin{align}
 	\label{eq:fbound1}
 	f_i & \geq 0.5 \cdot y_i \\
-	\label{eq:fbound2}
-	f_i & \leq y_i \\
 	\label{eq:ybound1}
-	f_i & \leq (0.5 - \epsilon) + y_i \\
+	y_i & \geq f_i - (0.5 - \epsilon) \\
+    \label{eq:fbound2}
+	f_i & \leq y_i \\
 	\label{eq:ybound2}
-	f_i & \geq (0.5 - \epsilon) - (1 - y_i) \ab{0.5 + \epsilon}
+    y_i & \leq f_i + (0.5 - \epsilon)
 \end{align}
 %
-Eq.~\eqref{eq:fbound1} and Eq.~\eqref{eq:fbound2} put the bounds on $f_i$.
-Eq.~\eqref{eq:ybound1} ensures that if $f_i \geq 0.5$, then $y_i = 1$, \ari{if $f_i \geq 0.5$, then $y_i \ge \epsilon$.} i.e., the POI must be chosen.  Eq.~\eqref{eq:ybound2} ensures that if $f_i
-< 0.5$, then $y_i = 0$, \ari{if $f_i < 0.5$, then $y_i < 1 + \epsilon$.} i.e., the POI must not be chosen.  ($\epsilon$ is a
+Eq.~\eqref{eq:fbound1} and Eq.~\eqref{eq:ybound1} ensure that if $y_i = 1$, i.e., if a POI is chosen, $f_i$ is at least $0.5$, and vice versa, i.e., if $f_i \geq 0.5$, then $y_i$ must be $1$. Eq.~\eqref{eq:fbound2} and
+Eq.~\eqref{eq:ybound2} ensure the complementary condition, i.e., if $f_i
+< 0.5$, then $y_i = 0$, and vice versa.  ($\epsilon$ is a
 tiny positive constant.)
 
 The utility $U^c_i$ is then simply the following.
@@ -290,11 +289,11 @@ The utility $U^c_i$ is then simply the following.
 	U^c_i = U_i \cdot f_i
 \end{align}
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
-\includegraphics[width=0.5\textwidth]{plots/UF_Combined.png}
-\caption{Graph representing Utility Function in different versions of Itinerary Planner}
-\label{fig:UF_Combined}
+\includegraphics[width=\columnwidth]{plots/UF_Combined.png}
+\caption{Different utility function variants}
+\label{fig:utility}
 \end{figure}
 
 \ignore{
@@ -365,11 +364,14 @@ To ensure only one slab level is chosen per POI, the following constraint is imp
 \subsection{Multi-Day Itinerary}
 \label{sec:multiday}
 
-For large tourist-forendly cities, covering all the POIs may not be
+For large tourist-friendly cities, covering all the POIs may not be
 possible within a single day, and travelers typically look for
-\emph{multi-day} tour itineraries.  Most work solve it trivially by first
+\emph{multi-day} tour itineraries.
+\ab{Using a single-day solution, \dots}
+Most work solve it trivially by first
 running for a single-day, getting rid of the POIs covered in that day, and
-then running again for the next day, and so on.  Instead, we solve the
+then running again for the next day, and so on. \pri{Are we sure about this?}
+Instead, we solve the
 problem as one single optimization problem.  For each day, we can specify a
 source and destination, and the time budget.  This caters to tours where
 the time in the first and last days are typically less due to arrival and
@@ -409,10 +411,9 @@ We initially start with an optimal static plan using our solver that takes into 
 However, after visit of every POI, we provide an option to her to \emph{re-optimize} the rest of the plan based on the current situation.
 This may happen since she may have spent substantially less or more time in a POI, or the current traffic condition has somehow altered significantly due to accidents, etc.
 
-Our solver now replans the schedule based on the remaining time and cost
-budgets. The POIs already visited are not considered further (they are
-added as must-avoid POIs), and the current POI is considered the source.
-This optimizes the rest of the tour based on current progress and not
+Our solver now re-plans the schedule based on the remaining time and cost
+budgets. The POIs already visited are not considered further, and the current POI is considered the source.
+This optimizes the rest of the tour based on current progress, which may be vastly different from the initial
 static assumptions.
 
 \ignore{

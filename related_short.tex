@@ -1,27 +1,27 @@
-\section{Related Work}
-
 \begin{table*}[t]
 \centering
 \begin{adjustbox}{width=\textwidth,center}
 \begin{tabular}{lcccccccccccc}
 \toprule
 
+& \bf \makecell{Multi-modal\\Trans.}
+& \bf \makecell{Dynamic\\Re-planning}
 & \bf \makecell{Multi-day\\Trips}
-& \bf \makecell{Multi-modal\\Trips}
-& \bf \makecell{Dynamic\\Itineraries}
 & \bf \makecell{No. of Utility\\Variants}
 & \bf \makecell{Time\\Budget} 
 & \bf \makecell{Cost\\Budget} 
 & \bf \makecell{POI\\Timings} 
 & \bf \makecell{Must-see\\POIs} 
 & \bf \makecell{Must-avoid\\POIs}
-& \bf \makecell{Category\\Constraint} 
-& \bf \makecell{Ordering\\Constraint}\\
+& \bf \makecell{Category\\Constraints} 
+& \bf \makecell{Ordering\\Constraints}\\
 \midrule
 %\midrule
-\cite{chen2014automatic}      & \cmark & \xmark & \xmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark\\
+\bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \\
+\midrule 
+\cite{chen2014automatic}      & \xmark & \xmark & \cmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark\\
 %\midrule
-\cite{vanzelst2016itinerary}  & \cmark  & \xmark & \xmark  & 0 & \xmark & \cmark & \cmark  & \xmark  &  \xmark & \cmark & \xmark \\
+\cite{vanzelst2016itinerary}  & \xmark  & \xmark & \cmark  & 0 & \xmark & \cmark & \cmark  & \xmark  &  \xmark & \cmark & \xmark \\
 %\midrule
 \cite{taylor2018tour}         & \xmark & \xmark & \xmark  & 1  & \cmark & \xmark  & \xmark &  \cmark & \xmark  & \xmark & \xmark \\
 %\midrule
@@ -29,70 +29,31 @@
 %\midrule
 \cite{panagiotakis2024expectation}      & \xmark & \xmark & \xmark & 0  & \cmark  & \xmark & \xmark & \cmark &  \xmark & \cmark & \cmark &\\
 %\midrule
-\cite{liu2024personalized}     & \cmark & \xmark & \xmark  & 0 & \cmark & \xmark & \cmark & \cmark   & \xmark &  \cmark  & \xmark\\
+\cite{liu2024personalized}     & \xmark & \xmark & \cmark  & 0 & \cmark & \xmark & \cmark & \cmark   & \xmark &  \cmark  & \xmark\\
 %\midrule
-\cite{rambha2024optimized}  & \cmark & \xmark & \xmark  &  0  & \xmark  & \cmark  & \cmark &  \xmark & \xmark & \xmark & \xmark &\\
+\cite{rambha2024optimized}  & \xmark & \xmark & \cmark  &  0  & \xmark  & \cmark  & \cmark &  \xmark & \xmark & \xmark & \xmark &\\
 %\midrule
 \cite{lim2018personalized}    & \xmark & \xmark & \xmark  & 0  & \cmark  & \cmark & \cmark &  \cmark & \xmark & \cmark & \xmark \\
 %\midrule
 \cite{bolzoni2014efficient}    & \xmark & \xmark & \xmark  & 2   & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark \\
 %\midrule
-\midrule
-\bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\caption{Comparison of recent work addressing the trip planning problem}
+\caption{A summary of key related works based on the solution capabilities.}
 \label{tab:otherworks}
 \end{table*}
 
-This survey is the backdrop for understanding how our approach is different and makes a contribution to the research work carried out in this area. A detailed survey is provided by~\cite{gavalas2014survey} and~\cite{sylejmani2011survey}. ~\cite{chen2014automatic} presents a scalable method to plan multi-day trips from user preferences. The system returns itineraries with much less computation time, trading off scalability and personalization for real-time planning. The use of Integer Linear Programming (ILP) to create individualized travel itineraries in urban environments is illustrated in~\cite{vanzelst2016itinerary}. The problem of integrating user-defined POIs in travel planning is shown by~\cite{taylor2018tour}. They introduce the \textbf{TourMustSee} problem, a variation of the well-known Orienteering Problem. ~\cite{vu2022branch} explored an advanced formulation of the Tourist Trip Design Problem (TTDP) by including multiple real-world constraints.
+\section{Related Work}
+\label{Rel_Work}
 
-~\cite{panagiotakis2024expectation} presented a deterministic solution using Expectation-Maximization (EM) to construct personalized trips. While their system is a good starting point for static Personalized Itinerary Recommendation (PIR), it lacks some practical considerations applicable to real-world systems. Specifically, the system does not support fractional visits to POIs, supports static travel time estimates, does not dynamically update the itinerary based on real-time information, and does not support multiple transport modes. A holistic satisfaction model for tour itinerary recommendation was proposed in~\cite{liu2024personalized}. Our extension builds upon this basis with the addition of dynamic real-time travel data collected through Google APIs, facilitating adaptive itinerary revision; fractional POI visitation support for light interaction; and multimodal travel modes for more realistic tourist mobility modeling. 
+We have summarized the recently published relevant papers in Table~\ref{tab:otherworks}. We can see that \trip is the only multi-day itinerary planning solution to offer multimodal transportation, choice of multiple utility variants, and dynamic re-planning. The ability to handle personalized constraints in the form of must-see POIs, must-avoid POIs, category constraints, and ordering constraints makes it even better. We next discuss these works.
+ 
+Chen et al. \cite{chen2014automatic} gave a scalable method to plan multiday trips according to user preferences. The system returns itineraries with low computation time, trading off scalability and personalization for real-time planning. van Zelst \cite{vanzelst2016itinerary} proposed Integer Linear Programming (ILP) based individualized travel itineraries in urban environments. Taylor et al. \cite{taylor2018tour} studied the problem of integrating user-defined POIs in travel planning. They introduced the \emph{TourMustSee} problem, which is a variation of the well-known Orienteering Problem \cite{golden1987orienteering}. They have considered maximizing utility function similar to the \textbf{\trip (TRip Itinerary Planner)} solution. However, they have considered only the walking mode of transport and did not factor in the cost budget. Vu et al. \cite{vu2022branch} advanced the formulation of the Tourist Trip Design Problem (TTDP) by including multiple practical constraints but could not achieve multiple-period itineraries. Multiday itinerary planning solution have been studied by~\cite{chen2014automatic, vanzelst2016itinerary, liu2024personalized, rambha2024optimized}. However, rather than optimizing any utility functions, they optimize either cost or time.  
 
-A solution for optimizing costs of such itineraries using an integer programming model is proposed by~\cite{rambha2024optimized}. Although this work focuses on minimizing the cost budget, it lacks in handling category and ordering constraints, must-see POIs, and dynamic trip planning etc., Another solution PERSTOUR personalizes trip recommendation for tourists based on user interests, points of interest, visit durations and visit recency~\cite{lim2018personalized}. Many features including dynamic itineraries, ordering constraint and multi day/modal trips etc., have not been addressed. Moreover, the data used for this work is restricted to a collection of images which may not be feasible to collect in all environments.~\cite{bolzoni2014efficient} proposed a more realistic approach to trip planning by adding category information to POIs which could capture only time budget, fractional visit and category constraints. 
+Rambha ~\cite{panagiotakis2024expectation} presented a deterministic solution using Expectation-Maximization (EM) to construct personalized trips. While their system is a good starting point for static Personalized Itinerary Recommendation (PIR), it lacks some practical considerations applicable to real-world systems. Specifically, the system does not dynamically update the itinerary based on real-time information, and does not support multiple transport modes. A holistic satisfaction model for tour itinerary recommendation was proposed in~\cite{liu2024personalized}. Our extension builds upon this basis with the addition of dynamic real-time travel data collected through Google APIs, facilitating adaptive itinerary revision; fractional POI visit support for light interaction; and multimodal travel modes for more realistic tourist mobility modeling. 
 
-~\cite{sylejmani2011survey} provide a complete overview of existing trip planning systems, for instance, City Trip Planner, YourTour, Plnnr, and Mtrip as outlined in Table~\ref{tab:otherworks}. Responsiveness and flexibility in future trip planning systems are their findings. CityTripPlanner and YourTour concentrate on generating simple itineraries but fail to consider dynamic scenarios and utility constraints. Mtrip has offline map capabilities and real-time flexibility but lacks planning functionalities such as the operational timings of POIs and category-based constraint.
+A solution for optimizing the costs of such itineraries using an integer programming model is proposed by~\cite{rambha2024optimized}. Although this work focuses on minimizing the cost budget, it lacks support for handling personalized constraints and dynamic itinerary generation. Another solution PERSTOUR personalizes the trip recommendation for tourists based on user interests, duration and frequency of visit~\cite{lim2018personalized}. Though they could consider POI popularity and user interest preferences, uncertainties in POI visit duration and arrival times have not been addressed. \cite{bolzoni2014efficient} proposed a more realistic approach by adding categories to POIs with maximal cardinality constraints, which, however, falls significantly short in handling multiple real-world constraints.
 
-Few other related work includes~\cite{zheng2021novel},~\cite{yu2017mining},~\cite{jiaoman2018travel},~\cite{sylejmani2017planning},~\cite{zografos2008algorithms},~\cite{rani2018development},~\cite{yu2014optimal} and~\cite{arora2024itinerary}. Our research (2025) offers an \emph{integrated optimization model} covering all the necessary dimensions: \emph{multi-modal transport modes, fractional visiting of POIs, real-time responsiveness, and advanced planning constraints like working days and category limits}. 
-
-\ignore{
-
-\begin{table}[t]
-\centering
-\begin{adjustbox}{max width=\columnwidth}
-\begin{tabular}{lccccc}
-\toprule
-\textbf{Feature} & \textbf{citytripplanner} & \textbf{yourtour} & \textbf{plnnr} & \textbf{mtrip} & \textbf{\trip} \\
-\midrule
-Personal Interest Modeling          & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Automatic POI Selection             & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Followable Itinerary                & \cmark &        & \cmark & \cmark & \cmark \\
-Mandatory POIs                      & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Max per Category Limit              &        &        &        &        & \cmark \\
-Required Category Inclusion         &        &        &        &        & \cmark \\
-Routing Through Mandatory POIs      & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Navigation Support                  & \cmark & \cmark & \cmark & \cmark & \cmark \\
-POI Opening Hours                   & \cmark &        &        &        & \cmark \\
-Weather-aware Travel Time           &        &        &        &        & \cmark \\
-Context-awareness (Current Location)&        &        &        & \cmark & \cmark \\
-POI Popularity Consideration        &        &        & \cmark & \cmark & \cmark \\
-\ab{Hotel Selection}                     &        & \cmark & \cmark & \cmark &        \\
-Multi-day Trip Planning             & \cmark & \cmark & \cmark & \cmark & \cmark \\
-Budget Constraints                  &        & \cmark &        &        & \cmark \\
-Adaptive Itinerary Replanning       &        &        &        & \cmark & \cmark \\
-\ab{Group Tours and Preferences}         &        & \cmark & \cmark &        &        \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\caption{Comparative summary of trip planning systems and our proposed method -- \ab{why two tables?}}
-\label{tab:websites}
-\end{table}
-
-}
-
-\ignore{
-
-Our system surmounts these limitations with the incorporation of a broad spectrum of state-of-the-art planning capabilities including real-time responsiveness, cost and time budgeting, priority-based POI inclusion, category filtering, and fractional visit support. Multimodal travel guidance and visit ordering constraints are also included. Group planning and lodging logistics cannot yet be done by the system but does excellent work generating highly personalized, constraint-based itineraries for solo travelers seeking optimized and flexible experiences.
-
-}
+Detailed reviews of previous work are available in\cite{gavalas2014survey} and~\cite{sylejmani2011survey}.
+Other notable related works include~\cite{zheng2021novel},~\cite{yu2017mining},~\cite{jiaoman2018travel},~\cite{sylejmani2017planning},~\cite{zografos2008algorithms},~\cite{rani2018development},~\cite{yu2014optimal} and~\cite{arora2024itinerary}. In contrast to earlier work, our proposed \trip solution is powered by a wide variety of superior planning capabilities such as multimodal transportation, multiday itinerary planning, choice of utility variants, dynamic adjustment of itinerary and ability to accommodate user-specified personalized constraints.
