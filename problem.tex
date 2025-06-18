@@ -6,7 +6,7 @@ We assume a city with different points of interest (POIs),
 represented as a graph where each POI is a node.  Every pair of POIs
 is connected by multiple edges that represent the mode of transport
 from one POI to the other.  Thus, if there are two modes of
-transport---walking and taxi---there will be two edges between every
+transport, say, walking and taxi, there will be two edges between every
 pair of POIs.  The weights on an edge $e$ is a tuple $\langle t_e,
 c_e \rangle$ that represent the time of travel and the cost of travel
 respectively for the particular travel mode.  The time of travel is
@@ -39,7 +39,7 @@ destination has to be also taken into account.
 \begin{figure}[t]
 	\centering
     \includegraphics[width=0.75\columnwidth]{plots/updatedExample.png}
-	\caption{Example of an optimal itinerary (solid edges represent walking and dashed edges represent taxi; edge labels depict \{travel cost, travel time\} while vertex labels depict \{visit cost, visit  time, utility\}; S and D are source and destination)}
+	\figcaption{Example of an optimal itinerary (solid edges represent walking and dashed edges represent taxi; edge labels depict \{travel cost, travel time\} while vertex labels depict \{visit cost, visit  time, utility\}; S and D are source and destination)}
 	\label{fig:example_graph}
 \end{figure}
 
@@ -62,7 +62,8 @@ destination has to be also taken into account.
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Details of Points of Interests (POIs)}
+	\tabcaption{Details of Points of Interests (POIs)}
+	%\vspace*{-4mm}
 	\label{tab:example_poi}
 \end{table}
 
@@ -108,135 +109,6 @@ category must be included, etc.  She may also put in ordering
 constraints, such as a temple must be visited before a museum, etc.  The feasible itinerary $I$ must satisfy all these
 constraints.
 
-\ignore{
-
-In this work, we introduce the \emph{Trip Itinerary Planning (TRIP) Problem},
-which is formulated as follows. The city is represented as a multimodal graph
-of points of interest (POIs), with every pair of POIs connected by two edges
-corresponding to walking and taxi travel. The taxi speed is $s_t$ and walking
-speed is $s_w$. Using these, the time to travel from one POI to another is
-calculated. Similarly, there is a cost per distance unit $c_t$ for taxi (the
-corresponding cost for walking is $c_w = 0$), using which the cost of traveling
-from one POI to another is computed. Every POI has a \emph{utility score},
-which is its relative attractiveness or significance to the tourist. Given a
-cost and a time budget, the basic problem is to \emph{find an itinerary}, i.e.,
-a sequence of POIs, that \emph{maximizes the overall utility} obtained from the
-chosen POIs. The core of the system is formulated as a Mixed-Integer Linear
-Programming (MILP) problem, solved using the Gurobi Optimizer\footnote{\ab{cite
-the tool}}, a powerful tool for mathematical optimization.
-%The goal of the MILP model is to maximize the total utility obtained from the
-%chosen POIs in the resulting itinerary, subject to a rich set of real-world
-%constraints.
-
-The itinerary is a linear, day-wise sequence of POIs that the tourist traverses
-in the city over multiple days, while adhering to daily time constraints and
-overall cost constraint. Let $V$ denote the set of POIs in the city. Each POI
-has its associated opening and closing time, i.e., the time window in which it
-can be explored by the tourists. Also, each POI has a weekly schedule and
-specific operating days on which it can be visited.
-
-\ab{This section is too much to-and-fro; there is not much of a flow -- we need to discuss}
-
-Each POI \( v_i \in V \) has the following features:
-
-\begin{itemize}
-    \item \( U(v_i) \): Utility Score associated with each POI
-    \item \( ot(v_i) \): Opening time of POI
-    \item \( ct(v_i) \): Closing time of POI
-    \item \( t(v_i) \): Average visit time spent by tourists on the POI
-    \item \( c(v_i) \): Entrance fee for the POI.
-\end{itemize}
-
-\noindent \textbf{Multi-modal Graph Representation:}
-This problem is modeled using a multi-modal graph \( G = (V, E) \) where:
-
-\begin{itemize}
-    \item \( V = \{v_1, ..., v_N\} \) denotes the set of all Points of interest of the city
-    \item \( E \) contains two distinct edges between every pair of POIs \( (v_i, v_j) \), corresponding the two modes of travel:
-    \begin{itemize}
-        \item \textbf{Walking Edge} \( e^{w}_{i,j} \) is characterized by:
-        \begin{itemize}
-            \item \( t^{w}_{i,j} \): Time required to walk from \( v_i \) to \( v_j \).
-            \item \( c^{w}_{i,j} \): Cost associated with walking (usually zero).
-        \end{itemize}
-        \item \textbf{Taxi Edge} \( e^{t}_{i,j} \) is characterized by:
-        \begin{itemize}
-            \item \( t^{t}_{i,j} \): Time required to travel by taxi.
-            \item \( c^{t}_{i,j} \): Cost of travel by taxi.
-        \end{itemize}
-    \end{itemize}
-    \item \textit{days} is the set of all days.
-\end{itemize}
-
-\noindent \textbf{Objective Function}\\
-To create multi-day itinerary, the optimization ensures a balanced distribution across all days. The objective is to \textbf{maximize the total utility score across all days}.
-
-The decision variable \( y_{i,d} \in \{0,1\} \) indicates whether POI \( v_i \) is selected on day \( d \). The objective function is:
-\begin{align}
-U(I) &= \sum_{d \in \text{days}} \sum_{i = 1}^{N} U(v_i) \cdot y_{i,d} \label{eq:multi_day_binary}
-\end{align}
-
-This equation computes the total utility $U(I)$ of the multi-day itinerary by summing the utilities of all selected POIs across all days.
-
-The basic constraints of the system are described below:
-
-\begin{itemize}
-
-\item \textbf{Time Budget Constraint}\\
-This constraint ensures that the total time taken i.e. the sum of visit and travel times is under the user specified time budget for each day.
-
-\begin{align}
-\label{mul_day_9}
-    & \sum_{i \ne j} t^{w}_{i,j} \cdot w_{i,j,d}
-    + \sum_{i \ne j} t^{t}_{i,j} \cdot x_{i,j,d}
-    + \sum_{i \in V} t(v_i) \cdot y_{i,d} \leq H
-\end{align}
-
-where H is the time budget specified by user. The user can specify different time budgets for the first day, last day, and intermediate days to account for flight or train arrival and departure timings.
-\\[1ex]
-\item \textbf{Cost Budget Constraint} \\
- This constraint ensures that the total cost of the trip, including both taxi travel and POI entry fees, remains within the cost budget specified by the user.
-
-\begin{align}
-\label{mul_day_25}
-\sum_{d \in \text{days}} \sum_{(i,j) \in I} \left(c^{w}_{i,j} \cdot w_{i,j} + c^{t}_{i,j} \cdot x_{i,j} \right) + \sum_{d \in \text{days}} \sum_{i \in I} c(v_i) \leq B 
-\end{align}
-where B is the cost budget for whole trip.
-\\[1ex]
-\item \textbf{Opening and Closing Time}\\
-    This constraint makes sure that each POI is visited correctly in its operating hours:
-    \begin{equation}
-    \label{mul_day_29}
-    s_{i,d} \geq \text{ot}_i \quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{days} \\
-    \end{equation}
-    \begin{equation}
-    \label{mul_day_30}
-        s_{i,d} \leq \text{ct}_i - t(v_i) \quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{days}
-    \end{equation}
-    \noindent
-    where \( s_{i,d} \) is the arrival time at POI \( i \) on day \( d \)
-\\[1ex]
-\item \textbf{Opening and Closing Day}\\
-    This constraint checks the availability of each POI on the day selected by the user. If the POI is not open for public during that day, then this constraint effectively uses $y[i, d] = 0$, to deliberately not include that POI in that day's itinerary.
-    \begin{align}
-    \label{mul_day_31}
- \quad y_{i,d} = 0 \quad  &\forall i \in \text{POI\_IDs}, \nonumber \\
-        &\forall d \in \text{days, } \texttt{day\_availability}[\texttt{trip\_weekdays}[d]][i] = 0 \nonumber
-\end{align}
-    % \[\quad \forall i \in \text{{poi\_ids}}, \forall d \in \text{Days},\]
-    \noindent
-    where:
-    \begin{itemize}
-        \item \textit{days} represent the set of weekdays.
-        \item \( \texttt{trip\_weekdays}[d] \) denotes the weekday corresponding to day \( d \).
-        \item \( \texttt{day\_availability}[weekday][i] \) is 1 if POI \( i \) is open on that weekday, and 0 if it is closed.
-    \end{itemize}
-\end{itemize}
-
-\textbf{Example}
-
-}
-
 Consider an example of a city that has 6 POIs.
 Table~\ref{tab:example_poi} shows the various time and cost values for
 the POIs while Table~\ref{tab:example_walk} and
@@ -263,7 +135,7 @@ walking and taxi respectively.
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Walking travel time matrix}
+	\tabcaption{Walking travel time matrix}
 	\label{tab:example_walk}
 \end{table}
 
@@ -286,7 +158,7 @@ walking and taxi respectively.
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Taxi travel time matrix}
+	\tabcaption{Taxi travel time matrix}
 	\label{tab:example_taxi}
 \end{table}
 
@@ -294,30 +166,8 @@ Suppose a traveler has a time and cost budget of $360$ minutes and $3500$ units 
 Additionally, she puts in the contraints that (1)~POIs 1 and 2 must be visited, (2)~POI 2 must be visited before POI 1, and (3)~POI 3, if visited, must be before both POI 2 and POI 5 (if visited).
 Further, she must visit at least 2 POIs of the category Park, and will not visit more than 2 POIs of the category Museum.
 
-Respecting all these constraints, the optimal itinerary is $[S, 2, 5, 6, 1, D]$, as shown in Figure~\ref{fig:example_graph}.  Note that the
+Respecting all these constraints, the optimal itinerary is $[S, 2, 5, 6, 1, D]$, as shown in Fig.~\ref{fig:example_graph}.  Note that the
 POIs 3 and 4 were not included.  The total utility obtained from the
 itinerary is $2114$ units, and the time and cost spent 
 are, respectively, $341.9$ minutes and $3260$ units.
-
-\ignore{
-
-\textbf{Constraints applied:}
-\begin{enumerate}[label=\textbf{\arabic*.}]
-    \item \textbf{Time budget:} 360 minutes (5 hours)
-    \item \textbf{Cost budget:} 3500 units
-    \item \textbf{Must-see POIs:} POIs 1 and 2 must be included in the itinerary
-    \item \textbf{Ordering constraints:} (Applied if both POIs are included in the itinerary)
-    \begin{itemize}
-        \item POI 3 must be visited before POI 2
-        \item POI 2 must be visited before POI 1
-        \item POI 3 must be visited before POI 5
-    \end{itemize}
-    \item \textbf{Category constraints:}
-    \begin{itemize}
-        \item At least 2 POIs from the \textit{Park} category
-        \item At most 2 POIs from the \textit{Museum} category
-    \end{itemize}
-    \item \textbf{Modes of travel allowed:} Taxi and walking
-\end{enumerate}
-}
 

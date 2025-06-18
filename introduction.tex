@@ -49,7 +49,52 @@ itinerary, it is often required to dynamically adjust the remaining itinerary ba
 unforeseen delays or altered conditions. However, none of the existing works address this requirement
 \cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}.
 
-Motivated by the above limitations, this work addresses the following itinerary planning problem: \emph{Given a tourist who intends to visit a set of POIs spread across a geographical region, how to identify an optimal itinerary that maximizes the tourist's utility under a specified time and cost budget and respects her choices and availability schedule that may span multiple days} The itinerary must adhere to the tourist's specified starting location and time, and ending location and time for each day of the trip. Additionally, it must consider the operational hours (day and timings) of each POI. The itinerary should factor in the tourist's preferred mode of transportation such as only walking, only taxi, or a hybrid mode that uses both walking and taxi, as necessary. The cost of the itinerary comprises of two components: (a)~\textbf{Transportation cost}, i.e., the cost incurred in traveling, (b)~\textbf{Visiting cost}, i.e., the cost incurred due to entry fees at each POI. Similarly, the time incurred is due to two components: (a)~\textbf{Travel time} between POIs, and (b)~\textbf{Visiting time} in a POI. The tourist may also specify one or more personalized constraints that include the following: (a)~\textbf{Must-see constraints:} These constraints specify a set of POIs that should necessarily be part of the itinerary, (b)~\textbf{Must-avoid constraints:} These constraints specify the set of POIs that must be excluded from the itinerary, (c)~\textbf{Ordering constraints:} These indicate relative ordering between two or more POIs in the itinerary, (d)~\textbf{Category constraints:} Based on the similarity of the POIs, they may be classified into one or more categories. For example, museums, lakes and temples could be a set of categories. The category constraints allow a tourist to specify a lower bound and an upper bound on the number of POIs, she wants to visit from each category. For instance, a tourist may decide to visit at least one but at most two museums. 
+Motivated by the above limitations, this work addresses the following itinerary planning problem: \emph{Given a tourist who intends to visit a set of POIs spread across a geographical region, how to identify an optimal itinerary that maximizes the tourist's utility under a specified time and cost budget and respects her choices and availability schedule that may span multiple days} The itinerary must adhere to the tourist's specified starting location and time, and ending location and time for each day of the trip. Additionally, it must consider the operational hours (day and timings) of each POI. The itinerary should factor in the tourist's preferred mode of transportation such as only walking, only taxi, or a hybrid mode that uses both walking and taxi, as necessary. The cost of the itinerary comprises of two components: (a)~\textbf{Transportation cost}, i.e., the cost incurred in traveling, (b)~\textbf{Visiting cost}, i.e., the cost incurred due to entry fees at each POI. Similarly, the time incurred is due to two components: (a)~\textbf{Travel time} between POIs, and (b)~\textbf{Visiting time} in a POI. The tourist may also specify one or more personalized constraints that include the following: (a)~\textbf{Must-see constraints:} These constraints specify a set of POIs that should necessarily be part of the itinerary, (b)~\textbf{Must-avoid constraints:} These constraints specify the set of POIs that must be excluded from the itinerary, (c)~\textbf{Ordering constraints:} These indicate relative ordering between two or more POIs in the itinerary, (d)~\textbf{Category constraints:} Based on the similarity of the POIs, they may be classified into one or more categories. For example, museums, lakes and temples could be a set of categories. The category constraints allow a tourist to specify a lower and an upper bound on the number of POIs she wants to visit from each category. For instance, she may decide to visit at least one but at most two museums. 
+
+\begin{table*}[t]
+\centering
+\begin{adjustbox}{width=\textwidth,center}
+\begin{tabular}{lcccccccccccc}
+\toprule
+& \bf \makecell{Multi-modal\\Trans.}
+& \bf \makecell{Dynamic\\Re-planning}
+& \bf \makecell{Multi-day\\Trips}
+& \bf \makecell{No. of Utility\\Variants}
+& \bf \makecell{Time\\Budget} 
+& \bf \makecell{Cost\\Budget} 
+& \bf \makecell{POI\\Timings} 
+& \bf \makecell{Must-see\\POIs} 
+& \bf \makecell{Must-avoid\\POIs}
+& \bf \makecell{Category\\Constraints} 
+& \bf \makecell{Ordering\\Constraints}\\
+\midrule
+%\midrule
+\bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \\
+\midrule 
+\cite{chen2014automatic}      & \xmark & \xmark & \cmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark\\
+%\midrule
+\cite{vanzelst2016itinerary}  & \xmark  & \xmark & \cmark  & 0 & \xmark & \cmark & \cmark  & \xmark  &  \xmark & \cmark & \xmark \\
+%\midrule
+\cite{taylor2018tour}         & \xmark & \xmark & \xmark  & 1  & \cmark & \xmark  & \xmark &  \cmark & \xmark  & \xmark & \xmark \\
+%\midrule
+\cite{vu2022branch}           & \xmark & \xmark &  \xmark & 0  & \cmark & \cmark & \cmark & \cmark & \cmark  & \cmark & \cmark &\\
+%\midrule
+\cite{panagiotakis2024expectation}      & \xmark & \xmark & \xmark & 0  & \cmark  & \xmark & \xmark & \cmark &  \xmark & \cmark & \cmark &\\
+%\midrule
+\cite{liu2024personalized}     & \xmark & \xmark & \cmark  & 0 & \cmark & \xmark & \cmark & \cmark   & \xmark &  \cmark  & \xmark\\
+%\midrule
+\cite{rambha2024optimized}  & \xmark & \xmark & \cmark  &  0  & \xmark  & \cmark  & \cmark &  \xmark & \xmark & \xmark & \xmark &\\
+%\midrule
+\cite{lim2018personalized}    & \xmark & \xmark & \xmark  & 0  & \cmark  & \cmark & \cmark &  \cmark & \xmark & \cmark & \xmark \\
+%\midrule
+\cite{bolzoni2014efficient}    & \xmark & \xmark & \xmark  & 2   & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark \\
+%\midrule
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\tabcaption{A summary of key related works based on the solution capabilities.}
+\label{tab:otherworks}
+\end{table*}
 
 Based on the feedback of previous tourists, each POI is associated with a utility score. 
 % assumed to have a user-rating and recommended visit duration. 
@@ -63,15 +108,17 @@ To address the above problem, this work proposes a novel solution framework,  ca
 Notably, the given trip itinerary planning problem is NP-hard as it is a strict generalization of the well-known orienteering problem \cite{vansteenwegen2011orienteering, gunawan2016orienteering, vansteenwegen2019orienteering}. Therefore, any optimal solution requires exponential time complexity. However, the itinerary planning problems of practical interest are sufficiently small in size, which allows solving them within acceptable running times (demonstrated in Sec.~\ref{sec:experiments}). Hence, we chose MILP based solution that returns optimal solution within reasonable computation time. This ensures best travel experience under the given constraints.
 
 The major contributions of this work are as follows:
-%
+
 \begin{enumerate}
 \item \textbf{Optimal Multi-day Itinerary:} This work proposes a novel multi-day trip itinerary planning solution, named \trip~ that returns an optimal itinerary under the specified cost budget and time budget constraints, while factoring the operational timings of each POI.  
 \item \textbf{Multimodal Transportation:} To the best of our knowledge, this is the first work to consider multiple transportation modes such as only walking, only taxi, or a hybrid mode that uses both walking as well as taxi, while planning trip itineraries.
-\item \textbf{Personalized Constraints:} The proposed solution framework allows the tourist to specify one or more personalized constraints in the form of must-see constraints, must-avoid constraints, ordering constraints and category constraints, as described earlier.
+\item \textbf{Personalized Constraints:} The proposed solution framework allows the tourist to specify one or more personalized constraints in the form of must-see constraints, must-avoid constraints, ordering constraints, category constraints, etc.
 \item \textbf{Utility Variants:} The \trip~solution framework allows the tourist to choose a utility variant from a set of three utility variants that best models her travel experience, as discussed above. The itinerary that maximizes the chosen utility variant is reported as the solution. This is the first work to consider multiple utility variants while planning \emph{multi-day itinerary}.
-\item \textbf{Dynamic Re-planning:} To the best of our knowledge, this is the first work that allows dynamic adjustment of the remaining itinerary based on unplanned delays or early exits experienced, while visiting the previous POIs of the itinerary.
+\item \textbf{Dynamic Re-planning:} To the best of our knowledge, this is the first work that allows dynamic adjustment of the remaining itinerary based on unplanned delays or early exits, while visiting the previous POIs of the itinerary.
 %\item Empirical evaluation on several popular tourist destinations confirm the efficacy and efficiency of the proposed solution. 
 %
 \end{enumerate}
 
-The rest of the paper is organized as follows. Sec.~\ref{Rel_Work}  discusses the related work. The trip itinerary planning problem is stated in Sec.~\ref{sec:problem}. Sec.~\ref{sec:ilp} presents the \trip solution framework and the experimental results are demonstrated in Sec.~\ref{sec:experiments}. Finally, Sec.~\ref{Conclusions} concludes the paper with directions of future work.
+The rest of the paper is organized as follows. Sec.~\ref{Rel_Work}  discusses the related work. The trip itinerary planning problem is stated in Sec.~\ref{sec:problem}. Sec.~\ref{sec:ilp} presents the \trip solution framework and the experimental results are demonstrated in Sec.~\ref{sec:experiments}. Finally, Sec.~\ref{Conclusions} concludes the paper.
+The code and data are available from: \url{https://github.com/priyanshujhaa/TRIP}.
+
