@@ -7,9 +7,9 @@ represented as a graph where each POI is a node.  Every pair of POIs
 is connected by multiple edges that represent the mode of transport
 from one POI to the other.  Thus, if there are two modes of
 transport, say, walking and taxi, there will be two edges between every
-pair of POIs.  The weights on an edge $e$ is a tuple $\langle t_e,
-c_e \rangle$ that represent the time of travel and the cost of travel
-respectively for the particular travel mode.  The time of travel is
+pair of POIs.  The weights on an edge $e$ is a tuple $\langle t^{m}_e,
+c^{m}_e \rangle$ that represent the time of travel and the cost of travel
+respectively for the particular travel mode $m$ selected.  The time of travel is
 typically measured using a constant speed.  Thus, the distance
 between the pair of POIs is divided by the constant speed to convert it
 to time.  Similarly, the taxi cost is computed using a fixed formula
@@ -76,14 +76,14 @@ An itinerary $I$ of $n$ POIs is, thus, represented as a sequence
 The total time spent for itinerary $I$ is
 %
 \begin{align}
-	t(I) = t_{S,v_1} + t_{v_1} + t_{v_1,v_2} + t_{v_2} + \dots + t_{v_{n-1,v_n}} + t_{v_n} + t_{v_n,D}
+	t(I) = \sum_{\forall m} t^{m}_{S,v_1} + t_{v_1} + \sum_{\forall m} t^{m}_{v_1,v_2} + t_{v_2} + \dots \notag \\ + \sum_{\forall m} t^{m}_{v_{n-1,v_n}} + t_{v_n} + \sum_{\forall m} t^{m}_{v_n,D}
 \end{align}
 %
 which takes into account both the travel time and visiting time.  Similarly,
 the total cost of itinerary $I$ is 
 %
 \begin{align}
-	c(I) = c_{S,v_1} + c_{v_1} + c_{v_1,v_2} + c_{v_2} + \dots + c_{v_{n-1,v_n}} + c_{v_n} + c_{v_n,D}
+	c(I) = \sum_{\forall m}c^{m}_{S,v_1} + c_{v_1} + \sum_{\forall m}c^{m}_{v_1,v_2} + c_{v_2} + \dots \notag \\ + \sum_{\forall m}c^{m}_{v_{n-1,v_n}} + c_{v_n} + \sum_{\forall m}c^{m}_{v_n,D}
 \end{align}
 %
 which again takes into account both the travel cost and visiting cost.  The
