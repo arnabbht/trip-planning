@@ -9,7 +9,7 @@ cost budget and time budget. Here, an itinerary refers to a sequence of
 departure for each POI such that each POI is visited at most once. With the
 increasing number of tourists and the increased availability of spatio-temporal
 data, there is growing research interest in planning the trip itinerary
-\cite{li2016travel, gavalas2014survey, sylejmani2011survey}. This problem is
+\citep{li2016travel, gavalas2014survey, sylejmani2011survey}. This problem is
 important not only for tourists, but also for tour planners that offer
 personalized trips.
 
@@ -25,92 +25,103 @@ itinerary planning systems that can generate effective and personalized trip
 itineraries that offer high utility, while being cognizant of the requirements
 of tourists.
 
-Although there exist several prior works \cite{chen2014automatic,
+Although there exist several prior works \citep{chen2014automatic,
 vanzelst2016itinerary, taylor2018tour, vu2022branch,
 panagiotakis2024expectation, liu2024personalized, rambha2024optimized,
 lim2018personalized, bolzoni2014efficient}, they have several key limitations. (1)~None of the existing works allow the tourist to
 choose from multiple available transportation modes such as walking, taxi, or a
 hybrid mode allowing usage of multiple transportation modes
-\cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}. (2)~Many
+\citep{chen2014automatic, taylor2018tour, vanzelst2016itinerary}. (2)~Many
 tourists spend more than a day at a given tourist destination. This scenario
 ideally calls for a multi-day trip itinerary planning that is aware of opening
 and closing days of each POI along with opening and closing time for each open
 day. However, majority of the earlier studies focus only on single-day itinerary
-planning \cite{taylor2018tour, vu2022branch, panagiotakis2024expectation}.
+planning \citep{taylor2018tour, vu2022branch, panagiotakis2024expectation}.
 While it may be possible to combine multiple single day itineraries to generate
-a multi-day itinerary, it is not guaranteed to be as cost-effective. (3)~Since most tourists want a rich travel experience, it would be more prudent to optimize the tourists' utility rather than choosing some other objective. However, majority of the earlier studies focussed on optimizing the cost or time,rather than optimizing the user experience \cite{chen2014automatic, vanzelst2016itinerary, liu2024personalized, rambha2024optimized}. (4)~Often there
+a multi-day itinerary, it is not guaranteed to be as cost-effective. (3)~Since most tourists want a rich travel experience, it would be more prudent to optimize the tourists' utility rather than choosing some other objective. However, majority of the earlier studies focussed on optimizing the cost or time,rather than optimizing the user experience \citep{chen2014automatic, vanzelst2016itinerary, liu2024personalized, rambha2024optimized}. (4)~Often there
 are tourists with specific requirements and preferences based on individual
 priorities and interests, which must be respected,
 along with the tourist's cost and time budget constraints. However,
 most existing itinerary planning solutions ignore this need to
-\emph{personalize} trip itineraries \cite{rambha2024optimized, yu2017mining,
+\emph{personalize} trip itineraries \citep{rambha2024optimized, yu2017mining,
 rani2018development, yu2014optimal}. (5)~While traveling based on a planned
 itinerary, it is often required to dynamically adjust the remaining itinerary based on
 unforeseen delays or altered conditions. However, none of the existing works address this requirement
-\cite{chen2014automatic, taylor2018tour, vanzelst2016itinerary}.
+\citep{chen2014automatic, taylor2018tour, vanzelst2016itinerary}.
 
 Motivated by the above limitations, this work addresses the following itinerary planning problem: \emph{Given a tourist who intends to visit a set of POIs spread across a geographical region, how to identify an optimal itinerary that maximizes the tourist's utility under a specified time and cost budget and respects her choices and availability schedule that may span multiple days} The itinerary must adhere to the tourist's specified starting location and time, and ending location and time for each day of the trip. Additionally, it must consider the operational hours (day and timings) of each POI. The itinerary should factor in the tourist's preferred mode of transportation such as only walking, only taxi, or a hybrid mode that uses both walking and taxi, as necessary. The cost of the itinerary comprises of two components: (a)~\textbf{Transportation cost}, i.e., the cost incurred in traveling, (b)~\textbf{Visiting cost}, i.e., the cost incurred due to entry fees at each POI. Similarly, the time incurred is due to two components: (a)~\textbf{Travel time} between POIs, and (b)~\textbf{Visiting time} in a POI. The tourist may also specify one or more personalized constraints that include the following: (a)~\textbf{Must-see constraints:} These constraints specify a set of POIs that should necessarily be part of the itinerary, (b)~\textbf{Must-avoid constraints:} These constraints specify the set of POIs that must be excluded from the itinerary, (c)~\textbf{Ordering constraints:} These indicate relative ordering between two or more POIs in the itinerary, (d)~\textbf{Category constraints:} Based on the similarity of the POIs, they may be classified into one or more categories. For example, museums, lakes and temples could be a set of categories. The category constraints allow a tourist to specify a lower and an upper bound on the number of POIs she wants to visit from each category. For instance, she may decide to visit at least one but at most two museums. 
 
 \begin{table*}[t]
 \centering
 \begin{adjustbox}{width=\textwidth,center}
-\begin{tabular}{lcccccccccccc}
+\begin{tabular}{lccccccccccccc}
 \toprule
-& \bf \makecell{Multi-modal\\Trans.}
+& \bf \makecell{Multi-modal\\Transportation}
 & \bf \makecell{Dynamic\\Re-planning}
 & \bf \makecell{Multi-day\\Trips}
-& \bf \makecell{No. of Utility\\Variants}
+& \bf \makecell{\# Utility\\Variants}
 & \bf \makecell{Time\\Budget} 
 & \bf \makecell{Cost\\Budget} 
 & \bf \makecell{POI\\Timings} 
 & \bf \makecell{Must-see\\POIs} 
 & \bf \makecell{Must-avoid\\POIs}
 & \bf \makecell{Category\\Constraints} 
-& \bf \makecell{Ordering\\Constraints}\\
+& \bf \makecell{Ordering\\Constraints}
+& \bf \makecell{Approach}
+& \bf \makecell{Optimality}\\
 \midrule
 %\midrule
-\bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \\
+\\
+\bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & MILP & \cmark\\
+\\
+
 \midrule 
-\cite{bolzoni2014efficient}    & \xmark & \xmark & \xmark  & 2   & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark \\
+\citep{bolzoni2014efficient}    & \xmark & \xmark & \xmark  & 2   & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark & Clustering & \xmark\\
 %\midrule
-\cite{chen2014automatic}      & \xmark & \xmark & \cmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark\\
+\citep{chen2014automatic}      & \xmark & \xmark & \cmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark & Approximate search & \xmark\\
 %\midrule
-\cite{lim2018personalized}    & \xmark & \xmark & \xmark  & 0  & \cmark  & \cmark & \cmark &  \cmark & \xmark & \cmark & \xmark \\
+\citep{lim2018personalized}    & \xmark & \xmark & \xmark  & 0  & \cmark  & \cmark & \cmark &  \cmark & \xmark & \cmark & \xmark & MILP & \xmark \\
 %\midrule
-\cite{liu2024personalized}     & \xmark & \xmark & \cmark  & 0 & \cmark & \xmark & \cmark & \cmark   & \xmark &  \cmark  & \xmark\\
+\citep{liu2024personalized}     & \xmark & \xmark & \cmark  & 0 & \cmark & \xmark & \cmark & \cmark   & \xmark &  \cmark  & \xmark & Local Search & \xmark \\
 %\midrule
-\cite{panagiotakis2024expectation}      & \xmark & \xmark & \xmark & 0  & \cmark  & \xmark & \xmark & \cmark &  \xmark & \cmark & \cmark &\\
+\citep{liu2025optimizing} & \xmark & \cmark &  \xmark & 1  & \cmark & \xmark & \xmark & \xmark & \xmark  & \xmark & \xmark & Game Theory & \cmark\\
 %\midrule
-\cite{rambha2024optimized}  & \xmark & \xmark & \cmark  &  0  & \xmark  & \cmark  & \cmark &  \xmark & \xmark & \xmark & \xmark &\\
+\citep{panagiotakis2024expectation}      & \xmark & \xmark & \xmark & 0  & \cmark  & \xmark & \xmark & \cmark &  \xmark & \cmark & \cmark & EM & \xmark\\
 %\midrule
-\cite{taylor2018tour}         & \xmark & \xmark & \xmark  & 1  & \cmark & \xmark  & \xmark &  \cmark & \xmark  & \xmark & \xmark \\
+\citep{rambha2024optimized}  & \xmark & \xmark & \cmark  &  0  & \xmark  & \cmark  & \cmark &  \xmark & \xmark & \xmark & \xmark & MILP & \cmark\\
 %\midrule
-\cite{vanzelst2016itinerary}  & \xmark  & \xmark & \cmark  & 0 & \xmark & \cmark & \cmark  & \xmark  &  \xmark & \cmark & \xmark \\
+\citep{taylor2018tour}         & \xmark & \xmark & \xmark  & 1  & \cmark & \xmark  & \xmark &  \cmark & \xmark  & \xmark & \xmark & MILP & \cmark\\
 %\midrule
-\cite{vu2022branch}           & \xmark & \xmark &  \xmark & 0  & \cmark & \cmark & \cmark & \cmark & \cmark  & \cmark & \cmark &\\
+\citep{vanzelst2016itinerary}  & \xmark  & \xmark & \cmark  & 0 & \xmark & \cmark & \cmark  & \xmark  &  \xmark & \cmark & \xmark & MILP & \cmark\\
 %\midrule
+\citep{vu2022branch}           & \xmark & \xmark &  \xmark & 0  & \cmark & \cmark & \cmark & \cmark & \cmark  & \cmark & \cmark & Branch \& Bound & \xmark \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
-\tabcaption{A summary of key related works based on the solution capabilities.}
+\tabcaption{A summary of key related works based on the solution capabilities}
 \label{tab:otherworks}
 \end{table*}
 
 Based on the feedback of previous tourists, each POI is associated with a utility score. 
 % assumed to have a user-rating and recommended visit duration. 
 % The utility of a tourist at a given POI depends on the fraction of recommended visit duration she actually spends at the given POI and its average user-rating.
-The utility of the itinerary is aggregate of the utilities derived at each visited POI. The proposed trip itinerary planning problem allows the tourist to choose from a set of three utility variants that best captures her travel experience. The first variant offers full utility at a POI only if the tourist spends at least the recommended visit duration at the given POI, and zero otherwise. The second variant offers utility that is proportional to the fraction of time that the tourist spends at the given POI w.r.t. its recommended visit duration, provided the tourist  spends at least a minimum specified time. While the first variant can be viewed as a binary step function, the second variant can be viewed as its continuous linear counterpart. The third variant is a multi-step utility function., i.e., a $t$-step utility function where $t \ge 3$. The goal is to maximize the chosen utility variant.
+The utility of the itinerary is aggregate of the utilities derived at each visited POI. The proposed trip itinerary planning problem allows the tourist to choose from a set of three utility variants that best captures her travel experience. The first variant offers full utility at a POI only if the tourist spends at least the recommended visit duration at the given POI, and zero otherwise. The second variant offers utility that is proportional to the fraction of time that the tourist spends at the given POI w.r.t. its recommended visit duration, provided the tourist  spends at least a minimum specified time. While the first variant can be viewed as a binary step function, the second variant can be viewed as its continuous linear counterpart. The third variant is a multi-step utility function., i.e., a $t$-step utility function where $t \ge 3$. This corresponds to a slab-based utility function. The goal is to maximize the chosen utility variant.
 
 Additionally, if there are unplanned delays or early exits in the earlier part of the itinerary, it should be possible to dynamically update the remaining itinerary based on the remaining cost budget and time budget. Here it is important to note that the reported itinerary not only returns a sequence of POIs to be visited, but also determines the amount of time the tourist spends at each POI (that in turn affects her utility) along with the suitable transportation mode (if more than one transportation modes are available) which in turn affects the travel time and the travel cost of the itinerary.
 
-To address the above problem, this work proposes a novel solution framework,  called \textbf{\trip (TRip Itinerary Planner)}.  Firstly, the problem is modeled as a directed multi-graph $G$, where, each node corresponds to a POI, and each edge corresponds to a travel between an ordered pair of POIs using a specific transportation mode such as walking or taxi. If there are $k$ ($k \ge 1$) transportation modes available between a given pair of POIs, then there are exactly $k$ directed edges between the corresponding pair of nodes in $G$, where each edge corresponds to a specific transportation mode, along with the associated travel cost and travel time. Subsequently, the solution is modeled using a mixed integer linear program (MILP) that returns an optimal itinerary. 
+To address the above problem, this work proposes a novel solution framework,  called \textbf{\trip (TRip Itinerary Planner)}.  Firstly, the problem is modeled as a directed multi-graph $G$, where each node corresponds to a POI, and each edge corresponds to a travel between an ordered pair of POIs using a specific transportation mode such as walking or taxi. If there are $k \ge 1$ transportation modes available between a given pair of POIs, then there are exactly $k$ directed edges between the corresponding pair of nodes in $G$, where each edge corresponds to a \emph{specific transportation mode}, along with the associated travel cost and travel time. Subsequently, the solution is modeled using a mixed integer linear program (MILP) that returns an optimal itinerary. 
 
-Notably, the given trip itinerary planning problem is NP-hard as it is a strict generalization of the well-known orienteering problem \cite{vansteenwegen2011orienteering, gunawan2016orienteering, vansteenwegen2019orienteering}. Therefore, any optimal solution requires exponential time complexity. However, the itinerary planning problems of practical interest are sufficiently small in size, which allows solving them within acceptable running times (demonstrated in Sec.~\ref{sec:experiments}). Hence, we chose MILP based solution that returns optimal solution within reasonable computation time. This ensures best travel experience under the given constraints.
+Notably, the given trip itinerary planning problem is \emph{NP-hard} as it is a strict generalization of the well-known orienteering problem \citep{vansteenwegen2011orienteering, gunawan2016orienteering, vansteenwegen2019orienteering}. Therefore, any optimal solution requires exponential time complexity. However, the itinerary planning problems of practical interest are sufficiently small in size, which allows solving them within practical running times (typically, within a few minutes, as shown in detail in Sec.~\ref{sec:scalability}). Hence, we choose MILP based solutions that returns optimal itinerary.
+%This ensures best travel experience under the given constraints.
+
+Comparing with earlier studies listed in Table~\ref{tab:otherworks}, it is observed that majority of the prior works returned sub-optimal itineraries \citep{bolzoni2014efficient, lim2018personalized, panagiotakis2024expectation, vu2022branch}. In contrast, works such as \citep{rambha2024optimized, taylor2018tour, vanzelst2016itinerary} return optimal itineraries using MILP-based solutions. However, as discussed in detail in Sec.~\ref{Rel_Work}, they do not address the itinerary problem that factors in all the capabilities, such as multi-modal transportation, dynamic re-planning, multi-day trips, budget constraints, personalized constraints, utility variants, etc.
+The novelty and significance of our work arises due to its ability to factor in the above mentioned capabilities in an optimal and practical solution framework.
+%Therefore, the proposed \trip solution also uses MILP based approach to produce optimal itineraries.
 
 The major contributions of this work are as follows:
 
 \begin{enumerate}
-\item \textbf{Optimal Multi-day Itinerary:} This work proposes a novel multi-day trip itinerary planning solution, named \trip~ that returns an optimal itinerary under the specified cost budget and time budget constraints, while factoring the operational timings of each POI.  
+\item \textbf{Optimal Multi-day Itinerary:} This work proposes a novel multi-day trip itinerary planning solution, named \trip that returns an optimal itinerary under the specified cost budget and time budget constraints, while factoring the operational timings of each POI.  
 \item \textbf{Multimodal Transportation:} To the best of our knowledge, this is the first work to consider multiple transportation modes such as only walking, only taxi, or a hybrid mode that uses both walking as well as taxi, while planning trip itineraries.
 \item \textbf{Personalized Constraints:} The proposed solution framework allows the tourist to specify one or more personalized constraints in the form of must-see constraints, must-avoid constraints, ordering constraints, category constraints, etc.
 \item \textbf{Utility Variants:} The \trip~solution framework allows the tourist to choose a utility variant from a set of three utility variants that best models her travel experience, as discussed above. The itinerary that maximizes the chosen utility variant is reported as the solution. This is the first work to consider multiple utility variants while planning \emph{multi-day itinerary}.
@@ -119,6 +130,6 @@ The major contributions of this work are as follows:
 %
 \end{enumerate}
 
-The rest of the paper is organized as follows. Sec.~\ref{Rel_Work}  discusses the related work. The trip itinerary planning problem is stated in Sec.~\ref{sec:problem}. Sec.~\ref{sec:ilp} presents the \trip solution framework and the experimental results are demonstrated in Sec.~\ref{sec:experiments}. Finally, Sec.~\ref{Conclusions} concludes the paper.
+%The novelty and significance of the proposed \trip solution arises due to its ability to factor in \emph{multi-modal transportation}, \emph{personalized constraints} and \emph{dynamic planning} to produce \emph{optimal multi-day} itinerary that adheres to the traveller's cost and time budget and offers best travel experience captured through a user specified utility variant.
+ The rest of the paper is organized as follows. Sec.~\ref{Rel_Work}  discusses the related work. The trip itinerary planning problem is stated in Sec.~\ref{sec:problem}. Sec.~\ref{sec:ilp} presents the \trip solution framework and the experimental results are demonstrated in Sec.~\ref{sec:experiments}. Finally, Sec.~\ref{Conclusions} concludes the paper.
 The code and data are available from: \url{https://github.com/priyanshujhaa/TRIP}.
-

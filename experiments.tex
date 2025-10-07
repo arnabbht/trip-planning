@@ -3,20 +3,46 @@
 
 In this section, we describe the empirical study of our \trip solver for the itinerary planning problem.
 
-\subsection{Dataset Description}
-\label{sec:dataset}
+\subsection{Research Questions and Objectives}
+In this work, we address the following research questions:
+
+\begin{itemize}
+    \item \textbf{RQ1:} How does the proposed work compare against the existing works in terms of itinerary personalization?
+
+    \item \textbf{RQ2:} How does the utility yield of the TRIP solution compare against the existing baseline?
+
+    \item \textbf{RQ3:} How does the TRIP solution perform across different city geographies?
+
+    \item \textbf{RQ4:} How does the multimodal transportation capability offered by the TRIP solution improve the user experience?
+
+    \item \textbf{RQ5:} How do the itineraries proposed by the TRIP solution utilize the time and cost budget?
+
+    \item \textbf{RQ6:} How does a multi-day itinerary covering $k$ days differ from $k$ disjoint single-day itineraries?
+
+    \item \textbf{RQ7:} What is the impact of personalized constraints (namely, number of must see POIs, number of must avoid POIs, Number of ordering constraints and number of category constraints) and different utility variants (namely, binary, continuous and hybrid) on the user experience?
+
+    \item \textbf{RQ8:} How does dynamic replanning adapt to unexpected delays or changes in the itinerary?
+
+    \item \textbf{RQ9:} How scalable is the TRIP solution in terms of the number of POIs and the number of days in the itinerary?
+\end{itemize}
+
+\subsection{Experimental Methodology}
+\subsubsection{\textbf{Dataset Description}}
+\label{sec:dataset}\\
 
 In order to test our itinerary planning system, we used curated datasets of Points of Interest (POIs) for six large cities: Budapest, Delhi, Edinburgh, Glasgow, Osaka, and Vienna. 
 %\ari{Americans will be very unhappy.} \ab{Ha ha ha!}
-The dataset utilized for our work is derived from the \emph{Yahoo Flickr Creative Commons 100 Million Dataset (YFCC100M)}~\cite{taylor2018tour} containing over 100 million images, of which 69 million are annotated and 48 million are geotagged.
+The dataset utilized for our work is derived from the \emph{Yahoo Flickr Creative Commons 100 Million Dataset (YFCC100M)}~\citep{taylor2018tour} containing over 100 million images, of which 69 million are annotated and 48 million are geotagged.
 %
-The authors of~\cite{taylor2018tour} considered a set of popular POIs for the cities mentioned earlier using resources such as \emph{Wikipedia}. Then, geotagged photos in \emph{Flickr} were matched with these POIs using spatial proximity. The relative popularity of a POI, used as the measure for its \textbf{utility}, was estimated based on the number of photos associated with each POI. The Flickr User-POI Visits dataset, curated in this manner by~\cite{limkwanhuiDataCode}, is used in our work.
+The authors of~\citep{taylor2018tour} considered a set of popular POIs for the cities mentioned earlier using resources such as \emph{Wikipedia}. Then, geotagged photos in \emph{Flickr} were matched with these POIs using spatial proximity. The relative popularity of a POI, used as the measure for its \textbf{utility}, was estimated based on the number of photos associated with each POI. The Flickr User-POI Visits dataset, curated in this manner by~\citep{limkwanhuiDataCode}, is used in our work.
 This provides a practical way to understand how tourists behave by using publicly shared photos as a proxy for how much interest people have in a particular place.
 
 Table~\ref{tab:original} contains the original dataset fields. With an aim to make our system more realistic and practical to use, we augmented the fields by adding some more features, as listed in Table~\ref{tab:additional}.
 These additional information were collected by either scraping or quoting official tourist boards, city tourism websites, and trustworthy travel websites.
 
 \begin{table}[t]
+\resizebox{\columnwidth}{!}
+{
 \begin{tabular}{l l}%p{4cm}}
 \toprule
 \textbf{Field Name} & \textbf{Description} \\
@@ -37,12 +63,14 @@ These additional information were collected by either scraping or quoting offici
 \texttt{Distance} & Distance to other POIs\\%. This is used in the travel time estimation between locations, with the walking speed $v_w$ and taxi speed $v_t$. \\
 \bottomrule
 \end{tabular}
+}
 \tabcaption{Original dataset fields}
 \label{tab:original}
 \end{table}
 
 \begin{table}[t]
-\centering
+\resizebox{\columnwidth}{!}
+{
 \begin{tabular}{l l}
 \toprule
 \textbf{Field Name} & \textbf{Description} \\
@@ -60,27 +88,28 @@ These additional information were collected by either scraping or quoting offici
 \texttt{Travel Cost} & Travel cost to other POIs for each mode of transport \\
 \bottomrule
 \end{tabular}
+}
 \tabcaption{Additional features added to the dataset}
 \label{tab:additional}
 \end{table}
 
-\subsection{Configuration}
+\subsubsection{\textbf{Configuration}}\\
 
 The experiments were conducted on a high-performance Linux server equipped with dual Intel(R) Xeon(R) E5-2697 v3 CPUs, each running at 2.60\,GHz, providing a total of 56 logical processors (28 physical cores per socket with hyper-threading enabled) and 503\,GB of RAM.
 The code was implemented in Python and mixed integer linear programming was done in Gurobi.
 
-\subsection{Baseline Itinerary Planner}
+\subsubsection{\textbf{Baseline Itinerary Planner}}\\
 
-To evaluate the performance of the \trip solution, we identified the works \cite{bolzoni2014efficient,taylor2018tour} and \cite{chen2014automatic,vanzelst2016itinerary} as potential baselines for single day itinerary planning and multi-day itinerary planning, respectively. This choice was based on the features of the solutions, as listed in Table~\ref{tab:otherworks}. Although we requested the authors of the respective works to share their implementation codes we did not receive a suitable response. Moreover, while the works \cite{bolzoni2014efficient,taylor2018tour}  consider utility optimization as their objective, the works \cite{chen2014automatic,vanzelst2016itinerary} did not. In addition, the implementation details stated in \cite{bolzoni2014efficient} were insufficient to reproduce their solution.  We, thus, did a best-effort implementation of~\cite{taylor2018tour}. While it too lacked a code repository or implementation details like the POI visiting durations, we were able to at least replicate the key features and constraints described. 
-Hence, we consider \cite{taylor2018tour} to be the  \emph{baseline} for evaluating single day as well as multi-day itinerary planning.
+To evaluate the performance of the \trip solution, we identified the works \citep{bolzoni2014efficient,taylor2018tour} and \citep{chen2014automatic,vanzelst2016itinerary} as potential baselines for single day itinerary planning and multi-day itinerary planning, respectively. This choice was based on the features of the solutions, as listed in Table~\ref{tab:otherworks}. Although we requested the authors of the respective works to share their implementation codes we did not receive a suitable response. Moreover, while the works \citep{bolzoni2014efficient,taylor2018tour}  consider utility optimization as their objective, the works \citep{chen2014automatic,vanzelst2016itinerary} did not. In addition, the implementation details stated in \citep{bolzoni2014efficient} were insufficient to reproduce their solution.  We, thus, did a best-effort implementation of~\citep{taylor2018tour}. While it too lacked a code repository or implementation details like the POI visiting durations, we were able to at least replicate the key features and constraints described. 
+Hence, we consider \citep{taylor2018tour} to be the  \emph{baseline} for evaluating single day as well as multi-day itinerary planning.
 
 Despite our best efforts, a direct performance comparison between our model and the baseline may not be
 feasible due to a key limitation in the common dataset used by both our
-system and~\cite{taylor2018tour}.
+system and~\citep{taylor2018tour}.
 This pertains to the POI visit time field.
-Since the code and dataset of~\cite{taylor2018tour} is not available, we are not sure what values they used for POI visit times.
+Since the code and dataset of~\citep{taylor2018tour} is not available, we are not sure what values they used for POI visit times.
 Nevertheless, we assume that they will not be very different from the average values used by us.
-Another limitation of the algorithm of~\cite{taylor2018tour} was that it did not consider any cost budget during
+Another limitation of the algorithm of~\citep{taylor2018tour} was that it did not consider any cost budget during
 itinerary planning.
 Thus, to ensure a fair comparison with their approach, we used a very
 high cost budget in our experiments when compared with the baseline, so that
@@ -90,7 +119,7 @@ it would not influence the itinerary planning outcome.
 
 We evaluate the performance of the \trip solution by considering all the utility variants (binary, slab, continuous) as well as the transportation mode variants (walking, taxi, hybrid). We, thus, have a total of $3 \times 3 = 9$ \trip variants.
 
-\subsection{Performance Metrics}
+\subsubsection{\textbf{Performance Metrics}}\\
 
 We evaluate the performance of the baseline and the \trip variants on mainly \emph{utility}, since that is what the objective of the optimization function is.
 In addition, however, we also measure the following parameters:
@@ -142,7 +171,7 @@ Fig.~\ref{fig:baseline-multi} shows the results for 1 to 4 days.
 The baseline utilities were calculated by creating daily itineraries one after another, making sure not to repeat any POIs from previous days, and summing up the utilities.
 The \trip variants run optimized multi-day planning models and, consequently, perform much better. Given the consistent and significant advantage of \trip over the baseline, we chose to leave the baseline out of future comparisons.
 
-\subsection{Multiple Cities}
+\subsection{Performance Evaluation on other City Geographies}
 
 Fig.~\ref{fig:cities} shows the results of single day tour planning for 6 different cities under various time and cost budgets for different utility variants for the Hybrid mode.
 The time budget is varied within a practical range of 480 to 600 minutes, and the cost budget is chosen to be appropriately aligned with the economic characteristics of the city.
@@ -151,7 +180,7 @@ The Continuous utility variant shows the best performance.
 %\ab{can we have utilization numbers here?}
 Since the trends remain the same across the cities, we choose Osaka as a representative, and show all subsequent results for it only.
 
-\subsection{Effect of Multi-modality}
+\subsection{Effect of Multi-modal Transportation}
 
 We next evaluate the effect of multiple modes of transport (Fig.~\ref{fig:multi-modal}).
 For a fixed cost budget (of 6000 units), the top graph shows that Hybrid is generally the best mode by a significant margin. This is intuitive since Hybrid chooses the best of both the worlds.
@@ -162,7 +191,7 @@ This is intuitive since a large cost budget allows the traveler to quickly visit
 Since walking does not incur any cost, for a fixed time budget, there is no effect of the cost budget on it, and the utility remains the same.
 Among the utility variants, Continuous shows the best performance.
 
-\subsection{Time and Cost Profile}
+\subsection{Time and Cost Budget Utilization}
 
 \begin{figure}[t]
 \centering
@@ -211,7 +240,7 @@ Cost utilization, however, is not always an indicator of utility maximization.
 The cost of visiting a POI is not always proportional to its utility.
 In Taxi mode, although faster travel allows reaching distant POIs, the high travel cost often exhausts the budget before accessing faraway high-utility POIs. Thus, for low cost budgets, its visit utilization is lower and utility is poorer.
 
-\subsection{Multi-day Trips}
+\subsection{Comparision of Multiday Itinerary planner vs K single-day itinerary planner}
 
 \begin{figure}[t]
 \centering
@@ -243,7 +272,7 @@ Fig.~\ref{fig:multi-day-cost-breakdown} depicts the cost utilization for Hybrid 
 The Restricted version is restricted by the cost budget per day and, hence, cannot get high utlity either.
 The \trip multi-day optimizer judiciously uses the budget over three days and, consequently, gets the highest utility.
 
-\subsection{Personalized Constraints}
+\subsection{Performance evaluation of Personalized Constraints}
 
 Fig.~\ref{fig:personalizedconstraints} shows the results of various personalized constraints over the 3 utility variants.
 In this study, a cost budget of 6000 units and a time budget of 480 minutes is fixed across all the cases.
@@ -261,7 +290,7 @@ Binary shows the sharpest drops since it has the least leeway; Slab and Continuo
 \label{fig:personalizedconstraints}
 \end{figure}
 
-\subsection{Dynamic Re-planning}
+\subsection{Evaluation of Dynamic Re-planning}
 
 \begin{figure}[t]
     \centering
@@ -301,7 +330,8 @@ Overall, this variation in utility values underscores the importance of adapting
     \label{fig:number-of-days}
 \end{figure}
 
-\subsection{Scalability}
+\subsection{Scalability Results}
+\label{sec:scalability}
 
 In this section, we test the scalability of our MILP solution in terms of running time for various parameters.
 
