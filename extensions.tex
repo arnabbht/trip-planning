@@ -206,9 +206,9 @@ running for a single day, then getting rid of the POIs covered in that day, and
 after that running again for the next day, and so on.
 Instead, we solve the
 problem as one single optimization problem.  For each day, we can specify a
-source and destination, and the time budget.  This caters to tours where
+source and destination, and the time budget.  This also caters to tours where
 the time in the first and last days are typically less due to arrival and
-departure constraints.  Also, the first day's source and the last day's
+departure constraints.  Further, the first day's source and the last day's
 destination may be an airport, while for other days, it
 may be a hotel.
 
@@ -227,7 +227,7 @@ conditions ensure that a POI is chosen at most once within $d$ days:
 	\sum_{\forall d} y^d_i & \leq 1, \forall i
 \end{align}
 %
-Choosing a POI at most once automatically constraints choosing any incoming
+Constraining a POI to be chosen at most once automatically constraints choosing any incoming
 or outgoing edge to or from it to at most once as well.
 
 \subsection{Dynamic Itinerary Re-planning}

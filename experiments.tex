@@ -1,34 +1,40 @@
 \section{Experiments}
 \label{sec:experiments}
 
-In this section, we describe the empirical study of our \trip solver for the itinerary planning problem.
+In this section, we present the empirical results of the proposed \trip solution. Firstly, we state the research questions addressed in this study, followed by the experimental methodology and then the empirical findings.
 
 \subsection{Research Questions and Objectives}
-In this work, we address the following research questions:
+
+The objective of this section is to assess the effectiveness and efficiency of the \trip solution in generating personalized multi-day itineraries. To this end,  we address the following research questions:
 
 \begin{itemize}
-    \item \textbf{RQ1:} How does the proposed work compare against the existing works in terms of itinerary personalization?
 
-    \item \textbf{RQ2:} How does the utility yield of the TRIP solution compare against the existing baseline?
+    \item \textbf{RQ1:} (Sec.~\ref{Rel_Work}) How does the proposed work compare against the existing works in terms of itinerary personalization?
 
-    \item \textbf{RQ3:} How does the TRIP solution perform across different city geographies?
+    \item \textbf{RQ2:} (Sec.~\ref{sec:exp baseline comparison}) How does the utility yield of the TRIP solution compare against the existing baseline method?
 
-    \item \textbf{RQ4:} How does the multimodal transportation capability offered by the TRIP solution improve the user experience?
+    \item \textbf{RQ3:} (Sec.~\ref{sec:exp city geographies}) How does the TRIP solution perform across different city geographies?
 
-    \item \textbf{RQ5:} How do the itineraries proposed by the TRIP solution utilize the time and cost budget?
+    \item \textbf{RQ4:} (Sec.~\ref{sec:exp multimodal}) How does the multimodal transportation capability offered by the TRIP solution improve the user experience?
 
-    \item \textbf{RQ6:} How does a multi-day itinerary covering $k$ days differ from $k$ disjoint single-day itineraries?
+    \item \textbf{RQ5:} (Sec.~\ref{sec:exp cost and time budget utilization}) How do the itineraries returned by the TRIP solution utilize the time and cost budget and what is the distribution of the budget between travel and POI visits?
 
-    \item \textbf{RQ7:} What is the impact of personalized constraints (namely, number of must see POIs, number of must avoid POIs, Number of ordering constraints and number of category constraints) and different utility variants (namely, binary, continuous and hybrid) on the user experience?
+    \item \textbf{RQ6:} (Sec.~\ref{sec:exp multi-day}) How does a multi-day itinerary covering $k$ days differ from an itinerary that combines $k$ disjoint single-day itineraries?
 
-    \item \textbf{RQ8:} How does dynamic replanning adapt to unexpected delays or changes in the itinerary?
+    \item \textbf{RQ7:} (Sec.~\ref{sec:exp personalized constraints}) What is the impact of personalized constraints (namely, \textit{must-see constraints, must-avoid constraints, ordering constraints and category constraints}) and different utility variants (namely, \textit{binary, slab and continuous}) on the user experience?
 
-    \item \textbf{RQ9:} How scalable is the TRIP solution in terms of the number of POIs and the number of days in the itinerary?
+    \item \textbf{RQ8:} (Sec.~\ref{sec:exp dynamic replanning}) How does dynamic replanning adapt to unexpected delays or unplanned changes in the itinerary?
+
+    \item \textbf{RQ9:} (Sec.~\ref{sec:exp scalability}) How scalable is the TRIP solution in terms of the number of POIs and the number of days in the itinerary?
+
 \end{itemize}
 
+With reference to RQ1, following the discussion in Sec.~2, it is clear that the \trip solution offers superior itinerary personalization capabilities. The remaining questions are addressed in the respective sections specified above.
 \subsection{Experimental Methodology}
-\subsubsection{\textbf{Dataset Description}}
-\label{sec:dataset}\\
+This section describes the experimental methodology adopted for evaluating the \trip solution. 
+
+\subsubsection{\textbf{Dataset}}
+\label{sec:dataset}
 
 In order to test our itinerary planning system, we used curated datasets of Points of Interest (POIs) for six large cities: Budapest, Delhi, Edinburgh, Glasgow, Osaka, and Vienna. 
 %\ari{Americans will be very unhappy.} \ab{Ha ha ha!}
@@ -93,40 +99,35 @@ These additional information were collected by either scraping or quoting offici
 \label{tab:additional}
 \end{table}
 
-\subsubsection{\textbf{Configuration}}\\
+\subsubsection{\textbf{Configuration}}
 
-The experiments were conducted on a high-performance Linux server equipped with dual Intel(R) Xeon(R) E5-2697 v3 CPUs, each running at 2.60\,GHz, providing a total of 56 logical processors (28 physical cores per socket with hyper-threading enabled) and 503\,GB of RAM.
-The code was implemented in Python and mixed integer linear programming was done in Gurobi.
+The experiments are conducted on a high-performance Linux server equipped with dual Intel(R) Xeon(R) E5-2697 v3 CPUs, each running at 2.60\,GHz, providing a total of 56 logical processors (28 physical cores per socket with hyper-threading enabled) and 503\,GB of RAM.
+The code is implemented in Python and mixed integer linear programming (MILP) is done using Gurobi.
 
-\subsubsection{\textbf{Baseline Itinerary Planner}}\\
+\subsubsection{\textbf{Baseline Itinerary Planner}}
 
-To evaluate the performance of the \trip solution, we identified the works \citep{bolzoni2014efficient,taylor2018tour} and \citep{chen2014automatic,vanzelst2016itinerary} as potential baselines for single day itinerary planning and multi-day itinerary planning, respectively. This choice was based on the features of the solutions, as listed in Table~\ref{tab:otherworks}. Although we requested the authors of the respective works to share their implementation codes we did not receive a suitable response. Moreover, while the works \citep{bolzoni2014efficient,taylor2018tour}  consider utility optimization as their objective, the works \citep{chen2014automatic,vanzelst2016itinerary} did not. In addition, the implementation details stated in \citep{bolzoni2014efficient} were insufficient to reproduce their solution.  We, thus, did a best-effort implementation of~\citep{taylor2018tour}. While it too lacked a code repository or implementation details like the POI visiting durations, we were able to at least replicate the key features and constraints described. 
+To evaluate the performance of the \trip solution, we identified the works \citep{bolzoni2014efficient,taylor2018tour} and \citep{chen2014automatic,vanzelst2016itinerary} as potential baselines for single day itinerary planning and multi-day itinerary planning, respectively. This choice was based on the features of the solutions, as listed in Table~\ref{tab:otherworks}. Although we requested the authors of the respective works to share their implementation codes we did not receive a suitable response. Moreover, while the works \citep{bolzoni2014efficient,taylor2018tour}  consider utility optimization as their objective, the works \citep{chen2014automatic,vanzelst2016itinerary} did not. In addition, the implementation details stated in \citep{bolzoni2014efficient} are insufficient to reproduce their solution.  We, thus, did a best-effort implementation of~\citep{taylor2018tour}. While it too lacked the code repository details or implementation details like the POI visiting durations, we were able to at least replicate the key features and constraints described. 
 Hence, we consider \citep{taylor2018tour} to be the  \emph{baseline} for evaluating single day as well as multi-day itinerary planning.
 
-Despite our best efforts, a direct performance comparison between our model and the baseline may not be
-feasible due to a key limitation in the common dataset used by both our
-system and~\citep{taylor2018tour}.
-This pertains to the POI visit time field.
-Since the code and dataset of~\citep{taylor2018tour} is not available, we are not sure what values they used for POI visit times.
-Nevertheless, we assume that they will not be very different from the average values used by us.
-Another limitation of the algorithm of~\citep{taylor2018tour} was that it did not consider any cost budget during
+While comparing with this baseline~\citep{taylor2018tour}, we faced multiple challenges. Firstly, since the code and the dataset of~\citep{taylor2018tour} is not available, it is not clear  what values they used for POI visit times.
+Nevertheless, we assume that they will not be very different from the average values used by our solution. Secondly,~\citep{taylor2018tour} did not consider any cost budget during
 itinerary planning.
 Thus, to ensure a fair comparison with their approach, we used a very
-high cost budget in our experiments when compared with the baseline, so that
+high cost budget for the \trip solution so that
 it would not influence the itinerary planning outcome.
 
 %\subsection{Variants of \trip}
 
 We evaluate the performance of the \trip solution by considering all the utility variants (binary, slab, continuous) as well as the transportation mode variants (walking, taxi, hybrid). We, thus, have a total of $3 \times 3 = 9$ \trip variants.
 
-\subsubsection{\textbf{Performance Metrics}}\\
+\subsubsection{\textbf{Performance Metrics}}
 
-We evaluate the performance of the baseline and the \trip variants on mainly \emph{utility}, since that is what the objective of the optimization function is.
-In addition, however, we also measure the following parameters:
+We evaluate the performance of the baseline and the \trip variants on mainly \emph{utility yield}, since that is the objective of the optimization function.
+In addition, we also measure the following metrics:
 
 \begin{enumerate}
-    \item \emph{Running time} of the solver, to determine its practicality,
-    \item \emph{Time and Cost spent} as a ratio of the total time and cost budget, to understand the utilization efficiency, and
+    \item \emph{Running time} of the solution, to determine its practicality,
+    \item \emph{Time and Cost spent} as a ratio of the total time and cost budget, to understand the cost and time utilization efficiency, and
     \item \emph{Time and Cost profile} of how time and cost are spent for travel vis-a-vis POI visit.
 \end{enumerate}
 
@@ -156,34 +157,36 @@ In addition, however, we also measure the following parameters:
     \label{fig:cities}
 \end{figure*}
 
-\subsection{Comparison with Baseline}
+\subsection{Comparison with Baseline} \label{sec:exp baseline comparison}
 
 We first experiment to see the performance of \trip against the baseline.
 Fig.~\ref{fig:baseline-single}\footnote{This and all subsequent graphs use a combination of line colors for utility variants and point shapes for transportation modes. Since there are 3 utility variants and 3 transportation modes, a combination of these legends produces the 9 \trip variants. For example, since Binary is represented by cyan-colored lines and Walking by circles, a cyan-colored line with circles represent the Binary Walking variant of \trip.}
 shows the utility scores across different time budgets under a high cost budget scenario (100000 units) for the city of Osaka for a single day.
 As expected, utility increases with increasing time budget, since there is more time to visit more POIs.
-Notably, the \trip Binary-Walking variant closely replicates the behavior of the baseline model, validating its correctness and fairness for comparative purposes. The other models, especially the Hybrid mode ones, outperform the baseline significantly.
+Notably, the \trip Binary-Walking variant closely replicates the behavior of the baseline. This is because the baseline model assumes walking as its transportation mode.  The other models, especially the Hybrid mode ones, outperform the baseline significantly.
 Since the cost budget is very high, the utility scores of Taxi match those of Hybrid.
 
 We next experiment with multi-day itinerary on Osaka for a very high cost budget of 100000 to ensure that cost is not a limiting factor for the baseline.
-Each day was assigned a time budget of 8 hours.
+Each day is assigned a time budget of 8 hours.
 Fig.~\ref{fig:baseline-multi} shows the results for 1 to 4 days.
 The baseline utilities were calculated by creating daily itineraries one after another, making sure not to repeat any POIs from previous days, and summing up the utilities.
 The \trip variants run optimized multi-day planning models and, consequently, perform much better. Given the consistent and significant advantage of \trip over the baseline, we chose to leave the baseline out of future comparisons.
 
 \subsection{Performance Evaluation on other City Geographies}
+\label{sec:exp city geographies}
 
 Fig.~\ref{fig:cities} shows the results of single day tour planning for 6 different cities under various time and cost budgets for different utility variants for the Hybrid mode.
 The time budget is varied within a practical range of 480 to 600 minutes, and the cost budget is chosen to be appropriately aligned with the economic characteristics of the city.
 As expected, higher cost and time budgets allow for higher utilities.
-The Continuous utility variant shows the best performance.
+The Continuous utility variant shows the best performance. This is because the utility yields of the continuous variant are proportional to the POI visit durations. The binary variant and the slab variants are unable to take full advantage of the POI visit duration.
 %\ab{can we have utilization numbers here?}
 Since the trends remain the same across the cities, we choose Osaka as a representative, and show all subsequent results for it only.
 
 \subsection{Effect of Multi-modal Transportation}
+\label{sec:exp multimodal}
 
 We next evaluate the effect of multiple modes of transport (Fig.~\ref{fig:multi-modal}).
-For a fixed cost budget (of 6000 units), the top graph shows that Hybrid is generally the best mode by a significant margin. This is intuitive since Hybrid chooses the best of both the worlds.
+For a fixed cost budget (of 6000 units), the top graph shows that Hybrid is generally the best mode by a significant margin. This is intuitive since Hybrid chooses the best of both the worlds, i.e., only walking and only taxi.
 The utility obtained using only Taxi saturates after a while, since once the fixed cost budget is exhausted, it cannot visit any more POI.
 The bottom graph shows the effect of increasing cost budget for a fixed time budget of 480 minutes.
 Again, while Hybrid is the best mode, with larger cost budgets, the Taxi variant catches up quickly.
@@ -192,6 +195,7 @@ Since walking does not incur any cost, for a fixed time budget, there is no effe
 Among the utility variants, Continuous shows the best performance.
 
 \subsection{Time and Cost Budget Utilization}
+\label{sec:exp cost and time budget utilization}
 
 \begin{figure}[t]
 \centering
@@ -216,7 +220,7 @@ Among the utility variants, Continuous shows the best performance.
 To understand the effects of different modes of transport even better, we next plot the time and cost utilization profiles.
 
 Fig.~\ref{fig:time-utilization} shows how the time is spent across visiting POIs versus traveling between POIs for different time and cost budgets.
-Walking shows a high travel-to-visit time ratio, which is expected due to the slow nature of walking. A significant amount of time is, thus, spent in traveling. On the other extreme, Taxi minimizes travel time. Hybrid offers a solution which is mid-way, and achieves a more moderate ratio and a better utility.
+Walking shows a high travel-to-visit time ratio, which is expected due to the slow nature of walking. A significant amount of time is, thus, spent in traveling. On the other extreme, Taxi minimizes travel time. Hybrid offers a balanced solution which is mid-way, and achieves a more moderate ratio and a better utility.
 Across all variants, increasing time budget allowed better utilization of available time, with Hybrid mode consistently providing the most balanced performance. This highlights that optimizing for utility involves not just maximizing visit duration but also strategically balancing travel efficiency with multi-modal flexibility.
 
 Further, the Hybrid mode consistently achieves high time utilization, utilizing more than 95\% of the time budget, across all time and cost budgets. 
@@ -240,7 +244,8 @@ Cost utilization, however, is not always an indicator of utility maximization.
 The cost of visiting a POI is not always proportional to its utility.
 In Taxi mode, although faster travel allows reaching distant POIs, the high travel cost often exhausts the budget before accessing faraway high-utility POIs. Thus, for low cost budgets, its visit utilization is lower and utility is poorer.
 
-\subsection{Comparision of Multiday Itinerary planner vs K single-day itinerary planner}
+\subsection{Comparision of Multiday  Planner versus Multiple Single-day  Planners}
+\label{sec:exp multi-day}
 
 \begin{figure}[t]
 \centering
@@ -269,10 +274,11 @@ Even for 2 days, the gain in utility is around 15\%.
 
 To understand how the total cost is utilized, we next experimented with the two single-day versions. In the first (called Unrestricted), the entire cost budget is made available on the first day, while in the second (called Restricted), 1/3rd of the cost budget is allocated everyday.
 Fig.~\ref{fig:multi-day-cost-breakdown} depicts the cost utilization for Hybrid mode with a time budget of 480 minutes per day, and a total cost budget of 6000 units for 3 days. The plot shows that the Full version utilizes the entire cost in the first day. Subsequently, little utility is received in the next two days.
-The Restricted version is restricted by the cost budget per day and, hence, cannot get high utlity either.
+The Restricted version is restricted by the cost budget per day and, hence, cannot get high utility either.
 The \trip multi-day optimizer judiciously uses the budget over three days and, consequently, gets the highest utility.
 
-\subsection{Performance evaluation of Personalized Constraints}
+\subsection{Personalized Constraints}
+\label{sec:exp personalized constraints}
 
 Fig.~\ref{fig:personalizedconstraints} shows the results of various personalized constraints over the 3 utility variants.
 In this study, a cost budget of 6000 units and a time budget of 480 minutes is fixed across all the cases.
@@ -291,6 +297,7 @@ Binary shows the sharpest drops since it has the least leeway; Slab and Continuo
 \end{figure}
 
 \subsection{Evaluation of Dynamic Re-planning}
+\label{sec:exp dynamic replanning} 
 
 \begin{figure}[t]
     \centering
@@ -306,7 +313,7 @@ In order to take the readings for the plot, we modified the average visit time o
 This was done only for this experiment.
 The time and cost budget are 480 minutes and 6000 units respectively.
 The optimal static itinerary consists of 4 POIs.
-Our planner dynamically recalculates the itinerary by considering the actual time a user spends at each POI and the time taken to travel between them, in contrast to the initially suggested static schedule.
+Our planner dynamically recalculates the itinerary by considering the actual time a user spends at each POI and the time taken to travel between them, in contrast to the static schedule initially suggested.
 
 The plot shows that the effect of spending a substantially different time on the first POI does not have much effect, since there is enough time for the planner to find another itinerary with a high utility.
 Similarly, spending less time in the third POI does not give a much better itinerary since there is not much scope to maneuver, given the time budget already spent. Spending a lot of extra time may, however, decrease the utility significantly, especially if this does not allow reaching the fourth and subsequent POIs.
@@ -330,17 +337,16 @@ Overall, this variation in utility values underscores the importance of adapting
     \label{fig:number-of-days}
 \end{figure}
 
-\subsection{Scalability Results}
-\label{sec:scalability}
+\subsection{Scalability Results}\label{sec:exp scalability}
 
-In this section, we test the scalability of our MILP solution in terms of running time for various parameters.
+In this section, we test the scalability of the \trip solution in terms of running time for various parameters.
 
-Fig.~\ref{fig:number-of-pois} and Fig.~\ref{fig:number-of-days} show that the time increases exponentially with number of POIs and number of days in the trip, which is expected for a linear programming solution.
+Fig.~\ref{fig:number-of-pois} and Fig.~\ref{fig:number-of-days} show that the running time increases exponentially with number of POIs and number of days in the trip, which is expected for an optimal solution to an NP hard problem .
 Importantly, the computation times remain \emph{practical} even when the number of POIs or the number of days is very high.
 
 We next show the change in computation time when the cost and time budget change.
 As shown in Fig.~\ref{fig:cost-budget}, for extremely low cost budgets, the time taken is small, but it increases rapidly with increasing cost budget. This is due to the fact that more choices become available when the cost budget increases. However, once the cost budget exceeds a threshold, the solver can effectively ignore about it, since almost all solutions become feasible in terms of cost.
-Similarly, the computation time remains very low, unless the time budget is extremely high (Fig.~\ref{fig:time-budget}) since only then almost all solutions become feasible in terms of time.
+A similar behavior is observed in Fig.~\ref{fig:time-budget} between the computation time and the available time budget. The computation time increases with the time budget.
 
 \begin{figure}[t]
     \centering
@@ -362,8 +368,7 @@ Overall, our experimental results provide the following insights.
 The \trip variants outperform the baseline significantly.
 The Hybrid is the best mode of transport.
 The Continuous utility variant gives slightly better results than the Slab variant, and both of them outperform the Binary variant due to lack of flexibility for the Binary variant.
-Optimizing for multiple days in one shot gives significantly better results than solving for single days, and adding them up.
-Personalized constraints are handled efficiently by our \trip solution.
+Optimizing for multiple days in one shot gives significantly better utilities than solving for single days, and adding them up.
+The personalized constraints are handled efficiently by our \trip solution.
 Dynamic re-planning can increase the utility when there is scope to maneuver the rest of the plan.
-Finally, \trip solver, despite being a MILP solution, is practical.
-
+Finally, the \trip solution runs within practical running times. Most importantly, the itineraries returned by the \trip solution are optimal.

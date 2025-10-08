@@ -118,3 +118,15 @@ Eq.~\eqref{eq:subtour} prevents it by ensuring that if POI $k$ is visited
 immediately after POI $j$, the start time of $v_k$ should be more than that of
 $v_j$ plus the time of visit of $v_j$ and the travel time from $v_j$ to $v_k$.
 
+There are five sets of variables: $y, m, c, t, z$.  
+The total number of variables of type $y$ in a single-day itinerary is $O(N)$ where N is number of POIs in the city.\ignore{, and in a multi-day itinerary is $O(N \cdot d)$.}
+The total number of variables of type $m$ in a single-day itinerary is $O(MN^2)$ where M is total number of modes of transportation available.\ignore{, and in a multi-day itinerary is $O(mN^2 \cdot d)$.}
+The total number of variables of types $c$ and $t$ in a single-day itinerary are $O(N) + O(N^2)$.\ignore{, which scale to $O(N^2 \cdot d)$ in the multi-day case.}
+The total number of variables of type $z$ in a single-day itinerary is $O(N^2)$.\ignore{, and in a multi-day itinerary is $O(N^2 \cdot d)$.}
+
+\noindent
+Hence, the total number of variables in the ILP model is $O(N^2)$ and a careful analysis of all the constraints shows that the total number of constraints is $O(N^2 + |MN| + |N|)$.
+
+\ignore{Hence, the total number of variables in the multi-day ILP model is $O(N^2 \cdot d)$ which boils down to $O(N^2)$ in case of single day itinerary.}
+
+
