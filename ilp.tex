@@ -118,15 +118,31 @@ Eq.~\eqref{eq:subtour} prevents it by ensuring that if POI $k$ is visited
 immediately after POI $j$, the start time of $v_k$ should be more than that of
 $v_j$ plus the time of visit of $v_j$ and the travel time from $v_j$ to $v_k$.
 
-There are five sets of variables: $y, m, c, t, z$.  
-The total number of variables of type $y$ in a single-day itinerary is $O(N)$ where N is number of POIs in the city.\ignore{, and in a multi-day itinerary is $O(N \cdot d)$.}
-The total number of variables of type $m$ in a single-day itinerary is $O(MN^2)$ where M is total number of modes of transportation available.\ignore{, and in a multi-day itinerary is $O(mN^2 \cdot d)$.}
-The total number of variables of types $c$ and $t$ in a single-day itinerary are $O(N) + O(N^2)$.\ignore{, which scale to $O(N^2 \cdot d)$ in the multi-day case.}
-The total number of variables of type $z$ in a single-day itinerary is $O(N^2)$.\ignore{, and in a multi-day itinerary is $O(N^2 \cdot d)$.}
+\ignore{
 
-\noindent
+There are five sets of variables in the formulation: $y, m, c, t, z$.
+The number of variables of type $y$ that represent POIs is $O(N)$ where $N$ is number of POIs in the city.
+\ignore{, and in a multi-day itinerary is $O(N \cdot d)$.}
+The number of variables of type $m$ that represent travelling from one POI to another is $O(T.N^2)$ where $T$ is total number of modes of transportation available.
+\ignore{, and in a multi-day itinerary is $O(mN^2 \cdot d)$.}
+The number of variables of types $c$ and $t$ that represent cost and time
+is $O(N) + O(N^2)$.
+\ignore{, which scale to $O(N^2 \cdot d)$ in the multi-day case.}
+The number of variables of type $z$ that represent connectivity is $O(N^2)$.
+\ignore{, and in a multi-day itinerary is $O(N^2 \cdot d)$.}
 Hence, the total number of variables in the ILP model is $O(N^2)$ and a careful analysis of all the constraints shows that the total number of constraints is $O(N^2 + |MN| + |N|)$.
-
 \ignore{Hence, the total number of variables in the multi-day ILP model is $O(N^2 \cdot d)$ which boils down to $O(N^2)$ in case of single day itinerary.}
 
+}
+
+There are four sets of variables in the formulation: $y, c, t, z$.  The number
+of variables of type $y$ that represent POIs is $O(N)$, where $N$ is number of
+POIs in the city.  The number of variables of types $c$ and $t$ that represent
+cost and time is $O(T.N) + O(T.N^2)$, where $T$ is the number of modes of
+transportation.  The number of variables of type $z$ that represent connectivity
+is $O(T.N^2)$.  Hence, the total number of variables in the MILP program is
+$O(T.N^2)$ for a single-day itinerary.  For a multi-day itinerary with $D$ days,
+the number of variables becomes $O(D.T.N^2)$.  While $N$ is typically less than
+$100$, $D$ and $T$ are small constants and, hence, the number of variables is
+approximately $10^4$ for most practical scenarios.
 

@@ -1,5 +1,3 @@
-%\section{Extensions of \trip}
-
 \subsection{Personalized Constraints}
 \label{sec:personalized}
 
@@ -112,15 +110,21 @@ Fig.~\ref{fig:utility} graphically shows the three variants.
 Note that in all of these variants, if a traveler spends \emph{more} time
 than the prescribed time of visit, her utility is capped to 100\% only.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\columnwidth]{plots/UF_Combined.png}
+\figcaption{Different utility function variants}
+\label{fig:utility}
+\end{figure}
+
 \subsubsection{\textbf{Binary}}
 \label{sec:binary}
 
-This is the standard utlity variant, where a traveler spends full time in a
-POI, and gets the complete utility.  If she does not spend that time, she
-gets no utility at all.
+The binary is the standard utlity variant, where a traveler spends full time in
+a POI, and gets the complete utility.  If she does not spend that time, she gets
+no utility at all.
 
-The binary utility $U^b_i$ of a POI $i$ for the binary variant is captured
-simply by
+The binary variant utility $U^b_i$ of a POI $i$ is captured simply by
 %
 \begin{align}
 	\label{eq:binary}
@@ -186,13 +190,6 @@ The utility $U^c_i$ is then simply the following.
 	\label{eq:continuous}
 	U^c_i = U_i \cdot f_i
 \end{align}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{plots/UF_Combined.png}
-\figcaption{Different utility function variants}
-\label{fig:utility}
-\end{figure}
 
 \subsection{Multi-Day Itinerary}
 \label{sec:multiday}

@@ -94,7 +94,8 @@ utility obtained from $I$ is
 \end{align}
 %
 Given a time budget $T$ and a cost budget $C$, the TRIP problem is to find the
-itinerary $I$ that maximizes $U(I)$ subject to the budget constraints:
+itinerary $I$ that maximizes the utility $U(I)$ subject to the budget
+constraints:
 %
 \begin{align}
 	& \arg\max_I U(I) \\
@@ -118,6 +119,12 @@ walking and taxi respectively.
 Suppose a traveler has a time and cost budget of $360$ minutes and $3500$ units respectively.
 Additionally, she puts in the contraints that (1)~POIs 1 and 2 must be visited, (2)~POI 2 must be visited before POI 1, and (3)~POI 3, if visited, must be before both POI 2 and POI 5 (if visited).
 Further, she must visit at least 2 POIs of the category Park, and will not visit more than 2 POIs of the category Museum.
+
+Respecting all these constraints, the optimal itinerary, as shown in
+Fig.~\ref{fig:example_graph},  is $[S, 2, 5, 6, 1, D]$.  Note that the POIs 3
+and 4 were not included.  The total utility obtained from the itinerary is
+$2114$ units, and the time and cost spent are, respectively, $341.9$ minutes and
+$3260$ units.
 
 \begin{table}[t]
 	\centering
@@ -164,13 +171,4 @@ Further, she must visit at least 2 POIs of the category Park, and will not visit
 	\tabcaption{Taxi travel time matrix}
 	\label{tab:example_taxi}
 \end{table}
-
-Respecting all these constraints, the optimal itinerary,
-as shown in Fig.~\ref{fig:example_graph},  is $[S, 2, 5, 6, 1, D]$.
-Note that the
-POIs 3 and 4 were not included.  The total utility obtained from the
-itinerary is $2114$ units, and the time and cost spent 
-are, respectively, $341.9$ minutes and $3260$ units.
-
-
 

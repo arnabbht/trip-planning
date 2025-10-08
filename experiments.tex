@@ -43,8 +43,11 @@ The dataset utilized for our work is derived from the \emph{Yahoo Flickr Creativ
 The authors of~\citep{taylor2018tour} considered a set of popular POIs for the cities mentioned earlier using resources such as \emph{Wikipedia}. Then, geotagged photos in \emph{Flickr} were matched with these POIs using spatial proximity. The relative popularity of a POI, used as the measure for its \textbf{utility}, was estimated based on the number of photos associated with each POI. The Flickr User-POI Visits dataset, curated in this manner by~\citep{limkwanhuiDataCode}, is used in our work.
 This provides a practical way to understand how tourists behave by using publicly shared photos as a proxy for how much interest people have in a particular place.
 
-Table~\ref{tab:original} contains the original dataset fields. With an aim to make our system more realistic and practical to use, we augmented the fields by adding some more features, as listed in Table~\ref{tab:additional}.
-These additional information were collected by either scraping or quoting official tourist boards, city tourism websites, and trustworthy travel websites.
+Table~\ref{tab:original} lists the original dataset fields. To make our system
+more realistic and practical, we augmented the fields by adding some more
+features, as listed in Table~\ref{tab:additional}.  These additional information
+were collected by either web scraping or quoting from official tourist boards,
+city tourism websites, and trustworthy travel websites.
 
 \begin{table}[t]
 \resizebox{\columnwidth}{!}
@@ -157,11 +160,12 @@ In addition, we also measure the following metrics:
     \label{fig:cities}
 \end{figure*}
 
-\subsection{Comparison with Baseline} \label{sec:exp baseline comparison}
+\subsection{Comparison with Baseline}
+\label{sec:exp baseline comparison}
 
 We first experiment to see the performance of \trip against the baseline.
 Fig.~\ref{fig:baseline-single}\footnote{This and all subsequent graphs use a combination of line colors for utility variants and point shapes for transportation modes. Since there are 3 utility variants and 3 transportation modes, a combination of these legends produces the 9 \trip variants. For example, since Binary is represented by cyan-colored lines and Walking by circles, a cyan-colored line with circles represent the Binary Walking variant of \trip.}
-shows the utility scores across different time budgets under a high cost budget scenario (100000 units) for the city of Osaka for a single day.
+shows the utility scores across different time budgets under a high cost budget scenario (100,000 units) for the city of Osaka for a single day.
 As expected, utility increases with increasing time budget, since there is more time to visit more POIs.
 Notably, the \trip Binary-Walking variant closely replicates the behavior of the baseline. This is because the baseline model assumes walking as its transportation mode.  The other models, especially the Hybrid mode ones, outperform the baseline significantly.
 Since the cost budget is very high, the utility scores of Taxi match those of Hybrid.
@@ -172,7 +176,7 @@ Fig.~\ref{fig:baseline-multi} shows the results for 1 to 4 days.
 The baseline utilities were calculated by creating daily itineraries one after another, making sure not to repeat any POIs from previous days, and summing up the utilities.
 The \trip variants run optimized multi-day planning models and, consequently, perform much better. Given the consistent and significant advantage of \trip over the baseline, we chose to leave the baseline out of future comparisons.
 
-\subsection{Performance Evaluation on other City Geographies}
+\subsection{Different City Geographies}
 \label{sec:exp city geographies}
 
 Fig.~\ref{fig:cities} shows the results of single day tour planning for 6 different cities under various time and cost budgets for different utility variants for the Hybrid mode.
@@ -244,7 +248,7 @@ Cost utilization, however, is not always an indicator of utility maximization.
 The cost of visiting a POI is not always proportional to its utility.
 In Taxi mode, although faster travel allows reaching distant POIs, the high travel cost often exhausts the budget before accessing faraway high-utility POIs. Thus, for low cost budgets, its visit utilization is lower and utility is poorer.
 
-\subsection{Comparision of Multiday  Planner versus Multiple Single-day  Planners}
+\subsection{Multiday Planner versus Multiple Single-day Planners}
 \label{sec:exp multi-day}
 
 \begin{figure}[t]
@@ -296,7 +300,7 @@ Binary shows the sharpest drops since it has the least leeway; Slab and Continuo
 \label{fig:personalizedconstraints}
 \end{figure}
 
-\subsection{Evaluation of Dynamic Re-planning}
+\subsection{Dynamic Re-planning}
 \label{sec:exp dynamic replanning} 
 
 \begin{figure}[t]
@@ -306,7 +310,7 @@ Binary shows the sharpest drops since it has the least leeway; Slab and Continuo
     \label{fig:dynamic}
 \end{figure}
 
-The next experiment captures the changes in utility when dynamic re-planning is done.
+The next experiment captures the changes in utility for dynamic re-planning.
 Fig.~\ref{fig:dynamic} covers five different scenarios for a POI, according to the time spent in visiting it: (1)~\emph{50\% less}, i.e., when the traveler spends 50\% of the visit time prescribed, (2)~\emph{25\% less}, i.e., 75\% of the prescribed time, (3)~\emph{ontime}, i.e., when the traveler spends the exact prescribed time, (4)~\emph{50\% more}, i.e., 150\% of the prescribed time, and (5)~\emph{100\% more}, i.e., 200\% of the prescribed time.
 The different groups specify the \emph{order} of the POI where the change is made (all other POIs spent the exact prescribed time).
 In order to take the readings for the plot, we modified the average visit time of the POIs of Osaka so as to bring more clarity in the result; this made the trends more pronounced in the case of the variable time spent by the user on the POI.
@@ -337,7 +341,8 @@ Overall, this variation in utility values underscores the importance of adapting
     \label{fig:number-of-days}
 \end{figure}
 
-\subsection{Scalability Results}\label{sec:exp scalability}
+\subsection{Scalability Results}
+\label{sec:exp scalability}
 
 In this section, we test the scalability of the \trip solution in terms of running time for various parameters.
 

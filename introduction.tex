@@ -71,12 +71,11 @@ Motivated by the above limitations, this work addresses the following itinerary 
 & \bf \makecell{Optimality}\\
 \midrule
 %\midrule
-\\
+%\\
 \bf {\trip}             & \cmark & \cmark & \cmark & 3  & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & MILP & \cmark\\
-\\
-
+%\\
 \midrule 
-\citep{bolzoni2014efficient}    & \xmark & \xmark & \xmark  & 2   & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark & Clustering & \xmark\\
+\citep{bolzoni2014efficient}    & \xmark & \xmark & \xmark & 2 & \cmark & \xmark & \xmark & \xmark & \xmark & \cmark & \xmark & Clustering & \xmark\\
 %\midrule
 \citep{chen2014automatic}      & \xmark & \xmark & \cmark & 0 & \cmark  &  \xmark & \xmark &  \cmark & \xmark & \xmark & \xmark & Approximate search & \xmark\\
 %\midrule
@@ -111,7 +110,7 @@ Additionally, if there are unplanned delays or early exits in the earlier part o
 
 To address the above problem, this work proposes a novel solution framework,  called \textbf{\trip (TRip Itinerary Planner)}.  Firstly, the problem is modeled as a directed multi-graph $G$, where each node corresponds to a POI, and each edge corresponds to a travel between an ordered pair of POIs using a specific transportation mode such as walking or taxi. If there are $k \ge 1$ transportation modes available between a given pair of POIs, then there are exactly $k$ directed edges between the corresponding pair of nodes in $G$, where each edge corresponds to a \emph{specific transportation mode}, along with the associated travel cost and travel time. Subsequently, the solution is modeled using a mixed integer linear program (MILP) that returns an optimal itinerary. 
 
-Notably, the given trip itinerary planning problem is \emph{NP-hard} as it is a strict generalization of the well-known orienteering problem \citep{vansteenwegen2011orienteering, gunawan2016orienteering, vansteenwegen2019orienteering}. Therefore, any optimal solution requires exponential time complexity. However, the itinerary planning problems of practical interest are sufficiently small in size, which allows solving them within practical running times (typically, within a few minutes, as shown in detail in Sec.~\ref{sec:scalability}). Hence, we choose MILP based solutions that returns optimal itinerary.
+Notably, the given trip itinerary planning problem is \emph{NP-hard} as it is a strict generalization of the well-known orienteering problem \citep{vansteenwegen2011orienteering, gunawan2016orienteering, vansteenwegen2019orienteering}. Therefore, any optimal solution requires exponential time complexity. However, the itinerary planning problems of practical interest are sufficiently small in size, which allows solving them within practical running times (typically, within a few minutes, as shown in detail in Sec.~\ref{sec:exp scalability}). Hence, we choose MILP based solutions that returns optimal itinerary.
 %This ensures best travel experience under the given constraints.
 
 Comparing with earlier studies listed in Table~\ref{tab:otherworks}, it is observed that majority of the prior works returned sub-optimal itineraries \citep{bolzoni2014efficient, lim2018personalized, panagiotakis2024expectation, vu2022branch}. In contrast, works such as \citep{rambha2024optimized, taylor2018tour, vanzelst2016itinerary} return optimal itineraries using MILP-based solutions. However, as discussed in detail in Sec.~\ref{Rel_Work}, they do not address the itinerary problem that factors in all the capabilities, such as multi-modal transportation, dynamic re-planning, multi-day trips, budget constraints, personalized constraints, utility variants, etc.
@@ -132,4 +131,5 @@ The major contributions of this work are as follows:
 
 %The novelty and significance of the proposed \trip solution arises due to its ability to factor in \emph{multi-modal transportation}, \emph{personalized constraints} and \emph{dynamic planning} to produce \emph{optimal multi-day} itinerary that adheres to the traveller's cost and time budget and offers best travel experience captured through a user specified utility variant.
  The rest of the paper is organized as follows. Sec.~\ref{Rel_Work}  discusses the related work. The trip itinerary planning problem is stated in Sec.~\ref{sec:problem}. Sec.~\ref{sec:ilp} presents the \trip solution framework and the experimental results are demonstrated in Sec.~\ref{sec:experiments}. Finally, Sec.~\ref{Conclusions} concludes the paper.
-The code and data are available from: \url{https://github.com/priyanshujhaa/TRIP}.
+ The code and data are available from: \emph{\url{https://github.com/priyanshujhaa/TRIP}}.
+
